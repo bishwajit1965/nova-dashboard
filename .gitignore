@@ -1,0 +1,33 @@
+# Ignore node_modules in client
+nova-client/node_modules/
+
+
+# Ignore build files in nova-client
+nova-client/.vscode/
+
+
+# Ignore public folder in nova-client
+nova-client/public/
+
+# Ignore assets folder in nova-client
+nova-client/assets/
+
+# Ignore firebase folder in nova-client
+nova-client/src/firebase/
+
+# Ignore TODO.js file in nova-client
+nova-client/TODO.js/
+
+# Ignore .env files in nova-client and nova-server
+nova-client/.env.local
+
+nova-server/.env
+
+# Ignore folders in server
+nova-server/config/
+nova-server/uploads/
+nova-server/mongoose/
+nova-server/.vscode/
+nova-server/node_modules/
+backups/
+nova-server/seeder
