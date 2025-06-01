@@ -11,6 +11,7 @@ const { protect } = require("../middlewares/authMiddleware");
 const authorizeRoles = require("../middlewares/authorizeRoles");
 const authorizePermissions = require("../middlewares/authorizePermissions");
 
+router.get("/public", getAllUsers);
 // ADMIN ONLY: All users list
 router.get(
   "/",
@@ -25,7 +26,5 @@ router.get("/me", protect, getMe);
 router.get("/:id", protect, authorizeRoles("admin"), getUserById);
 router.put("/:id", protect, authorizeRoles("admin"), updateUserById);
 router.delete("/:id", protect, authorizeRoles("admin"), deleteUserById);
-
-// router.get("/public", getAllUsers);
 
 module.exports = router;

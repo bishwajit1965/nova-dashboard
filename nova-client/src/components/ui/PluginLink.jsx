@@ -2,12 +2,13 @@ import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
 
 const baseStyles =
-  "inline-flex items-center gap-2 px-4 py-2 rounded transition font-medium";
+  "inline-flex items-center gap-2 px-4 py-2 rounded transform transition-transform duration-300 ease-in-out font-medium";
 
 const variants = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700",
+  primary: "bg-blue-600 text-white hover:bg-blue-700 hover:text-gray-200",
   outline: "border border-blue-600 text-blue-600 hover:bg-blue-50",
-  ghost: "text-blue-600 hover:bg-blue-100",
+  ghost: "text-blue-600 hover:text-base-200 hover:bg-blue-100",
+  gray: "text-slate-400 hover:text-slate-300 bg-slate-700 hover:bg-slate-600",
   disabled: "opacity-50 pointer-events-none cursor-not-allowed",
 };
 
@@ -36,7 +37,7 @@ const PluginLink = ({
           disabled ? variants.disabled : variants[variant],
           iconOnly && "p-2 justify-center",
           isActive &&
-            "ring-1 ring-offset-2 ring-green-400 bg-green-700 shadow-lg shadow-green-500/50 outline-2 outline-green-500 animate-pulse", // consistent, elegant effect
+            "ring-2 ring-offset-2 ring-slate-700 bg-slate-600 shadow-lg shadow-slate-700/50 outline-2 outline-slate-700 text-base-200", // consistent, elegant effect
           className
         )
       }

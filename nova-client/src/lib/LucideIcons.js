@@ -1,0 +1,51 @@
+// src/lib/LucideIcon.js
+
+import {
+  CalendarClock,
+  CalendarDays,
+  Check,
+  ChevronDown,
+  CircleCheck,
+  ClipboardCheck,
+  Clock,
+  Edit,
+  FilePenLine,
+  Home,
+  ListCheck,
+  Loader2,
+  LogOut,
+  Menu,
+  Plus,
+  Save,
+  Settings,
+  SquarePlus,
+  Trash2,
+  User,
+  Users,
+} from "lucide-react";
+
+// Central registry
+export const LucideIcon = {
+  Check,
+  ChevronDown,
+  CalendarClock,
+  CircleCheck,
+  ClipboardCheck,
+  CalendarDays,
+  Clock,
+  Edit,
+  FilePenLine,
+  Home,
+  ListCheck,
+  Loader2,
+  LogOut,
+  Menu,
+  Plus,
+  Save,
+  Settings,
+  SquarePlus,
+  Trash2,
+  User,
+  Users,
+  // Continue adding here
+};

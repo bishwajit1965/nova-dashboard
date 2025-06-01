@@ -6,11 +6,15 @@ import { AuthProvider } from "./providers/AuthProvider.jsx";
 import { RouterProvider } from "react-router-dom";
 import { StrictMode } from "react";
 import { Toaster } from "react-hot-toast"; // ✅ Add this
+import { applySavedTheme } from "./applyTheme.js";
 import { createRoot } from "react-dom/client";
 import router from "./routes/Routes.jsx";
 
 // Create a client instance
 const queryClient = new QueryClient();
+
+// Dark theme
+applySavedTheme();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

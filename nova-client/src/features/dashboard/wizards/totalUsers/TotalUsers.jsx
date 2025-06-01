@@ -20,13 +20,13 @@ const TotalUsers = () => {
 
   if (error) {
     return (
-      <div className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4">
-        <div className="bg-blue-100 p-3 rounded-full">
+      <div className="bg-base-50 p-4 rounded-2xl shadow-sm flex items-center gap-4">
+        <div className="bg-base-300 shadow p-3 rounded-full">
           <UserIcon className="text-blue-600 w-6 h-6" />
         </div>
         <div>
-          <p className="text-sm text-gray-500">Total Users</p>
-          <h3 className="text-2xl font-semibold text-gray-800">
+          <p className="text-sm text-base-content">Total Users</p>
+          <h3 className="text-2xl font-semibold text-base-content">
             Error fetching data
           </h3>
         </div>
@@ -34,13 +34,13 @@ const TotalUsers = () => {
     );
   }
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4">
-      <div className="bg-blue-100 p-3 rounded-full">
+    <div className="bg-base-50 p-4 rounded-2xl shadow-sm flex items-center gap-4">
+      <div className="bg-base-300 p-3 rounded-full">
         <UserIcon className="text-blue-600 w-6 h-6" />
       </div>
       <div>
         <p className="text-sm text-gray-500">Total Users</p>
-        <h3 className="text-2xl font-semibold text-gray-800">
+        <h3 className="text-2xl font-semibold text-base-content">
           {data.length > 0 ? data.length : 0}
         </h3>
       </div>

@@ -52,9 +52,10 @@ const updateUserById = async (req, res) => {
 // @route   GET /api/users
 const getAllUsers = async (req, res) => {
   try {
-    if (req.user.role !== "admin") {
+    if (!req.user.roles?.includes("admin")) {
       return res.status(403).json({ message: "Access denied" });
     }
+
     const users = await User.find({}).select("-password");
     res.status(200).json({ users });
   } catch (error) {

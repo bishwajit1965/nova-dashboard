@@ -10,10 +10,9 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const AdminDashboard = () => {
   const { user, isAuthenticated } = useAuth();
-  console.log("USER DATA", user);
   return (
     <div className="p- space-y-6">
-      <h1 className="text-2xl font-bold">Welcome Admin</h1>
+      <h1 className="text-2xl text-base-content font-bold">Welcome Admin</h1>
       {/* Stat Cards Row begins */}
       <div className="p-4 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -35,7 +34,6 @@ const AdminDashboard = () => {
       {/* Stat Cards Row ends */}
 
       {/* Charts and Notifications begins */}
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <RevenueChart />
         <UserRolesPieChart />
@@ -43,7 +41,6 @@ const AdminDashboard = () => {
       </div>
       <ActivityChart />
       <Notifications />
-
       {/* Charts and Notifications ends */}
       <p>User data: {user?.email ? user.email : "N/A"}</p>
       <p>User role: {user?.roles ? user.roles : "N/A"}</p>
