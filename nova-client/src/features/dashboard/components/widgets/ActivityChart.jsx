@@ -45,3 +45,49 @@ const ActivityChart = () => {
 };
 
 export default ActivityChart;
+
+// import {
+//   Bar,
+//   BarChart,
+//   CartesianGrid,
+//   ResponsiveContainer,
+//   Tooltip,
+//   XAxis,
+//   YAxis,
+// } from "recharts";
+
+// const data = [
+//   { day: "Mon", activity: 120 },
+//   { day: "Tue", activity: 200 },
+//   { day: "Wed", activity: 150 },
+//   { day: "Thu", activity: 180 },
+//   { day: "Fri", activity: 250 },
+//   { day: "Sat", activity: 300 },
+//   { day: "Sun", activity: 280 },
+// ];
+
+// const ActivityChart = () => {
+//   return (
+//     <div className="card bg-base-100 shadow-md p-4 mt-4">
+//       <h2 className="text-lg font-semibold mb-2 text-base-content">
+//         Weekly User Activity
+//       </h2>
+//       <div className="h-64">
+//         <ResponsiveContainer width="100%" height="100%">
+//           <BarChart
+//             data={data}
+//             margin={{ top: 20, right: 30, bottom: 5, left: 0 }}
+//           >
+//             <CartesianGrid strokeDasharray="3 3" />
+//             <XAxis dataKey="day" />
+//             <YAxis />
+//             <Tooltip />
+//             <Bar dataKey="activity" fill="#22c55e" radius={[4, 4, 0, 0]} />
+//           </BarChart>
+//         </ResponsiveContainer>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ActivityChart;

@@ -20,6 +20,7 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 // Importing routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const permissionRoutes = require("./routes/permissionRoutes");
+const roleRoutes = require("./routes/roleRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -36,6 +39,8 @@ app.get("/", (req, res) => {
 // Using routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/roles", roleRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

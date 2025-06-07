@@ -1,0 +1,629 @@
+6:56 PM 6/3/2025
+===========================
+✅ROUTING STRATEGY
+createBrowserRouter([
+  // Public Layout Routes
+  {
+    path: "/",
+    element: <LandingPage />, // Or PublicLayout if multiple pages
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+
+  // Dashboard Layout Routes
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "user", "editor"]}>
+            <DashboardRouter />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "user", "editor"]}>
+            <UserSettings />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "users",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UsersList />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
+
+  // Shared / Auth Error Routes
+  {
+    path: "/unauthorized",
+    element: <UnauthorizedPage />,
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
+]);
+
+==================================
+✅ Suggestion: Route Plan Checklist
+Here’s your next step suggestion:
+
+📍 Finish Basic Routing
+ Public: /, /login
+
+ Error: /unauthorized, *
+
+ Dashboard root: /dashboard
+
+ Dashboard: /dashboard/settings
+
+ Dashboard: /dashboard/users
+
+ Optional: /dashboard/help, /dashboard/profile
+
+===================================
+✅ Completed So Far
+ JWT-based Auth system (Access & Refresh)
+
+ Role-Based Access Control (RBAC)
+
+ Admin-only protected route: /dashboard/users
+
+ Fetched all users via /users API
+
+ Dashboard layout with <Sidebar />, <Topbar />, <Outlet />
+
+ Theme toggle with localStorage
+
+ Basic route structure working
+
+ Routing guard via <ProtectedRoute />
+
+ Created LandingPage, LoginPage, NotFound, Unauthorized
+
+==================================
+🔜 Next Action Plan (Chronological & Checked as we proceed)
+🧱 Phase 1: Foundation Completion
+ ✅ Finalize route structure (admin/user layout logic)
+
+ ✅ Design fallback UI for pages outside <Outlet />
+
+ ⬜ Add "Back to Dashboard" link/button on non-dashboard pages
+
+ ⬜ Polish layout responsiveness
+
+👤 Phase 2: User Features
+ ⬜ Display current user's profile info (/dashboard/profile)
+
+ ⬜ Add user settings modal/page (change email/name)
+
+ ⬜ Implement password change (user + admin reset)
+
+ ⬜ Add avatar upload (optional)
+
+🧑‍💼 Phase 3: Admin Features
+ ⬜ Table to manage users (view, delete, edit role)
+
+ ⬜ Add new user (admin)
+
+ ⬜ Role management UI (assign/revoke roles)
+
+📊 Phase 4: Widgets and Stats
+ ⬜ Total users, recent signups
+
+ ⬜ Cards: Revenue, Engagement
+
+ ⬜ Charts: Bar/Line (Recharts)
+
+
+===================================
+✅Suggested Folder Structure
+nova-client/
+├── src/
+│   ├── api/
+│   │   └── index.js
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── Topbar.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── widgets/
+│   │   │   ├── StatsCard.jsx
+│   │   │   └── RevenueCard.jsx
+│   ├── contexts/
+│   │   └── ThemeContext.jsx
+│   ├── features/
+│   │   ├── account/
+│   │   │   └── UserSettings.jsx
+│   │   ├── auth/
+│   │   │   └── LoginForm.jsx
+│   │   ├── dashboard/
+│   │   │   ├── DashboardRouter.jsx
+│   │   │   ├── index.jsx # Optional if you want to group dashboard views
+│   │   ├── users/
+│   │   │   ├── UsersList.jsx
+│   │   │   ├── UserCard.jsx
+│   ├── hooks/
+│   │   └── useApiQuery.js
+│   ├── layouts/
+│   │   └── DashboardLayout.jsx
+│   ├── pages/
+│   │   ├── LandingPage.jsx
+│   │   ├── LoginPage.jsx
+│   │   ├── NotFound.jsx
+│   │   ├── UnauthorizedPage.jsx
+│   │   ├── ProfilePage.jsx
+│   ├── routes/
+│   │   ├── router.jsx
+│   │   └── ProtectedRoute.jsx
+│   ├── styles/
+│   ├── utils/
+│   └── main.jsx
+
+=======================================
+📂 Sidebar Navigation (Main App Sections)
+Label	Path	Role	Icon	Notes
+Dashboard	/dashboard	all	layout-dashboard	Landing view with widgets/stats
+Users	/dashboard/users	admin only	users	Manage user list
+Settings	/dashboard/settings	all	settings	Profile settings, theme toggle
+Profile	/dashboard/profile	all	user	Show current user details
+Audit Logs	/dashboard/logs	admin only	file-text	Action history (future feature)
+Help / Docs	/dashboard/help	all	help-circle	Link to help / app usage guide
+
+🔝 Topbar Options (User-Specific Controls)
+Feature	Notes
+Theme Toggle	Light/Dark switch
+Logout Button	Logs user out + clears localStorage
+User Dropdown	Shows name/email, link to /dashboard/profile, Logout
+Notifications 🔔	(Optional) System updates/messages
+
+🛠️ Optional: Admin Extras
+If you’re planning to use this as a freelancer tool or SaaS starter, consider later adding:
+
+📊 Analytics: /dashboard/analytics
+
+📦 Projects: /dashboard/projects
+
+📤 Export Data: CSV export of users/data
+
+🛡️ Roles/Permissions UI: Manage roles (admin UI for RBAC)
+
+============================================
+✅ Suggested Immediate Setup
+Let’s implement the following for now:
+
+✅ Sidebar Routes (Ready to Build):
+ Dashboard
+
+ Users
+
+ Profile
+
+ Settings
+
+ Help
+
+✅ Topbar:
+ Theme toggle
+
+ User dropdown (name/email)
+
+ Logout
+
+=====================================
+🧭 Planned Dashboard Sidebar Options
+These are the pages/features we intend to show inside the <DashboardLayout />:
+
+📊 Dashboard (main widget overview)
+
+👥 Users Management
+
+⚙️ User Settings
+
+🧑‍💼 Profile Page
+
+💡 My Buttons / Components Demo
+
+📚 Help / Documentation
+
+🚫 Unauthorized Page
+
+❌ 404 Not Found
+
+We can later expand with:
+
+🔐 Role & Permission Manager
+
+📈 Analytics & Stats
+
+🔔 Notifications or Audit Logs
+
+🧪 Experiments/Playground
+
+✅ Completed Tasks
+Task	Status
+Setup Tailwind + DaisyUI	✅ Done
+Implement Dark Mode System	✅ Done
+Create DashboardLayout with Sidebar & Topbar	✅ Done
+JWT Auth with RBAC (Role Check)	✅ Done
+Backend User CRUD with Permissions	✅ Done
+Protect Routes with ProtectedRoute	✅ Done
+Fetch Users Data (API + Display)	✅ Done
+
+🔲 Incomplete Tasks (Next Steps)
+Task	Priority	Notes
+🧩 Add Stats Widgets in /dashboard	⭐ High	Start with TotalUsers
+📄 Build User Settings Page (Form UI)	⭐ High	Update name/email/password
+🧑‍💼 Implement Profile Page	⭐ High	For all roles
+🧑‍🤝‍🧑 Complete Users List Page (Edit/Delete)	⭐ High	Role badge, status, etc.
+🧭 Add Navigation Links to Non-Outlet Pages	⭐ Medium	Add links to return back
+🎨 Add ThemeSwitcher to Topbar	⭐ Medium	Already functional logic-wise
+🧪 Add a full Icons/Components Preview Page	⭐ Medium	For development
+❌ Add 404 fallback with return button	⭐ Medium	Improves UX
+🚫 Unauthorized Page design polish	⭐ Medium	Already renders
+
+============================================
+📁 Suggested Folder Structure (Recap)
+src/
+├── components/
+│   └── widgets/
+│       ├── StatsCard.jsx
+│       └── RevenueCard.jsx
+├── contexts/
+│   └── ThemeContext.jsx
+├── features/
+│   ├── account/
+│   │   └── UserSettings.jsx
+│   ├── auth/
+│   ├── dashboard/
+│   │   └── DashboardRouter.jsx
+│   ├── profile/
+│   │   └── ProfilePage.jsx
+│   ├── users/
+│   │   └── UsersList.jsx
+│   └── ui/
+│       └── ThemeToggler.jsx
+├── hooks/
+│   └── useTheme.js
+├── layouts/
+│   └── DashboardLayout.jsx
+├── lib/
+│   └── api.js
+├── pages/
+│   ├── LoginPage.jsx
+│   ├── LandingPage.jsx
+│   ├── UnauthorizedPage.jsx
+│   └── NotFoundPage.jsx
+├── routes/
+│   └── index.jsx
+
+======================================================
+📌 Nova Dashboard Progress Tracker
+✅ = Completed  🔲 = Incomplete
+🔧 Core Setup
+✅ Tailwind CSS + DaisyUI setup
+
+✅ Dark mode with useTheme + localStorage persistence
+
+✅ React Router with DashboardLayout and nested routes
+
+✅ ProtectedRoute with RBAC (roles/permissions)
+
+✅ JWT Auth (access + refresh tokens)
+
+✅ Sidebar, Topbar, Footer structure
+
+✅ Logout button and auth redirect logic
+
+👥 User Management (Backend + Frontend)
+✅ Seed admin/user accounts
+
+✅ Backend user CRUD (get, update, delete)
+
+✅ Role & permission system middleware
+
+✅ Fetch all users from backend
+
+🔲 Display users list in a table
+
+🔲 Add edit/delete buttons for each user
+
+🔲 Show role badges and status indicators
+
+📊 Dashboard
+🔲 Add StatsCard widget (e.g., Total Users)
+
+🔲 Add more widgets: Revenue, Posts, Growth, etc.
+
+🔲 Add responsive layout and overflow handling
+
+🔲 Polish mobile view
+
+⚙️ User Settings / Profile
+🔲 Add User Settings page (name, email, password change)
+
+🔲 Add Profile page with static info
+
+🔲 Add avatar and role display
+
+🧭 Routing & Navigation
+✅ Basic route structure set up
+
+🔲 Add fallback 404 Not Found page
+
+🔲 Add Unauthorized page design
+
+🔲 Add links to navigate back from pages outside <Outlet />
+
+🔲 Ensure mobile-friendly routing UX
+
+🧰 UI Library Enhancements
+✅ Buttons, Cards, Badge components
+
+🔲 Add reusable Alert / Toast
+
+🔲 Add Modal, Tabs, and Tooltip components
+
+🔲 Add full Lucide icon preview grid
+
+🔲 Improve icon styling via Tailwind
+
+🧠 Admin Power Features
+🔲 Add Role/Permission management UI
+
+🔲 Add Audit log/history table
+
+🔲 Add metrics dashboard (signups, activity, etc.)
+
+🔲 Add import/export (CSV download/upload)
+
+🎨 Polish & Optimization
+🔲 Add loading skeletons
+
+🔲 Lazy load routes
+
+🔲 Meta tags for landing/SEO
+
+🔲 Lighthouse performance pass
+
+Would you like me to convert this into a Kanban-style board, a markdown file, or just keep updating this list as we progress?
+
+Also, shall we start with the users list table next (/dashboard/users) or begin with the dashboard widgets
+
+=============================================
+🧭 Nova Dashboard – Project Blueprint
+📁 Folder Structure
+nova-client/
+├── public/
+│   └── index.html
+├── src/
+│
+├── assets/                     # Logos, icons, images
+│   └── images/, icons/, logos/
+│
+├── components/                 # Reusable, generic components
+│   ├── common/                 # Buttons, Cards, Badges, IconButtons
+│   ├── layout/                 # Sidebar, Topbar, Footer
+│   ├── ui/                     # Tooltip, Modal, Tabs, Alert (WIP)
+│   └── widgets/                # StatsCard, RevenueCard, etc.
+│
+├── context/
+│   ├── ThemeContext.jsx       # Dark/light mode toggle logic
+│   └── AuthContext.jsx        # Optional auth context
+│
+├── features/                  # Domain-specific logic
+│   ├── account/               # User profile/settings
+│   │   └── UserSettings.jsx
+│   ├── auth/                  # Login, logout, tokens
+│   │   └── useAuth.js
+│   ├── dashboard/             # Main dashboard router + widgets
+│   │   └── DashboardRouter.jsx
+│   ├── users/                 # Admin user management
+│   │   ├── UsersList.jsx
+│   │   ├── UserCard.jsx
+│   │   └── EditUserModal.jsx (planned)
+│   └── roles/                 # Role/permission UI (planned)
+│
+├── hooks/                     # Custom reusable hooks
+│   ├── useTheme.js
+│   ├── useApiMutation.js
+│   └── useUser.js             # Optional user fetch/mutation hook
+│
+├── layouts/
+│   └── DashboardLayout.jsx   # Common layout with <Outlet />
+│
+├── pages/                     # Page-level views
+│   ├── LandingPage.jsx
+│   ├── LoginPage.jsx
+│   ├── NotFound.jsx
+│   ├── UnauthorizedPage.jsx
+│   └── ProfilePage.jsx (planned)
+│
+├── routes/
+│   ├── router.jsx             # Full route config
+│   └── ProtectedRoute.jsx
+│
+├── services/
+│   ├── api.js                 # Axios config
+│   └── userService.js         # API calls for users
+│
+├── styles/
+│   └── globals.css            # Tailwind base styles
+│
+├── utils/
+│   ├── auth.js                # JWT decode, helper
+│   └── helpers.js             # Other utilities
+│
+├── .env
+├── tailwind.config.js
+├── postcss.config.js
+├── vite.config.js
+└── index.jsx
+
+========================================
+✅ Master Checklist (Chronological Execution)
+🔁 Phase 1: Core Finalization
+✅ Protected Routes with Role-Based Guards
+
+✅ JWT-based login + token decode
+
+✅ Sidebar, Topbar, Footer (DashboardLayout)
+
+✅ Fetch and display users (admin only)
+
+⬜ Edit User (Modal inside UsersList.jsx)
+
+⬜ Add dashboard widgets (StatsCard, RevenueCard)
+
+⬜ Add scroll & layout consistency
+
+⬜ Handle 404 fallback with NotFoundPage
+
+⬜ Polish mobile view (Sidebar collapsible)
+
+🧰 Phase 2: Feature Expansion
+⬜ User Settings page (update name/email/password)
+
+⬜ Profile Page (/profile) with avatar, email, etc.
+
+⬜ Global dark mode toggle (done, polish UI)
+
+⬜ Table filtering/sorting for user list
+
+⬜ Toast/Alert system (reusable component)
+
+⬜ Global search bar (planned)
+
+🧑‍💼 Phase 3: Admin Power Tools
+⬜ Role + permission manager
+
+⬜ Audit logs (user actions/history)
+
+⬜ Real-time stats with WebSocket (optional)
+
+⬜ Import/export data (CSV, JSON)
+
+🚀 Phase 4: Polish & Performance
+⬜ Add loading skeletons (while fetching users/stats)
+
+⬜ Lazy load routes (React lazy + suspense)
+
+⬜ SEO (meta tags, favicon, titles)
+
+⬜ Lighthouse pass (performance & accessibility)
+
+🧑‍💻 Current Progress Snapshot
+Feature	Status
+JWT Auth	✅ Done
+Role-Based Access (RBAC)	✅ Done
+Get All Users (admin only)	✅ Done
+Dashboard Layout (Topbar/Sidebar)	✅ Done
+Fetch Users	✅ Done
+Edit/Delete Users (UI)	⬜ Incomplete
+Dark Mode	✅ Done (polished pending)
+Widgets (stats/revenue)	⬜ Not Started
+User Settings Page	⬜ Not Started
+Profile Page	⬜ Not Started
+Alerts / Toasts	⬜ Not Started
+
+===================================
+✅ Done:
+
+ StatsCard.jsx created
+
+ Example added to DashboardHome
+
+🔜 Next:
+
+ RevenueCard.jsx (shows money/income stats with currency)
+
+ Display real user count from useApiQuery
+
+Shall we move to RevenueCard.jsx next?
+
+✅ Widget Progress Summary
+Widget	Status
+✅ StatsCard	Completed
+✅ RevenueCard	Completed
+🔲 LiveUsersCard	Upcoming
+🔲 RecentSignupsCard	Upcoming
+🔲 ChartWidget	Upcoming
+
+
+✅ Widget Completion Status
+| ✅ | StatsCard |
+| ✅ | RevenueCard |
+| ⬜ | LiveUsersCard |
+| ⬜ | RecentSignupsCard |
+| ⬜ | ChartWidget |
+
+
+✅ Nova Dashboard Widget Progress Checklist
+✅	Feature	File/Path
+✅	RevenueCard	components/widgets/RevenueCard.jsx
+✅	TotalUsersCard	components/widgets/TotalUsers.jsx
+✅	LiveUsersCard	components/widgets/LiveUsersCard.jsx
+🔲	New Signups Card	components/widgets/NewSignupsCard.jsx
+
+
+🧩 Current Widget Set & Visual Plan (UI First)
+Let’s complete a grid of 4 dashboard cards to visually fill the top row. You already have:
+
+✅	Component	Icon	Purpose
+✅	RevenueCard	💰 Banknote	Shows monthly revenue
+✅	TotalUsersCard	👥 Users	Total registered users
+✅	LiveUsersCard	🔵 Activity	Users currently online
+🔲	NewSignupsCard	➕ UserPlus	Users signed up in last 7 days
+
+
+
+==============================
+src/
+├── features/
+│   ├── roles/
+│   │   ├── api/
+│   │   │   └── roleApi.js               // Feature-specific API functions
+│   │   ├── hooks/
+│   │   │   ├── useCreateRole.js
+│   │   │   ├── useUpdateRole.js
+│   │   │   ├── useDeleteRole.js
+│   │   │   ├── useGetRoles.js
+│   │   │   └── useAssignPermissionsToRole.js
+│   │   ├── components/
+│   │   │   └── RoleTable.jsx
+│   │   └── RolePage.jsx
+│
+│   ├── permissions/
+│   │   ├── api/
+│   │   │   └── permissionApi.js
+│   │   ├── hooks/
+│   │   │   ├── useCreatePermission.js
+│   │   │   ├── useUpdatePermission.js
+│   │   │   ├── useDeletePermission.js
+│   │   │   └── useGetPermissions.js
+│   │   ├── components/
+│   │   │   └── PermissionTable.jsx
+│   │   └── PermissionPage.jsx
+│
+├── services/
+│   ├── apiPaths.js
+│   ├── handleApiCall.js                // Optional
+│   └── toastUtil.js                    // Optional toast helpers
+│
+├── hooks/
+│   ├── useApiMutation.js               // Generic reusable hook
+│   └── useApiQuery.js                  // Generic reusable hook
+│
+├── lib/
+│   └── api.js                          // Axios instance

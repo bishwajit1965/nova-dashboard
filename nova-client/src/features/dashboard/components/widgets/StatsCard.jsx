@@ -3,9 +3,9 @@ import { Users } from "lucide-react";
 
 const StatsCard = ({ title, value, icon = Users, color = "text-blue-500" }) => {
   return (
-    <div className="bg-base-100 rounded-2xl shadow-sm p-4 flex items-center gap-4">
-      <div className={`p-3 rounded-full bg-base-300 ${color}`}>
-        {React.createElement(icon, { className: "w-6 h-6" })}
+    <div className="bg-base-100 rounded-2xl shadow-md p-4 flex items-center gap-4">
+      <div className={`p-3 rounded-full bg-info ${color}`}>
+        {React.createElement(icon, { className: "w-6 h-6 text-white" })}
       </div>
       <div>
         <h4 className="text-sm text-base-content dark:text-gray-400">

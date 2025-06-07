@@ -4,14 +4,18 @@ const {
   getMe,
   getUserById,
   updateUserById,
+  updateCurrentUserProfile,
+  changePassword,
   deleteUserById,
   getAllUsers,
 } = require("../controllers/userController");
+
 const { protect } = require("../middlewares/authMiddleware");
 const authorizeRoles = require("../middlewares/authorizeRoles");
 const authorizePermissions = require("../middlewares/authorizePermissions");
 
 router.get("/public", getAllUsers);
+
 // ADMIN ONLY: All users list
 router.get(
   "/",
@@ -22,6 +26,18 @@ router.get(
 );
 
 // MOST SPECIFIC ROUTES FIRST
+router.patch(
+  "/profile",
+  protect,
+  authorizeRoles("admin"),
+  updateCurrentUserProfile
+);
+router.put(
+  "/change-password",
+  protect,
+  authorizeRoles("admin"),
+  changePassword
+);
 router.get("/me", protect, getMe);
 router.get("/:id", protect, authorizeRoles("admin"), getUserById);
 router.put("/:id", protect, authorizeRoles("admin"), updateUserById);

@@ -12,10 +12,10 @@ const Button = ({
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 px-4 py-2 rounded font-semibold transition duration-150";
+    "inline-flex items-center justify-center gap-2 px-2 py-2 rounded font-semibold transition duration-150 cursor-pointer";
 
   const variants = {
-    primary: "bg-blue-600 text-white hover:text-base-200 hover:bg-blue-700",
+    primary: "bg-blue-600 text-white hover:text-base-200 hover:bg-blue-800",
     success:
       "bg-green-600 text-white hover:text-base-200 hover:bg-green-700 shadow-sm",
     secondary:
@@ -29,6 +29,8 @@ const Button = ({
     cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-sm",
     outline:
       "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-sm ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2",
+    warning:
+      "bg-yellow-500 border border-yellow-500 text-gray-800 hover:text-gray-200 hover:bg-yellow-600 shadow-sm",
     muted:
       "bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-100 shadow-sm", // 👈 Add this
   };

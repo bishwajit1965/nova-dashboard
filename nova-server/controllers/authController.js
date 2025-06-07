@@ -1,5 +1,6 @@
 const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const generateAccessToken = require("../utils/generateAccessToken.js");
 const { generateRefreshToken } = require("../utils/generateRefreshToken.js");
@@ -22,15 +23,17 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  try {
+    const { email, password } = req.body;
 
-  if (user && (await user.matchPassword(password))) {
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user._id);
-
-    console.log("ACCESS TOKEN", accessToken);
-    console.log("REFRESH TOKEN", refreshToken);
 
     user.refreshToken = refreshToken;
     await user.save();
@@ -52,10 +55,49 @@ const loginUser = async (req, res) => {
         permissions: user.permissions,
       },
     });
-  } else {
-    res.status(401).json({ message: "Invalid email or password" });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
+// const loginUser = async (req, res) => {
+//   const { email, password } = req.body;
+//   const user = await User.findOne({ email }).select("+password");
+//   console.log("Email->", email);
+//   console.log("Password->", password);
+
+//   if (user && (await user.matchPassword(password))) {
+//     const accessToken = generateAccessToken(user);
+//     const refreshToken = generateRefreshToken(user._id);
+
+//     console.log("ACCESS TOKEN", accessToken);
+//     console.log("REFRESH TOKEN", refreshToken);
+
+//     user.refreshToken = refreshToken;
+//     await user.save();
+
+//     res.cookie("jwt", refreshToken, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "strict",
+//       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+//     });
+
+//     res.status(200).json({
+//       accessToken,
+//       user: {
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         roles: user.roles,
+//         permissions: user.permissions,
+//       },
+//     });
+//   } else {
+//     res.status(401).json({ message: "Invalid email or password" });
+//   }
+// };
 
 const refreshTokenHandler = async (req, res) => {
   const token = req.cookies.jwt;

@@ -80,6 +80,20 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             variant="gray"
             className="bg-slate-600 hover:bg-slate-700 w-full"
           />
+          <PluginLink
+            to="admin/role"
+            label="Manage Roles"
+            icon={SquareChartGantt}
+            variant="gray"
+            className="bg-slate-600 hover:bg-slate-700 w-full"
+          />
+          <PluginLink
+            to="admin/users"
+            label="Manage Users Profile"
+            icon={SquareChartGantt}
+            variant="gray"
+            className="bg-slate-600 hover:bg-slate-700 w-full"
+          />
         </div>
       </nav>
     </aside>

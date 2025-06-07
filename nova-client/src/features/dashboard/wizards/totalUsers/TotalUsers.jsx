@@ -1,4 +1,4 @@
-import { UserIcon } from "lucide-react";
+import { UsersRoundIcon } from "lucide-react";
 import api from "../../../../lib/api";
 import useApiQuery from "../../../../hooks/useApiQuery";
 
@@ -22,7 +22,7 @@ const TotalUsers = () => {
     return (
       <div className="bg-base-50 p-4 rounded-2xl shadow-sm flex items-center gap-4">
         <div className="bg-base-300 shadow p-3 rounded-full">
-          <UserIcon className="text-blue-600 w-6 h-6" />
+          <UsersRoundIcon className="text-blue-600 w-6 h-6" />
         </div>
         <div>
           <p className="text-sm text-base-content">Total Users</p>
@@ -36,7 +36,7 @@ const TotalUsers = () => {
   return (
     <div className="bg-base-50 p-4 rounded-2xl shadow-sm flex items-center gap-4">
       <div className="bg-base-300 p-3 rounded-full">
-        <UserIcon className="text-blue-600 w-6 h-6" />
+        <UsersRoundIcon className="text-blue-600 w-6 h-6" />
       </div>
       <div>
         <p className="text-sm text-gray-500">Total Users</p>
