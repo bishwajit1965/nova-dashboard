@@ -49,7 +49,7 @@ router.put(
 );
 router.get("/me", protect, getMe);
 router.get("/:id", protect, authorizeRoles("admin"), getUserById);
-router.put("/:id", protect, authorizeRoles("admin"), updateUserById);
+router.patch("/:id", protect, authorizeRoles("admin"), updateUserById);
 router.patch(
   "/:id/roles-permissions",
   protect,
