@@ -89,8 +89,11 @@ const getAllUsers = async (req, res) => {
       return res.status(403).json({ message: "Access denied" });
     }
 
-    const users = await User.find({}).select("-password");
-    res.status(200).json({ users });
+    const users = await User.find({})
+      .select("-password")
+      .populate("roles")
+      .populate("permissions");
+    res.status(200).json({ data: users });
   } catch (error) {
     console.error("Failed to get users:", error);
     res.status(500).json({ message: "Server error" });
@@ -146,6 +149,16 @@ const changePassword = async (req, res) => {
   }
 };
 
+const updateUserRolesPermissions = async (req, res) => {
+  const { roles, permissions } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    { roles, permissions },
+    { new: true }
+  );
+  res.json(user);
+};
+
 // @desc    Delete user by ID (admin only)
 // @route   DELETE /api/users/:id
 const deleteUserById = async (req, res) => {
@@ -167,7 +180,8 @@ module.exports = {
   updateUserById,
   updateCurrentUserProfile,
   getAllUsers,
-  changePassword,
-  deleteUserById,
   getMe,
+  changePassword,
+  updateUserRolesPermissions,
+  deleteUserById,
 };

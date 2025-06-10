@@ -25,16 +25,29 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false, // Hides password by default
     },
-    roles: {
-      type: [String],
-      enum: ["admin", "editor", "user", "moderator"],
-      default: ["user"],
-    },
-    permissions: {
-      type: [String],
-      enum: ["create_post", "edit_post", "view_stats", "view_post"],
-      default: ["create_post"],
-    },
+    roles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
+      },
+    ],
+    permissions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Permission",
+      },
+    ],
+
+    // roles: {
+    //   type: [String],
+    //   enum: ["admin", "editor", "user", "moderator"],
+    //   default: ["user"],
+    // },
+    // permissions: {
+    //   type: [String],
+    //   enum: ["create_post", "edit_post", "view_stats", "view_post"],
+    //   default: ["create_post"],
+    // },
     refreshToken: {
       type: String,
       default: "",

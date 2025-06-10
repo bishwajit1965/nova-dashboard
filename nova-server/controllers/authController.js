@@ -13,7 +13,8 @@ const registerUser = async (req, res) => {
   const userExists = await User.findOne({ email });
   if (userExists)
     return res.status(400).json({ message: "User already exists" });
-  const user = await User.create({ name, email, password });
+  const user = await User.create({ name, email, password, roles: ["user"] });
+  await user.populate("roles").populate("permissions");
   if (user) {
     generateAccessToken(user);
     res.status(201).json({ _id: user._id, name: user.name, email: user.email });
@@ -26,7 +27,10 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email })
+      .select("+password")
+      .populate("roles")
+      .populate("permissions");
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -51,8 +55,8 @@ const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        roles: user.roles,
-        permissions: user.permissions,
+        roles: user.roles.map((role) => role.name),
+        permissions: user.permissions.map((permission) => permission.name),
       },
     });
   } catch (error) {
@@ -61,51 +65,15 @@ const loginUser = async (req, res) => {
   }
 };
 
-// const loginUser = async (req, res) => {
-//   const { email, password } = req.body;
-//   const user = await User.findOne({ email }).select("+password");
-//   console.log("Email->", email);
-//   console.log("Password->", password);
-
-//   if (user && (await user.matchPassword(password))) {
-//     const accessToken = generateAccessToken(user);
-//     const refreshToken = generateRefreshToken(user._id);
-
-//     console.log("ACCESS TOKEN", accessToken);
-//     console.log("REFRESH TOKEN", refreshToken);
-
-//     user.refreshToken = refreshToken;
-//     await user.save();
-
-//     res.cookie("jwt", refreshToken, {
-//       httpOnly: true,
-//       secure: process.env.NODE_ENV === "production",
-//       sameSite: "strict",
-//       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-//     });
-
-//     res.status(200).json({
-//       accessToken,
-//       user: {
-//         _id: user._id,
-//         name: user.name,
-//         email: user.email,
-//         roles: user.roles,
-//         permissions: user.permissions,
-//       },
-//     });
-//   } else {
-//     res.status(401).json({ message: "Invalid email or password" });
-//   }
-// };
-
 const refreshTokenHandler = async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) return res.status(401).json({ message: "No token provided" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId)
+      .populate("roles")
+      .populate("permissions");
 
     if (!user || user.refreshToken !== token) {
       return res.status(403).json({ message: "Invalid refresh token" });
@@ -119,8 +87,8 @@ const refreshTokenHandler = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        roles: user.roles,
-        permissions: user.permissions,
+        roles: user.roles.map((role) => role.name),
+        permissions: user.permissions.map((permission) => permission.name),
       },
     });
   } catch (err) {

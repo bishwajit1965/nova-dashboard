@@ -2,14 +2,15 @@ const Permission = require("../models/Permission");
 
 const getAllPermissions = async (req, res) => {
   try {
-    const permissions = await Permission.find();
+    const permissions = await Permission.find({});
+    console.log("Fetched permissions:", permissions); // ✅ log
     res.status(200).json({
       success: true,
       message: "Permissions fetched successfully.",
       data: permissions,
     });
   } catch (error) {
-    console.error("Error encountered.", error);
+    console.error("Error encountered while fetching permissions:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error while fetching permissions.",
@@ -25,7 +26,7 @@ const createPermission = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Permission created successfully.",
-      permission,
+      data: permission,
     });
   } catch (error) {
     console.error("Error encountered.", error);
@@ -46,7 +47,7 @@ const updatePermission = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Permission updated successfully.",
-      permission: updated,
+      data: updated,
     });
   } catch (error) {
     console.error("Error encountered.", error);
@@ -59,12 +60,13 @@ const updatePermission = async (req, res) => {
 
 const deletePermission = async (req, res) => {
   console.log("Permission deletePermission controller method is hit");
-  console.log("ID+>", req.params.id);
+  console.log("ID>", req.params.id);
   try {
-    await Permission.findByIdAndDelete(req.params.id);
+    const permission = await Permission.findByIdAndDelete(req.params.id);
     res.status(200).json({
       success: true,
       message: "Permission deleted successfully.",
+      data: permission,
     });
   } catch (error) {
     console.error("Error encountered.", error);
