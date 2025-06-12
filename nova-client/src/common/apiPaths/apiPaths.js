@@ -1,4 +1,8 @@
-export const API_PATHS = {
+const API_PATHS = {
+  AUDIT_LOGS: {
+    ENDPOINT: "audit-logs",
+    KEY: "auditLogs",
+  },
   USERS: {
     ENDPOINT: "users",
     KEY: ["users"],
@@ -11,7 +15,6 @@ export const API_PATHS = {
     ENDPOINT: "permissions",
     KEY: ["permissions"],
   },
-  // Extend this for other features
+  // Extend this for other features.....
 };
-
-// export default API_PATHS;
+export default API_PATHS;

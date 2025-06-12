@@ -37,17 +37,6 @@ const userSchema = new mongoose.Schema(
         ref: "Permission",
       },
     ],
-
-    // roles: {
-    //   type: [String],
-    //   enum: ["admin", "editor", "user", "moderator"],
-    //   default: ["user"],
-    // },
-    // permissions: {
-    //   type: [String],
-    //   enum: ["create_post", "edit_post", "view_stats", "view_post"],
-    //   default: ["create_post"],
-    // },
     refreshToken: {
       type: String,
       default: "",

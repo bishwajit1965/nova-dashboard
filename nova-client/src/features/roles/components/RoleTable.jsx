@@ -1,21 +1,40 @@
+import API_PATHS from "../../../common/apiPaths/apiPaths";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import Loader from "../../../components/ui/Loader";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
-import useFetchRoles from "../hooks/useFetchRoles";
+import toast from "react-hot-toast";
+import { useApiMutation } from "../../../common/hooks/useApiMutation";
+import { useApiQuery } from "../../../common/hooks/useApiQuery";
 import { useState } from "react";
 
-const RoleTable = ({ onEdit, onDelete }) => {
-  const { data: roles = [], isLoading } = useFetchRoles();
+const RoleTable = ({ onEdit }) => {
+  const { data: roles, isLoading } = useApiQuery({
+    url: `${API_PATHS.ROLES.ENDPOINT}`,
+    queryKey: `${API_PATHS.ROLES.KEY}`,
+    options: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  });
+
+  const { mutate: deleteRole } = useApiMutation({
+    method: "delete",
+    path: (id) => `${API_PATHS.ROLES.ENDPOINT}/${id}`,
+    key: API_PATHS.ROLES.KEY,
+    onSuccess: () => {
+      setConfirmDelete(null);
+    },
+    onError: (error) => {
+      toast.error("Error deleting permission");
+      setConfirmDelete(null);
+      console.error(error);
+    },
+  });
+
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   if (isLoading) return <Loader />;
-
-  if (roles.length === 0)
-    return (
-      <p className="flex justify-center text-sm text-gray-500">
-        No roles found.
-      </p>
-    );
 
   return (
     <div className="overflow-x-auto">
@@ -62,7 +81,7 @@ const RoleTable = ({ onEdit, onDelete }) => {
         <ConfirmDialog
           isOpen={confirmDelete}
           onClose={() => setConfirmDelete(null)}
-          onConfirm={() => onDelete(confirmDelete._id)}
+          onConfirm={() => deleteRole(confirmDelete._id)}
         />
       )}
     </div>

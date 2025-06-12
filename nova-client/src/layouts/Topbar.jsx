@@ -1,11 +1,26 @@
+import { Home, UsersIcon, X } from "lucide-react";
 import { LogIn, LogOut, SquareMenu } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import ThemeToggle from "../components/ui/ThemeToggle";
 import api from "../lib/api";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
-const Topbar = ({ toggleSidebar }) => {
+const navItems = [
+  {
+    to: "/",
+    label: "Home",
+    icon: Home,
+    end: true,
+  },
+  {
+    to: "/dashboard/users",
+    label: "Contact",
+    icon: UsersIcon,
+  },
+];
+
+const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -17,13 +32,47 @@ const Topbar = ({ toggleSidebar }) => {
       console.error("Logout failed:", err);
     }
   };
-  console.log("USER", user);
+
   return (
     <header className="bg-base-200 border-b border-base-300 shadow px-4 py-3 flex items-center justify-between w-full">
-      <button onClick={toggleSidebar} className="lg:hidden pr-2">
-        <SquareMenu size={28} />
-      </button>
-      <h2 className="text-lg font-semibold">Dashboard</h2>
+      <div className="flex items-center">
+        <button onClick={toggleSidebar} className="lg:hidden pr-2">
+          <SquareMenu size={28} />
+        </button>
+        <h2 className="text-xl font-bold flex text-base-content items-center invisible lg:visible lg:mr-6">
+          <span className="tooltip tooltip-right" data-tip="Hide sidebar">
+            <SquareMenu
+              size={25}
+              onClick={leftSidebarToggler}
+              className="tooltip"
+              data-tip="Hide sidebar"
+            />
+          </span>
+
+          {user?.name}
+        </h2>
+        <ul className="flex space-x-4">
+          {navItems.map(({ to, label, icon: Icon, end }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={end}
+                className={({ isActive }) =>
+                  `flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
+                    isActive
+                      ? "bg-base-300 text-primary"
+                      : "text-base-content hover:bg-base-200"
+                  }`
+                }
+              >
+                {Icon && <Icon size={18} />}
+                <span>{label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div className="flex items-center justify-around lg:space-x-8">
         <div className="invisible lg:visible">Menu One</div>
         <div className="invisible lg:visible">Menu Two</div>

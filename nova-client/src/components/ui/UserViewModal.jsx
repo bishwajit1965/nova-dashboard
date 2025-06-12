@@ -20,22 +20,22 @@ export default function UserViewModal({ user, open, onClose }) {
 
         <div className="space-y-2">
           <div>
-            <strong>Name:</strong> <span>{user.name}</span>
+            <strong>Name:</strong> <span>{user?.name}</span>
           </div>
           <div>
-            <strong>Email:</strong> <span>{user.email}</span>
+            <strong>Email:</strong> <span>{user?.email}</span>
           </div>
           {user.bio && (
             <div>
-              <strong>Bio:</strong> <span>{user.bio}</span>
+              <strong>Bio:</strong> <span>{user?.bio}</span>
             </div>
           )}
           <div>
             <strong>Roles:</strong>{" "}
             <div className="flex flex-wrap gap-1 mt-1">
-              {user.roles?.map((role) => (
-                <Badge key={role} color="blue">
-                  <span>{role}</span>
+              {user?.roles?.map((role) => (
+                <Badge key={role._id} color="blue">
+                  <span>{role?.name}</span>
                 </Badge>
               ))}
             </div>
@@ -44,9 +44,9 @@ export default function UserViewModal({ user, open, onClose }) {
             <div>
               <strong>Permissions:</strong>
               <div className="flex flex-wrap gap-1 mt-1">
-                {user.permissions.map((perm) => (
-                  <Badge key={perm} color="blue">
-                    {perm}
+                {user?.permissions?.map((perm) => (
+                  <Badge key={perm._id} color="blue">
+                    {perm?.name}
                   </Badge>
                 ))}
               </div>

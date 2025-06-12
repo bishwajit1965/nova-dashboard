@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const logAudit = require("../utils/logAudit");
+const AuditLog = require("../models/AuditLog");
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
@@ -45,10 +47,41 @@ const updateUserById = async (req, res) => {
       permissions: updatedUser.permissions,
       bio: updatedUser.bio,
     });
+
+    // After updating the user
+    await logAudit({
+      userId: req.user._id, // or however you're tracking the actor
+      action: "Updated User",
+      entityType: "User",
+      entityId: updatedUser._id,
+      details: `Updated user name to ${updatedUser.name}`,
+    });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+const getAllAuditLogs = async (req, res) => {
+  try {
+    const auditLogs = await AuditLog.find({})
+      .populate({
+        path: "userId",
+        select: "name email roles permissions",
+        populate: [
+          { path: "roles", select: "name description" },
+          { path: "permissions", select: "name description" },
+        ],
+      })
+      .sort({ timestamp: -1 })
+      .limit(100);
+    console.log("Audit log", auditLogs);
+    res.status(200).json({
+      success: true,
+      message: "Audit log fetched successfully",
+      data: auditLogs,
+    });
+  } catch (error) {}
 };
 
 const updateCurrentUserProfile = async (req, res) => {
@@ -178,6 +211,7 @@ const deleteUserById = async (req, res) => {
 module.exports = {
   getUserById,
   updateUserById,
+  getAllAuditLogs,
   updateCurrentUserProfile,
   getAllUsers,
   getMe,

@@ -1,20 +1,27 @@
+import API_PATHS from "../../../../common/apiPaths/apiPaths";
 import { UsersRoundIcon } from "lucide-react";
-import api from "../../../../lib/api";
-import useApiQuery from "../../../../hooks/useApiQuery";
+import { useApiQuery } from "../../../../common/hooks/useApiQuery";
 
 const TotalUsers = () => {
-  const { data, isLoading, error } = useApiQuery({
-    key: "totalUsers",
-    url: "/users",
-    params: {},
-    enabled: true,
-    select: (data) => data.users,
-    onSuccess: (data) => console.log("Data fetched successfully:", data),
-    fetcher: (url, params) =>
-      api.get(url, { params, withCredentials: true }).then((res) => res.data),
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+  } = useApiQuery({
+    url: API_PATHS.USERS.ENDPOINT,
+    queryKey: API_PATHS.USERS.KEY,
+    options: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
   });
-
+  console.log("LOGGING USERS LENGTH=>", users);
   if (isLoading) {
+    return <div className="animate-pulse h-20 bg-gray-200 rounded" />;
+  }
+  if (isError) {
     return <div className="animate-pulse h-20 bg-gray-200 rounded" />;
   }
 
@@ -41,7 +48,7 @@ const TotalUsers = () => {
       <div>
         <p className="text-sm text-gray-500">Total Users</p>
         <h3 className="text-2xl font-semibold text-base-content">
-          {data.length > 0 ? data.length : 0}
+          {users?.length ? users?.length : "0"}
         </h3>
       </div>
     </div>

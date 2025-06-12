@@ -1,18 +1,32 @@
+import API_PATHS from "../../../../common/apiPaths/apiPaths";
+import { Loader } from "lucide-react";
 import { LucideIcon } from "../../../../lib/LucideIcons";
 import StatsCard from "./StatsCard";
-import api from "../../../../lib/api";
-import useApiQuery from "../../../../hooks/useApiQuery";
+import { useApiQuery } from "../../../../common/hooks/useApiQuery";
 
 const TotalUsersCard = () => {
-  const { data, isLoading } = useApiQuery({
-    key: "totalUsers",
-    url: "/users",
-    select: (data) => data.users,
-    fetcher: (url) =>
-      api.get(url, { withCredentials: true }).then((res) => res.data),
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+  } = useApiQuery({
+    url: API_PATHS.USERS.ENDPOINT,
+    queryKey: API_PATHS.USERS.KEY,
+    options: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
   });
 
-  const count = data?.length ?? 0;
+  const count = users?.length ?? 0;
+  if (isError || error)
+    return (
+      <div className="border-t-8 animate-spin flex justify-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <StatsCard

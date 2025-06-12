@@ -9,30 +9,31 @@ export default function PermissionManager() {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-6">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Manage Permissions</h1>
+    <div className="max-w-7xl mx-auto lg:p-4 p-2 space-y-6">
+      <div className="lg:flex lg:space-y-0 space-y-2 justify-between">
+        <h1 className="lg:text-2xl text-xl font-bold">Manage Permissions</h1>
         <Button
           onClick={() => {
             setEditingData(null); // create mode
             setShowForm(true);
           }}
-          className="btn btn-primary mb-4"
+          className="btn btn-primary lg:mb-4"
           icon={LucideIcon.SquarePlus}
         >
           Add Permission
         </Button>
       </div>
-
       {showForm && (
-        <PermissionForm
-          existing={editingData}
-          onClose={() => {
-            setShowForm(false);
-            setEditingData(null);
-          }}
-          onEditing={setEditingData}
-        />
+        <div className="bg-base-100 rounded-lg shadow-sm lg:p-4 p-2">
+          <PermissionForm
+            existing={editingData}
+            onClose={() => {
+              setShowForm(false);
+              setEditingData(null);
+            }}
+            onEditing={setEditingData}
+          />
+        </div>
       )}
 
       <PermissionList

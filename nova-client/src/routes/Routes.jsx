@@ -1,4 +1,5 @@
-import AdminUsersPage from "../features/users/AdminUsersPage";
+import AdminUsersManagementPage from "../features/users/AdminUsersManagementPage";
+import AuditLogPage from "../features/auditLog/AuditLogPage";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardRouter from "../features/dashboard/DashboardRouter";
 import LandingPage from "../pages/LandingPage";
@@ -11,6 +12,7 @@ import RoleManager from "../features/roles/RolesManager";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UserSettings from "../features/account/UserSettings";
 import UsersList from "../features/users/UsersList";
+import UsersPage from "../features/users/UsersPage";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -50,16 +52,40 @@ const router = createBrowserRouter([
         element: <UserSettings />,
       },
       {
-        path: "admin/users",
-        element: <AdminUsersPage />,
+        path: "admin/users/management",
+        element: <AdminUsersManagementPage />,
+      },
+      {
+        path: "admin/users-roles-permissions",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UsersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/role",
-        element: <RoleManager />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <RoleManager />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/permissions",
-        element: <PermissionManager />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <PermissionManager />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/audit-log",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AuditLogPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "users", // `/dashboard/users`

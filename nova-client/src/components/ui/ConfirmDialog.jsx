@@ -7,14 +7,14 @@ export default function ConfirmDialog({
   onClose,
   onConfirm,
   icon = <CircleCheckBig size={25} className="text-blue-500" />,
-  title = "Confirm Delete ?",
+  title = "Confirm delete this item ?",
   message = "Are you sure you want to delete this item?",
   confirmText = "Delete",
   cancelText = "Cancel",
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title}>
-      <div className="space-y-4">
+      <div className="space-y-2">
         <p className="flex items-center space-x-2">
           <span>{icon}</span>
           <span>{message}</span>

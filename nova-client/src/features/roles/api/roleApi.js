@@ -1,4 +1,6 @@
-import API_PATHS from "../../../services/apiPaths";
+// import API_PATHS from "../../../services/apiPaths";
+
+import API_PATHS from "../../../common/apiPaths/apiPaths";
 import api from "../../../lib/api";
 
 export const getAllRoles = () => api.get(API_PATHS.ROLES);

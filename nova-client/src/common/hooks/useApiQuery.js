@@ -1,15 +1,36 @@
-import { apiService } from "../api/apiService";
+import apiService from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 
-export const useApiQuery = ({ key, path, enabled = true }) => {
+export const useApiQuery = ({
+  queryKey,
+  url,
+  params = {},
+  enabled = true,
+  select,
+  onSuccess,
+  onError,
+  retry = 1,
+  staleTime = 0,
+  cacheTime = 5 * 60 * 1000,
+  fetcher = (url, { params }) =>
+    apiService.getAll(url, { params }).then((res) => {
+      console.log("Hook got the response:", res);
+      return res.data;
+    }),
+  refetchOnWindowFocus = true,
+  options = {},
+}) => {
   return useQuery({
-    queryKey: key,
-    queryFn: async () => {
-      if (!path) throw new Error("API path is undefined");
-      const res = await apiService.getAll(path);
-      if (!res?.data) throw new Error("Permissions not found.");
-      return res.data; // This is the array of permissions
-    },
+    queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
+    queryFn: () => fetcher(url, { params }),
     enabled,
+    select,
+    onSuccess,
+    onError,
+    retry,
+    staleTime,
+    cacheTime,
+    refetchOnWindowFocus,
+    ...options,
   });
 };

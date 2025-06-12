@@ -15,7 +15,8 @@ const Button = ({
     "inline-flex items-center justify-center gap-2 px-2 py-2 rounded font-semibold transition duration-150 cursor-pointer";
 
   const variants = {
-    primary: "bg-blue-600 text-white hover:text-base-200 hover:bg-blue-800",
+    primary:
+      "bg-blue-600 text-white hover:text-base-200 hover:bg-blue-800 shadow-sm",
     success:
       "bg-green-600 text-white hover:text-base-200 hover:bg-green-700 shadow-sm",
     secondary:
@@ -23,20 +24,20 @@ const Button = ({
     danger:
       "bg-red-600 text-white hover:text-gray-800 hover:bg-red-700 shadow-sm",
     green:
-      "bg-green-600 text-white hover:text-base-200 hover:bg-green-700 shadow-sm",
+      "bg-green-500 text-white hover:text-base-200 hover:bg-green-800 shadow-sm",
     ghost:
       "text-gray-600 hover:text-gray-800 hover:text-black hover:bg-gray-100 border border-gray-200 shadow-sm",
     cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-sm",
     outline:
-      "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-sm ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2",
+      "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-sm ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-sm",
     warning:
-      "bg-yellow-500 border border-yellow-500 text-gray-800 hover:text-gray-200 hover:bg-yellow-600 shadow-sm",
+      "bg-yellow-600 border border-yellow-600 text-base-100 hover:text-base-200 hover:bg-yellow-700 shadow-sm",
     muted:
       "bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-100 shadow-sm", // 👈 Add this
   };
 
   const disabledStyles =
-    "opacity-50 cursor-not-allowed hover:!text-gray-400 hover:!bg-transparent";
+    "opacity-50 cursor-not-allowed pointer-events-none hover:!text-gray-400 hover:!bg-transparent";
 
   const loadingSpinner = (
     <span className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin" />
