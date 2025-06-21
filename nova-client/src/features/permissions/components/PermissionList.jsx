@@ -2,14 +2,13 @@ import API_PATHS from "../../../common/apiPaths/apiPaths";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import Loader from "../../../components/ui/Loader";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
+import Pagination from "../../../pagination/Pagination";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../../common/hooks/useApiQuery";
 import { useState } from "react";
 
 export default function PermissionList({ onEdit }) {
-  const [confirmDelete, setConfirmDelete] = useState(null);
-
   const {
     data: permissions,
     isLoading,
@@ -25,6 +24,9 @@ export default function PermissionList({ onEdit }) {
       refetchOnReconnect: true,
     },
   });
+
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [paginatedData, setPaginatedData] = useState(permissions || []);
 
   const { mutate: deletePermission } = useApiMutation({
     method: "delete",
@@ -58,7 +60,7 @@ export default function PermissionList({ onEdit }) {
             </tr>
           </thead>
           <tbody>
-            {permissions?.map((permission, idx) => (
+            {paginatedData?.map((permission, idx) => (
               <tr key={permission._id}>
                 <td>{idx + 1}</td>
                 <td>{permission.name}</td>
@@ -86,6 +88,12 @@ export default function PermissionList({ onEdit }) {
             ))}
           </tbody>
         </table>
+
+        {/* pagination begins*/}
+        <Pagination
+          items={permissions}
+          onPaginatedDataChange={setPaginatedData}
+        />
 
         {/* Permission Delete Confirm Dialogue */}
         {confirmDelete && (

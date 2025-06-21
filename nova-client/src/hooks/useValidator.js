@@ -38,6 +38,9 @@ const useValidator = (validationRules, formData) => {
 
     setErrors(newErrors);
 
+    if (Object.keys(newErrors).length > 0) {
+      setTimeout(() => setErrors({}), 2000);
+    }
     return Object.keys(newErrors).length === 0;
   }, [validationRules, formData]);
 

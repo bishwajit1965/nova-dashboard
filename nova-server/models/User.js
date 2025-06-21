@@ -20,10 +20,16 @@ const userSchema = new mongoose.Schema(
       default: "",
       maxlength: 500, // Optional constraint
     },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   select: false, // Hides password by default
+    // },
     password: {
       type: String,
-      required: true,
-      select: false, // Hides password by default
+      required: function () {
+        return this.provider === "local";
+      },
     },
     roles: [
       {
@@ -54,14 +60,29 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+  // Only hash if the password exists and has been modified
+  if (!this.password || !this.isModified("password")) {
     return next();
   }
-  // Hash the password before saving it to the database
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    return next(err);
+  }
 });
+
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified("password" || !this.password)) {
+//     return next();
+//   }
+//   // Hash the password before saving it to the database
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

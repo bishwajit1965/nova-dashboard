@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["Avenir", "Gantt", "Satoshi", "shadcn", "Topbar", "VITE"]
+  "cSpell.words": ["Avenir", "Gantt", "Satoshi", "shadcn", "Topbar", "VITE"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnType": true
 }

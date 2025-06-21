@@ -69,12 +69,17 @@ const navItems = [
     label: "Manage Audit Log",
     icon: ListCheck,
   },
+  {
+    to: "admin/contact-messages",
+    label: "Manage Contacts",
+    icon: ListCheck,
+  },
 ];
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <aside
-      className={`fixed top-0 left-0 z-40 w-64 h-screen bg-gray-800 text-base-content transform transition-transform duration-300 ease-in-out
+      className={`fixed top-0 left-0 z-50 w-64 h-screen bg-gray-800 text-base-content transform transition-transform duration-300 ease-in-out
       ${isOpen ? "translate-x-0 " : "-translate-x-full"}
       lg:translate-x-0 lg:static lg:block overflow-y-auto shadow-inner`}
     >

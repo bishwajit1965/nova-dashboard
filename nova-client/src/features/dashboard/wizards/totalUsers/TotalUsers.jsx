@@ -1,5 +1,6 @@
+import { Loader, UsersRoundIcon } from "lucide-react";
+
 import API_PATHS from "../../../../common/apiPaths/apiPaths";
-import { UsersRoundIcon } from "lucide-react";
 import { useApiQuery } from "../../../../common/hooks/useApiQuery";
 
 const TotalUsers = () => {
@@ -17,13 +18,11 @@ const TotalUsers = () => {
       refetchOnReconnect: true,
     },
   });
-  console.log("LOGGING USERS LENGTH=>", users);
-  if (isLoading) {
-    return <div className="animate-pulse h-20 bg-gray-200 rounded" />;
-  }
-  if (isError) {
-    return <div className="animate-pulse h-20 bg-gray-200 rounded" />;
-  }
+
+  if (isLoading)
+    return <Loader className="animate-spin w-6 h-6 text-blue-600" />;
+
+  if (isError) return <Loader className="animate-spin w-6 h-6 text-red-600" />;
 
   if (error) {
     return (

@@ -2,6 +2,7 @@ import { Home, UsersIcon, X } from "lucide-react";
 import { LogIn, LogOut, SquareMenu } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
+import Logo from "../components/ui/Logo";
 import ThemeToggle from "../components/ui/ThemeToggle";
 import api from "../lib/api";
 import { useAuth } from "../hooks/useAuth";
@@ -21,8 +22,9 @@ const navItems = [
 ];
 
 const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     try {
       await api.post("/auth/logout", {}, { withCredentials: true });
@@ -48,8 +50,9 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
               data-tip="Hide sidebar"
             />
           </span>
-
-          {user?.name}
+          <span className="ml-6">
+            <Logo />
+          </span>
         </h2>
         <ul className="flex space-x-4">
           {navItems.map(({ to, label, icon: Icon, end }) => (

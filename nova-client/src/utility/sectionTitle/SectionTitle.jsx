@@ -12,7 +12,7 @@ const SectionTitle = ({
       <div className="flex justify-center">
         <h1 className="lg:text-2xl font-extrabold flex items-center space-x-2">
           <span>{icon}</span>
-          <span>{userStatus}</span>
+          <span className="capitalize">{userStatus}</span>
           <span>
             {title}{" "}
             <span className="text-amber-600 text-shadow-amber-500 shadow-amber-300">

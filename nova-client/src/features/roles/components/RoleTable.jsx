@@ -2,6 +2,7 @@ import API_PATHS from "../../../common/apiPaths/apiPaths";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 import Loader from "../../../components/ui/Loader";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
+import Pagination from "../../../pagination/Pagination";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../../common/hooks/useApiQuery";
@@ -17,6 +18,8 @@ const RoleTable = ({ onEdit }) => {
       refetchOnReconnect: true,
     },
   });
+
+  const [paginatedData, setPaginatedData] = useState(roles || []);
 
   const { mutate: deleteRole } = useApiMutation({
     method: "delete",
@@ -49,7 +52,7 @@ const RoleTable = ({ onEdit }) => {
           </tr>
         </thead>
         <tbody>
-          {roles?.map((role, idx) => (
+          {paginatedData?.map((role, idx) => (
             <tr key={role._id}>
               <td>{idx + 1}</td>
               <td>{role.name}</td>
@@ -75,6 +78,9 @@ const RoleTable = ({ onEdit }) => {
           ))}
         </tbody>
       </table>
+
+      {/* pagination begins*/}
+      <Pagination items={roles} onPaginatedDataChange={setPaginatedData} />
 
       {/* Role Delete Confirm Dialogue */}
       {confirmDelete && (

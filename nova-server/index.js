@@ -31,6 +31,7 @@ const userRoutes = require("./routes/userRoutes");
 const permissionRoutes = require("./routes/permissionRoutes");
 const roleRoutes = require("./routes/roleRoutes");
 const auditLogRoutes = require("./routes/auditLogRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -43,6 +44,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/audit-logs", auditLogRoutes);
+app.use("/api", contactRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

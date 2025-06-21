@@ -12,28 +12,28 @@ const Button = ({
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 px-2 py-2 rounded font-semibold transition duration-150 cursor-pointer";
+    "inline-flex items-center justify-center gap-2 px-2 py-2 rounded font-semibold transition duration-150 cursor-pointer hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50 text-sm";
 
   const variants = {
     primary:
-      "bg-blue-600 text-white hover:text-base-200 hover:bg-blue-800 shadow-sm",
+      "bg-blue-600 text-white hover:text-gray-200 hover:bg-blue-800 shadow-md",
     success:
-      "bg-green-600 text-white hover:text-base-200 hover:bg-green-700 shadow-sm",
+      "bg-green-600 text-white hover:text-gray-200 hover:bg-green-700 shadow-md",
     secondary:
-      "bg-gray-200 text-gray-800 hover:text-base-800 hover:bg-gray-300 shadow-sm",
+      "bg-gray-200 text-gray-800 hover:text-base-800 hover:bg-gray-300 shadow-md",
     danger:
-      "bg-red-600 text-white hover:text-gray-800 hover:bg-red-700 shadow-sm",
+      "bg-red-600 text-white hover:text-base-100 hover:bg-red-700 shadow-md outline-none border-none",
     green:
-      "bg-green-500 text-white hover:text-base-200 hover:bg-green-800 shadow-sm",
+      "bg-green-500 text-white hover:text-gray-200 hover:bg-green-800 shadow-md",
     ghost:
-      "text-gray-600 hover:text-gray-800 hover:text-black hover:bg-gray-100 border border-gray-200 shadow-sm",
-    cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-sm",
+      "text-gray-600 hover:text-gray-800 hover:text-black hover:bg-gray-100 border border-gray-200 shadow-md",
+    cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-md",
     outline:
-      "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-sm ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-sm",
+      "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-md ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-md",
     warning:
-      "bg-yellow-600 border border-yellow-600 text-base-100 hover:text-base-200 hover:bg-yellow-700 shadow-sm",
+      "bg-yellow-600 border border-yellow-600 text-base-100 hover:text-gray-200 hover:bg-yellow-700 shadow-md",
     muted:
-      "bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-100 shadow-sm", // 👈 Add this
+      "bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-100 shadow-md", // 👈 Add this
   };
 
   const disabledStyles =

@@ -1,4 +1,4 @@
-import { Eye, Loader2, Pencil, PlusCircleIcon, Trash2 } from "lucide-react";
+import { Eye, Loader2, Pencil, PlusCircleIcon, Trash2, X } from "lucide-react";
 
 import Button from "./Button";
 import { cn } from "../../lib/utils";
@@ -9,6 +9,7 @@ const icons = {
   view: Eye,
   loading: Loader2,
   add: PlusCircleIcon,
+  close: X,
 };
 
 const iconLabels = {
@@ -16,6 +17,8 @@ const iconLabels = {
   delete: "Delete",
   view: "View",
   add: "Add",
+  close: "Close",
+  loading: "Loading",
 };
 
 export function MiniIconButton({

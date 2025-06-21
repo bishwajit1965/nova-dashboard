@@ -6,9 +6,10 @@ import Textarea from "../../../components/ui/Textarea";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../../common/hooks/useApiMutation";
 import { useState } from "react";
+import useSubmitDelayedValue from "../../../common/hooks/useSubmitDelayedValue";
 import useValidator from "../../../hooks/useValidator";
 
-export default function PermissionForm({ existing, onSuccess, onClose }) {
+export default function PermissionForm({ existing, onClose, onEditing }) {
   const [name, setName] = useState(existing?.name || "");
   const [description, setDescription] = useState(existing?.description || "");
 
@@ -40,7 +41,7 @@ export default function PermissionForm({ existing, onSuccess, onClose }) {
       : API_PATHS.PERMISSIONS.ENDPOINT,
     key: API_PATHS.PERMISSIONS.KEY, // used by useQuery
     onSuccess: (data) => {
-      onSuccess?.(data);
+      onEditing?.(data);
       onClose?.();
     },
     onError: (error) => {
@@ -59,8 +60,10 @@ export default function PermissionForm({ existing, onSuccess, onClose }) {
     mutation.mutate(payload);
   };
 
+  const delayedIsSubmitting = useSubmitDelayedValue(mutation.isPending, 2000);
+
   return (
-    <div className="lg:max-w-xl max-w-full mx-auto space-y-6 border border-gray-300 shadow-sm lg:p-6 rounded-lg lg:mb-10">
+    <div className="lg:max-w-xl max-w-full mx-auto space-y-6 border border-base-300 shadow-sm lg:p-6 rounded-lg lg:mb-10">
       <h2 className="lg:text-3xl text-xl font-bold text-base-content">
         {existing ? "Update Permission" : "Create Permission"}
       </h2>
@@ -104,27 +107,26 @@ export default function PermissionForm({ existing, onSuccess, onClose }) {
         </div>
         <div className="flex items-center space-x-4">
           <Button
-            className="btn"
+            className="btn btn-md"
             variant="primary"
             type="submit"
             disabled={mutation.isPending}
             loading={mutation.isPending}
             icon={
-              mutation.isPending
+              delayedIsSubmitting
                 ? LucideIcon.Check
                 : existing
                 ? LucideIcon.Edit
                 : LucideIcon.Plus
             }
           >
-            {mutation.isLoading ? "Saving..." : existing ? "Update" : "Create"}{" "}
+            {delayedIsSubmitting ? "Saving..." : existing ? "Update" : "Create"}{" "}
           </Button>
           <Button
             type="button"
             icon={LucideIcon.Settings}
             variant="warning"
             onClick={onClose}
-            className="btn"
           >
             Cancel
           </Button>

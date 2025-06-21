@@ -34,7 +34,7 @@ const DashboardLayout = () => {
         />
 
         <main className="flex-1 overflow-y-auto bg-base-50">
-          <div className="sticky top-0 z-50">
+          <div className="sticky top-0 z-40">
             <SectionTitle
               icon=<ShieldCheckIcon className="" />
               title="Only"
@@ -59,7 +59,7 @@ const DashboardLayout = () => {
               }
             />
           </div>
-          <div className="p-4">
+          <div className="lg:p-4">
             <Outlet />
           </div>
         </main>

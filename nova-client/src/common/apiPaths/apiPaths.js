@@ -3,6 +3,10 @@ const API_PATHS = {
     ENDPOINT: "audit-logs",
     KEY: "auditLogs",
   },
+  CONTACT_MESSAGES: {
+    ENDPOINT: "contacts",
+    KEY: "contactMessages",
+  },
   USERS: {
     ENDPOINT: "users",
     KEY: ["users"],

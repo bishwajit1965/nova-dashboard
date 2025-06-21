@@ -23,7 +23,7 @@ const RoleManager = () => {
           icon={LucideIcon.SquarePlus}
           className="btn btn-md"
         >
-          Add Role
+          Create Role
         </Button>
       </div>
 

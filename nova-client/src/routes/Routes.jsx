@@ -1,13 +1,18 @@
+import About from "../pages/About";
 import AdminUsersManagementPage from "../features/users/AdminUsersManagementPage";
 import AuditLogPage from "../features/auditLog/AuditLogPage";
+import Contact from "../pages/Contact";
+import ContactMessagesPage from "../pages/admin/ContactMessagesPage";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardRouter from "../features/dashboard/DashboardRouter";
 import LandingPage from "../pages/LandingPage";
-import LoginPage from "../pages/LoginPage";
+import Login from "../features/auth/Login";
 import MyButtons from "../stories/sandbox/MyButtons";
 import NotFoundPage from "../pages/NotFound";
 import PermissionManager from "../features/permissions/pages/PermissionManager";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicLayout from "../layouts/public/PublicLayout";
+import Register from "../features/auth/Register";
 import RoleManager from "../features/roles/RolesManager";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UserSettings from "../features/account/UserSettings";
@@ -19,19 +24,39 @@ const router = createBrowserRouter([
   // Public landing layout
   {
     path: "/",
-    element: <LandingPage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/my-buttons",
-    element: <MyButtons />,
-  },
-  {
-    path: "/unauthorized",
-    element: <UnauthorizedPage />,
+    element: <PublicLayout />,
+    children: [
+      {
+        index: true, // 👈 This means "show this when path is exactly '/'"
+        element: <LandingPage />,
+      },
+      {
+        path: "/about",
+        element: <About />, // Assuming you have an About component
+      },
+      {
+        path: "/contact",
+        element: <Contact />, // Assuming you have a Contact component
+      },
+      {
+        path: "/login",
+        element: <Login />,
+        handle: { hideLayout: true }, // 👈 flag to hide navbar/footer
+      },
+      {
+        path: "/register",
+        element: <Register />,
+        handle: { hideLayout: true }, // 👈 flag to hide navbar/footer
+      },
+      {
+        path: "/my-buttons",
+        element: <MyButtons />,
+      },
+      {
+        path: "/unauthorized",
+        element: <UnauthorizedPage />,
+      },
+    ],
   },
 
   // ⚡️ Dashboard Layout - all routes under /dashboard share the same layout
@@ -88,10 +113,18 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "users", // `/dashboard/users`
+        path: "admin/users", // `/dashboard/users`
         element: (
           <ProtectedRoute allowedRoles={["admin"]}>
             <UsersList />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/contact-messages",
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "editor"]}>
+            <ContactMessagesPage />
           </ProtectedRoute>
         ),
       },

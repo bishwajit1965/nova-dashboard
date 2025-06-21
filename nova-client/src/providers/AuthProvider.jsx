@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import AuthContext from "../authContext/AuthContext";
 import api from "../lib/api"; // Axios instance with credentials
+import { initializeGoogleSDK } from "../utils/googleSdk";
 import toast from "react-hot-toast";
 
 export const AuthProvider = ({ children }) => {
@@ -35,25 +36,59 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  const register = async ({ name, email, password }) => {
+    const res = await api.post(
+      "/auth/register",
+      { name, email, password },
+      { withCredentials: true }
+    );
+    const user = res.data?.user;
+    if (!user) {
+      throw new Error("Registration failed. Please check your credentials.");
+    }
+    // ⬇️ Attach token to Axios instance
+    setUser(user);
+    setIsAuthenticated(true);
+    return user;
+  };
+
   const login = async (email, password) => {
     const res = await api.post(
       "/auth/login",
       { email, password },
       { withCredentials: true }
     );
-    setUser(res.data.user);
+    const user = res.data?.user;
+    if (!user) {
+      throw new Error("Login failed. Please check your credentials.");
+    }
+    // ⬇️ Attach token to Axios instance
+    setUser(user);
     setIsAuthenticated(true);
+    return user;
   };
 
   const logout = async () => {
-    await api.post("/auth/logout", {}, { withCredentials: true });
-    setUser(null);
-    setIsAuthenticated(false);
+    try {
+      await api.post("/auth/logout", {}, { withCredentials: true });
+      setUser(null);
+      setIsAuthenticated(false);
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      toast.error("Logout failed. Try again.");
+    }
   };
+  useEffect(() => {
+    initializeGoogleSDK();
+  }, []);
 
   const authInfo = {
     user,
+    setUser,
     isAuthenticated,
+    setIsAuthenticated,
+    register,
     login,
     logout,
     loading,
