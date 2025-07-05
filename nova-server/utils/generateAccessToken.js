@@ -1,13 +1,16 @@
 const jwt = require("jsonwebtoken");
 
 const generateAccessToken = (user) => {
-  // Handles both ObjectId and string
   const roles = user.roles.map((role) =>
     typeof role === "string" ? role : role.name
   );
   const permissions = user.permissions.map((perm) =>
     typeof perm === "string" ? perm : perm.name
   );
+
+  const planTier = user?.plan?.tier ?? "free";
+  const planFeatures = user?.plan?.features ?? [];
+  const planPrice = user?.plan?.price;
 
   return jwt.sign(
     {
@@ -16,6 +19,8 @@ const generateAccessToken = (user) => {
       email: user.email,
       roles,
       permissions,
+      plan: { tier: planTier, features: planFeatures, price: planPrice },
+      bio: user.bio,
     },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || "1d" }

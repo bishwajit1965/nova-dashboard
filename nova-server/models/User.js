@@ -43,6 +43,11 @@ const userSchema = new mongoose.Schema(
         ref: "Permission",
       },
     ],
+    plan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Plan",
+      default: null,
+    },
     refreshToken: {
       type: String,
       default: "",
@@ -73,16 +78,6 @@ userSchema.pre("save", async function (next) {
     return next(err);
   }
 });
-
-// userSchema.pre("save", async function (next) {
-//   if (!this.isModified("password" || !this.password)) {
-//     return next();
-//   }
-//   // Hash the password before saving it to the database
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
-//   next();
-// });
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

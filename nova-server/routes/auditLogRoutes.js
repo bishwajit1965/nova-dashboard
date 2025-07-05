@@ -10,7 +10,7 @@ const authorizePermissions = require("../middlewares/authorizePermissions");
 router.get(
   "/",
   protect,
-  authorizeRoles("admin"),
+  authorizeRoles("admin", "editor"),
   authorizePermissions("edit_post"),
   getAllAuditLogs
 );

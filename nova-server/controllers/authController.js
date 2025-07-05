@@ -34,6 +34,11 @@ const registerUser = async (req, res) => {
       permissions: [],
     });
 
+    user = await User.findById(user._id)
+      .populate("roles")
+      .populate("permissions")
+      .populate("plan", "_id name price tier features");
+
     if (user) {
       const accessToken = generateAccessToken(user);
       const refreshToken = generateRefreshToken(user._id);
@@ -56,6 +61,13 @@ const registerUser = async (req, res) => {
           email: user.email,
           roles: user.roles.map((r) => r.name),
           permissions: user.permissions.map((p) => p.name),
+          plan: user.plan && {
+            _id: user.plan._id,
+            tier: user.plan.tier,
+            features: user.plan.features,
+            name: user.plan.name,
+            price: user.plan.price,
+          },
         },
       });
     } else {
@@ -99,7 +111,6 @@ const googleSignUpController = async (req, res) => {
 
     const userRole = await Role.findOne({ name: "user" });
 
-    // 👤 Create new user if doesn't exist
     if (!user) {
       user = await User.create({
         name,
@@ -111,9 +122,6 @@ const googleSignUpController = async (req, res) => {
         password: null,
       });
     }
-
-    // Populate roles and permissions before sending
-    // await user.populate("roles").populate("permissions");
 
     // ✅ Generate access and refresh tokens
     const accessToken = generateAccessToken(user);
@@ -142,6 +150,10 @@ const googleSignUpController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
+        plan: {
+          tier: user.plan?.tier ?? "free",
+          features: user.plan?.features ?? [],
+        },
       },
     });
   } catch (error) {
@@ -157,7 +169,8 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email })
       .select("+password")
       .populate("roles")
-      .populate("permissions");
+      .populate("permissions")
+      .populate("plan", "_id name price tier features");
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -184,6 +197,14 @@ const loginUser = async (req, res) => {
         email: user.email,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((permission) => permission.name),
+        bio: user.bio,
+        plan: user.plan && {
+          _id: user.plan._id,
+          tier: user.plan.tier,
+          features: user.plan.features,
+          name: user.plan.name,
+          price: user.plan.price,
+        },
       },
     });
   } catch (error) {
@@ -197,20 +218,18 @@ const refreshTokenHandler = async (req, res) => {
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-
-    const user = await User.findById(decoded.userId)
-      .populate("roles")
-      .populate("permissions");
-
+    let user = await User.findById(decoded.userId);
     if (!user || user.refreshToken !== token) {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
+    user = await User.findById(decoded.userId)
+      .populate("roles")
+      .populate("permissions")
+      .populate("plan", "_id name price tier features");
 
     const accessToken = generateAccessToken(user);
-
     return res.status(200).json({
       accessToken,
       user: {
@@ -220,6 +239,14 @@ const refreshTokenHandler = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((permission) => permission.name),
+        bio: user.bio,
+        plan: user.plan && {
+          _id: user.plan._id,
+          tier: user.plan.tier,
+          features: user.plan.features,
+          name: user.plan.name,
+          price: user.plan.price,
+        },
       },
     });
   } catch (err) {
@@ -298,6 +325,10 @@ const googleAuthController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
+        plan: {
+          tier: user.plan?.tier ?? "free",
+          features: user.plan?.features ?? [],
+        },
       },
     });
   } catch (error) {

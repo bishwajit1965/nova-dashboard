@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // 1) refresh session (keeps your original flow)
         const res = await api.get("/auth/refresh"); // or /auth/refresh
         const newAccessToken = res.data.accessToken;
 

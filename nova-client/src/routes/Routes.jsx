@@ -10,10 +10,12 @@ import Login from "../features/auth/Login";
 import MyButtons from "../stories/sandbox/MyButtons";
 import NotFoundPage from "../pages/NotFound";
 import PermissionManager from "../features/permissions/pages/PermissionManager";
+import PlansPage from "../pages/admin/PlansPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/public/PublicLayout";
 import Register from "../features/auth/Register";
 import RoleManager from "../features/roles/RolesManager";
+import SiteSettingsPage from "../pages/admin/SiteSettingsPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UserSettings from "../features/account/UserSettings";
 import UsersList from "../features/users/UsersList";
@@ -59,7 +61,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  // ⚡️ Dashboard Layout - all routes under /dashboard share the same layout
+  //⚡️ Dashboard Layout - all routes under /dashboard share the same layout
   {
     path: "/dashboard",
     element: (
@@ -75,6 +77,14 @@ const router = createBrowserRouter([
       {
         path: "settings", // `/dashboard/settings`
         element: <UserSettings />,
+      },
+      {
+        path: "admin/site-settings",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <SiteSettingsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/users/management",
@@ -107,7 +117,7 @@ const router = createBrowserRouter([
       {
         path: "admin/audit-log",
         element: (
-          <ProtectedRoute allowedRoles={["admin"]}>
+          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
             <AuditLogPage />
           </ProtectedRoute>
         ),
@@ -115,7 +125,7 @@ const router = createBrowserRouter([
       {
         path: "admin/users", // `/dashboard/users`
         element: (
-          <ProtectedRoute allowedRoles={["admin"]}>
+          <ProtectedRoute allowedRoles={["admin", "user"]}>
             <UsersList />
           </ProtectedRoute>
         ),
@@ -123,10 +133,14 @@ const router = createBrowserRouter([
       {
         path: "admin/contact-messages",
         element: (
-          <ProtectedRoute allowedRoles={["admin", "editor"]}>
+          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
             <ContactMessagesPage />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: "admin/plans",
+        element: <PlansPage />,
       },
     ],
   },
@@ -136,63 +150,6 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFoundPage />,
   },
-  // {
-  //   path: "/",
-  //   element: <DashboardLayout />,
-  //   children: [
-  //     {
-  //       index: true, // 👈 This means "show this when path is exactly '/'"
-  //       element: <LandingPage />,
-  //     },
-  //     {
-  //       path: "/dashboard",
-  //       element: (
-  //         <ProtectedRoute
-  //           allowedRoles={["admin", "editor", "user"]}
-  //           requiredPermissions={[]}
-  //         >
-  //           <DashboardRouter />
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //     {
-  //       path: "/dashboard/settings",
-  //       element: (
-  //         <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
-  //           <UserSettings />
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //     {
-  //       path: "/my-buttons",
-  //       element: <MyButtons />,
-  //     },
-  //     {
-  //       path: "/dashboard/users",
-  //       element: (
-  //         <ProtectedRoute allowedRoles={["admin"]}>
-  //           <UsersList />,
-  //         </ProtectedRoute>
-  //       ),
-  //     },
-  //     {
-  //       path: "/unauthorized",
-  //       element: <UnauthorizedPage />,
-  //     },
-  //     {
-  //       path: "*",
-  //       element: <NotFoundPage />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: "/login",
-  //   element: <LoginPage />,
-  // },
-  // {
-  //   path: "*",
-  //   element: <NotFoundPage />,
-  // },
 ]);
 
 export default router;

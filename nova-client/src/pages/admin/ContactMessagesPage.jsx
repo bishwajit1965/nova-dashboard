@@ -5,6 +5,7 @@ import { Loader } from "lucide-react";
 import { MiniIconButton } from "../../components/ui/MiniIconButton";
 import Modal from "../../components/ui/Modal";
 import { QueryClient } from "@tanstack/react-query";
+import WithFeatureAccess from "../../features/auth/WithFeatureAccess";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
@@ -88,7 +89,7 @@ const ContactMessagesPage = () => {
   if (error) return <p className="flex justify-center">{error.message}</p>;
 
   return (
-    <div>
+    <WithFeatureAccess feature="manage-inbox">
       <div className="">
         <div className="flex items-center space-x-6 mb-4">
           <Button
@@ -230,7 +231,7 @@ const ContactMessagesPage = () => {
           </Modal>
         )}
       </div>
-    </div>
+    </WithFeatureAccess>
   );
 };
 

@@ -2,7 +2,6 @@ import Button from "../../components/ui/Button";
 import ChangePasswordForm from "./ChangePasswordForm";
 import { Input } from "../../components/ui/Input";
 import { LucideIcon } from "../../lib/LucideIcons";
-import { RotateCcwKey } from "lucide-react";
 import Textarea from "../../components/ui/Textarea";
 import useApiMutation from "../../hooks/useApiMutation";
 import { useAuth } from "../../hooks/useAuth";
@@ -11,6 +10,7 @@ import { useState } from "react";
 const UserSettings = () => {
   const [isOpenPasswordReset, setIsOpenPasswordReset] = useState(false);
   const { user } = useAuth();
+  console.log("USER DATA+>", user);
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -22,7 +22,7 @@ const UserSettings = () => {
     method: "patch",
     onSuccess: () => {
       setFormData({
-        bio: "",
+        // bio: "",
       });
     },
   });
@@ -81,7 +81,6 @@ const UserSettings = () => {
             <label className="block text-sm text-gray-600 font-medium">
               Email
             </label>
-
             <Input
               type="email"
               name="email"
@@ -98,7 +97,7 @@ const UserSettings = () => {
               name="bio"
               placeholder="Tell us about yourself..."
               onChange={handleChange}
-              error={formData.bio.length > 500 ? "Too long!" : undefined}
+              error={formData?.bio?.length > 500 ? "Too long!" : undefined}
             />
           </div>
 

@@ -23,8 +23,8 @@ const TotalUsersCard = () => {
   const count = users?.length ?? 0;
   if (isError || error)
     return (
-      <div className="border-t-8 animate-spin flex justify-center">
-        <Loader />
+      <div className="flex justify-center">
+        <Loader className="animate-spin" />
       </div>
     );
 

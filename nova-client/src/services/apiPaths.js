@@ -11,6 +11,11 @@ export const API_PATHS = {
     ENDPOINT: "permissions",
     KEY: ["permissions"],
   },
+  SETTINGS: {
+    ENDPOINT: "settings",
+    KEY: ["siteSettings"],
+  },
+
   // Extend this for other features
 };
 

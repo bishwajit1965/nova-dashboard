@@ -1,12 +1,18 @@
 import ActivityChart from "../components/widgets/ActivityChart";
 import Notifications from "../components/widgets/Notifications";
+import PlanCard from "../../../components/planCard/PlanCard";
 import { useAuth } from "../../../hooks/useAuth";
 
 const EditorDashboard = () => {
   const { user, isAuthenticated } = useAuth();
+  console.log("USER PLAN", user?.plan);
   return (
     <div className="p-4 space-y-4">
-      <h2 className="text-2xl font-semibold">Editor Dashboard</h2>
+      {user?.plan ? (
+        <PlanCard />
+      ) : (
+        <div className="flex justify-center">No plan found</div>
+      )}
       <ActivityChart />
       <Notifications />
       <p>User data: {user?.email ? user.email : "N/A"}</p>

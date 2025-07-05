@@ -1,4 +1,14 @@
-import { BarChart2, History, Loader, ShieldCheck } from "lucide-react";
+import {
+  BarChart2,
+  CircleGauge,
+  History,
+  Loader,
+  ShieldCheck,
+  User2Icon,
+  UserCheck2Icon,
+  UserCircle2Icon,
+  UserCog2,
+} from "lucide-react";
 import {
   CircleArrowOutUpRight,
   DollarSign,
@@ -6,12 +16,16 @@ import {
   Lock,
 } from "lucide-react";
 
+import API_PATHS from "../common/apiPaths/apiPaths";
 import Button from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Link } from "react-router-dom";
+import { LucideIcon } from "../lib/LucideIcons";
 import StarRating from "../components/ui/StartRating";
 import api from "../lib/api";
 import { toast } from "react-hot-toast";
+import { useApiMutation } from "../common/hooks/useApiMutation";
+import { useApiQuery } from "../common/hooks/useApiQuery";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 
@@ -19,12 +33,6 @@ const features = [
   { title: "Role-based Access", icon: ShieldCheck },
   { title: "Audit Logs", icon: History },
   { title: "Analytics Dashboard", icon: BarChart2 },
-];
-
-const plans = [
-  { name: "Starter", price: 29 },
-  { name: "Pro", price: 49 },
-  { name: "Enterprise", price: 99 },
 ];
 
 const testimonials = [
@@ -51,11 +59,43 @@ const LandingPage = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [selectedPlanId, setSelectedPlanId] = useState(user?.plan?._id || null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+  console.log("User plan Id", user);
+  console.log("Selected plan Id", selectedPlanId);
+
+  // Fetch plans data
+  const {
+    data: plans,
+    isLoading,
+    isError,
+    error,
+  } = useApiQuery({
+    url: API_PATHS.PLANS.ENDPOINT,
+    queryKey: API_PATHS.PLANS.KEY,
+  });
+
+  const mutation = useApiMutation({
+    method: "update",
+    path: `${API_PATHS.USERS.ENDPOINT}/plan`, // Not dynamic, fixed path
+    key: API_PATHS.USERS.KEY,
+    onSuccess: (data) => {
+      console.log("Success response:", data);
+    },
+    onError: (error) => {
+      // toast.error("Error in saving plan.");
+      console.error(error);
+    },
+  });
+
+  const handleSelect = (planId) => {
+    setSelectedPlanId(planId);
+    mutation.mutate({ data: { planId } });
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -101,6 +141,7 @@ const LandingPage = () => {
       }, 2000);
     }
   };
+
   // Simulate loading state for demo purposes
   setTimeout(() => {
     setLoading(false);
@@ -108,28 +149,37 @@ const LandingPage = () => {
     setErrors(false);
   }, 2000);
 
+  if (isLoading) return <div className="flex justify-center">Loading...</div>;
+  if (error) return <div className="flex justify-center">{error.message}</div>;
+  if (isError)
+    return <div className="flex justify-center">{error.message}</div>;
+
   return (
     <div>
       <main className="py-12 max-w-7xl mx-auto text-center space-y-20">
         {/* Hero Section */}
         <section className="space-y-6">
           <h1 className="text-5xl font-extrabold text-base-content">
-            Welcome to Nova Dashboard
+            <span className="text-amber-600"> {user?.name} - </span> Welcome to
+            Nova Dashboard
           </h1>
-          {user?.name}
+
           <p className="text-lg text-secondary">
             Manage your content, users, and data effortlessly with our
             all-in-one admin platform.
           </p>
-          <Link to="/register">
-            <Button
-              variant="cyan"
-              className="btn-lg"
-              icon={CircleArrowOutUpRight}
-            >
-              Get Started Free
-            </Button>
-          </Link>
+          <div className="flex items-center justify-center space-x-4">
+            <Link to="/register">
+              <Button variant="cyan" className="btn btn-md" icon={UserCog2}>
+                Register to Get Started Free
+              </Button>
+            </Link>
+            <Link to="/dashboard">
+              <Button icon={CircleGauge} className="btn btn-md">
+                Your Dashboard
+              </Button>
+            </Link>
+          </div>
         </section>
 
         {/* Features Section */}
@@ -152,24 +202,39 @@ const LandingPage = () => {
         </section>
 
         {/* Pricing Cards */}
-        <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {plans.map((p, i) => (
+        <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {plans?.map((p, i) => (
             <div
               key={i}
-              className="p-6 rounded-xl shadow-sm border border-base-300 bg-base-100 text-base-content transition-colors"
+              className="relative min-h-72 p-6 rounded-xl shadow-sm border border-base-300 bg-base-100 text-base-content transition-colors"
             >
               <h3 className="text-xl font-semibold">{p.name}</h3>
               <p className="my-4 text-base font-medium text-secondary">
                 ${p.price}/mo
               </p>
               <ul className="text-left space-y-2">
-                <li>✓ Feature A</li>
-                <li>✓ Feature B</li>
-                <li>✓ Feature C</li>
+                {p.features.map((pf, i) => (
+                  <li key={i} className="flex items-center space-x-1">
+                    <span>{<LucideIcon.CircleCheck size={18} />}</span>{" "}
+                    <span>{pf}</span>
+                  </li>
+                ))}
               </ul>
-              <button className="mt-4 w-full btn btn-primary">
-                Choose Plan
-              </button>
+              {selectedPlanId === p._id && (
+                <p className="font-bold text-xl flex justify-center text-blue-600 py-2 items-center space-x-2">
+                  <span>{<LucideIcon.CircleCheck size={25} />}</span>
+                  <span>Plan is selected</span>
+                </p>
+              )}
+              <div className="absolute bottom-0 left-0 w-full">
+                <Button
+                  onClick={() => handleSelect(p._id)}
+                  disabled={selectedPlanId === p._id}
+                  className="mt-4 w-full btn btn-primary rounded-b-lg"
+                >
+                  Choose Plan
+                </Button>
+              </div>
             </div>
           ))}
         </section>

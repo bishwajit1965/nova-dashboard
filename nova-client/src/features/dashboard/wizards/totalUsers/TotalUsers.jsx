@@ -47,7 +47,7 @@ const TotalUsers = () => {
       <div>
         <p className="text-sm text-gray-500">Total Users</p>
         <h3 className="text-2xl font-semibold text-base-content">
-          {users?.length ? users?.length : "0"}
+          {users?.length > 0 ? users?.length : 0}
         </h3>
       </div>
     </div>
