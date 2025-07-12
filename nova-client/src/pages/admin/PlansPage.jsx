@@ -2,7 +2,6 @@ import API_PATHS from "../../common/apiPaths/apiPaths";
 import Button from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
 import { Loader } from "lucide-react";
-import { QueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
@@ -28,6 +27,8 @@ const PlansPage = () => {
     queryKey: API_PATHS.PLANS.KEY,
   });
 
+  console.log("Plans in Plan Page", plans);
+
   const mutation = useApiMutation({
     method: editingId ? "update" : "create",
     path: editingId
@@ -37,9 +38,7 @@ const PlansPage = () => {
     onSuccess: () => {
       setForm({ tier: "", name: "", price: "", features: "" });
       setEditingId(null);
-      setTimeout(() => {
-        // QueryClient.invalidateQueries(API_PATHS.PLANS.KEY);
-      }, 500);
+      setTimeout(() => {}, 500);
     },
     onError: () => toast.error("Failed to save plan"),
   });
@@ -49,12 +48,14 @@ const PlansPage = () => {
     path: (id) => `${API_PATHS.PLANS.ENDPOINT}/${id}`,
     key: API_PATHS.PLANS.KEY,
     onSuccess: () => {
-      setTimeout(() => {
-        // QueryClient.invalidateQueries(API_PATHS.PLANS.KEY);
-      }, 500);
+      setTimeout(() => {}, 500);
     },
     onError: () => toast.error("Failed to delete plan"),
   });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,6 +65,7 @@ const PlansPage = () => {
       price: parseFloat(form.price),
       features: form.features.split(",").map((f) => f.trim()),
     };
+    console.log("🛰 Payload to backend:", payload);
     editingId
       ? mutation.mutate({ id: editingId, data: payload })
       : mutation.mutate({ data: payload });
@@ -71,18 +73,16 @@ const PlansPage = () => {
 
   const handleEdit = (plan) => {
     setForm({
-      tier: form.tier,
+      tier: plan.tier,
       name: plan.name,
       price: plan.price,
-      features: plan.features.join(", "),
+      // features: plan.features.join(", "),
+      features: plan.features.map((f) => f.key).join(", "),
     });
     setEditingId(plan._id);
   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
+  console.log("Form data in plan page ", form);
   if (isLoading) return <div className="p-4">Loading...</div>;
   if (isError)
     return <div className="text-red-500">Error: {error?.message}</div>;
@@ -103,20 +103,27 @@ const PlansPage = () => {
           onChange={handleChange}
           placeholder="Plan name..."
         />
-        <select
-          name="tier"
-          id=""
-          value={form.tier}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-        >
-          <option value="">Select Tier</option>
-          <option value="free">Free</option>
-          <option value="basic">Basic</option>
-          <option value="pro">Pro</option>
-          <option value="premium">Premium</option>
-          <option value="enterprise">Enterprise</option>
-        </select>
+
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Tier</legend>
+          <select
+            // defaultValue="Select Tie"
+            name="tier"
+            value={form.tier}
+            onChange={handleChange}
+            className="input input-bordered w-full select"
+          >
+            <option value="" disabled>
+              Select Tier
+            </option>
+            <option value="free">Free</option>
+            <option value="basic">Basic</option>
+            <option value="pro">Pro</option>
+            <option value="premium">Premium</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </fieldset>
+
         <Input
           label="Price (USD)"
           name="price"
@@ -125,6 +132,7 @@ const PlansPage = () => {
           onChange={handleChange}
           placeholder="Plan price..."
         />
+
         <Input
           label="Features (comma-separated)"
           name="features"
@@ -132,6 +140,7 @@ const PlansPage = () => {
           onChange={handleChange}
           placeholder="Plan feature..."
         />
+
         <Button type="submit" disabled={mutation.isPending}>
           {mutation.isPending ? (
             <Loader className="animate-spin" />
@@ -147,7 +156,7 @@ const PlansPage = () => {
             variant="ghost"
             onClick={() => {
               setEditingId(null);
-              setForm({ name: "", price: "", features: "" });
+              setForm({ tier: "", name: "", price: "", features: "" });
             }}
           >
             Cancel Edit
@@ -174,7 +183,7 @@ const PlansPage = () => {
               <td>
                 <ul className="list-disc list-inside space-y-1">
                   {plan.features.map((f, idx) => (
-                    <li key={idx}>{f}</li>
+                    <li key={f._id || idx}>{f.title}</li>
                   ))}
                 </ul>
               </td>

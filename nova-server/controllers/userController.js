@@ -75,7 +75,10 @@ const updateUserPlan = async (req, res) => {
       userId,
       { plan: planId },
       { new: true }
-    ).populate("plan");
+    ).populate({
+      path: "plan",
+      populate: { path: "features" },
+    });
 
     res.status(200).json({
       success: true,
@@ -167,7 +170,11 @@ const getAllUsers = async (req, res) => {
       .select("-password")
       .populate("roles", "name")
       .populate("permissions", "name")
-      .populate("plan", "tier name features price createdAt updatedAt");
+      .populate({
+        path: "plan",
+        select: "tier name features price createdAt updatedAt",
+        populate: { path: "features" }, // populate the referenced features
+      });
     res.status(200).json({ data: users });
   } catch (error) {
     console.error("Failed to get users:", error);
@@ -181,7 +188,11 @@ const getMe = async (req, res) => {
       .select("+password")
       .populate("roles", "name")
       .populate("permissions", "name")
-      .populate("plan", "tier name features price createdAt updatedAt");
+      .populate({
+        path: "plan",
+        select: "tier name features price createdAt updatedAt",
+        populate: { path: "features" }, // populate the referenced features
+      });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -200,7 +211,11 @@ const getMyPlan = async (req, res) => {
     const user = await User.findById(userId)
       .populate("roles", "name")
       .populate("permissions", "name")
-      .populate("plan", "tier name price features createdAt updatedAt");
+      .populate({
+        path: "plan",
+        select: "tier name features price createdAt updatedAt",
+        populate: { path: "features" }, // populate the referenced features
+      });
     console.log("USER ID=>", user);
 
     if (!user || !user.plan) {

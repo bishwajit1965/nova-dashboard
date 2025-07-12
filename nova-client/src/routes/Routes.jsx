@@ -1,4 +1,6 @@
 import About from "../pages/About";
+import AdminNewsletterList from "../features/dashboard/newsLetterList/AdminNewsletterList";
+import AdminTestimonialsPage from "../features/dashboard/testimonials/AdminTestimonialsPage";
 import AdminUsersManagementPage from "../features/users/AdminUsersManagementPage";
 import AuditLogPage from "../features/auditLog/AuditLogPage";
 import Contact from "../pages/Contact";
@@ -54,6 +56,7 @@ const router = createBrowserRouter([
         path: "/my-buttons",
         element: <MyButtons />,
       },
+
       {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
@@ -117,7 +120,10 @@ const router = createBrowserRouter([
       {
         path: "admin/audit-log",
         element: (
-          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
+          <ProtectedRoute
+            requiredFeatures={["audit-logs"]}
+            allowedRoles={["admin", "editor", "user"]}
+          >
             <AuditLogPage />
           </ProtectedRoute>
         ),
@@ -140,7 +146,26 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/plans",
-        element: <PlansPage />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
+            <PlansPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/testimonials",
+        element: <AdminTestimonialsPage />,
+      },
+      {
+        path: "admin/news-letter",
+        element: (
+          <ProtectedRoute
+            requiredFeatures={["newsletter"]}
+            allowedRoles={["admin", "editor", "user"]}
+          >
+            <AdminNewsletterList />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

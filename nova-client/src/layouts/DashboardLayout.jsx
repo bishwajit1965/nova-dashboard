@@ -1,7 +1,5 @@
 import Footer from "./Footer";
 import { Outlet } from "react-router-dom";
-import PlanContext from "../planContext/PlanContext";
-import PlanProvider from "../providers/PlanProvider";
 import SectionTitle from "../utility/sectionTitle/SectionTitle";
 import { ShieldCheckIcon } from "lucide-react";
 import Sidebar from "./Sidebar";
@@ -12,6 +10,7 @@ import { useState } from "react";
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+
   const { user, isAuthenticated } = useAuth();
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

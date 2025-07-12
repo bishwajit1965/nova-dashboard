@@ -41,37 +41,3 @@ export const useNavAccess = () => {
     return featurePass;
   };
 };
-
-// export const useNavAccess = () => {
-//   const { user } = useAuth();
-//   const hasFeature = useFeatureAccess();
-
-//   if (!user) return () => false;
-
-//   const userRoles = (user.roles || []).map((role) =>
-//     typeof role === "string" ? role : role.name
-//   );
-//   const userPermissions = (user.permissions || []).map((p) =>
-//     typeof p === "string" ? p : p.name
-//   );
-//   const features = user?.plan?.features || [];
-
-//   const isAdmin = userRoles.includes("admin");
-
-//   return (item) => {
-//     const rolePass =
-//       isAdmin ||
-//       item.roles?.length === 0 ||
-//       item.roles?.some((role) => userRoles.includes(role));
-
-//     const permissionPass =
-//       isAdmin ||
-//       item.permissions?.length === 0 ||
-//       item.permissions?.every((p) => userPermissions.includes(p));
-
-//     const featurePass =
-//       isAdmin || !item.feature || features.includes(item.feature);
-
-//     return rolePass && permissionPass && featurePass;
-//   };
-// };

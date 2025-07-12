@@ -1,8 +1,6 @@
-import Button from "../../components/ui/Button";
-import { Input } from "../../components/ui/Input";
-import SocialLinks from "../../components/socialLinks/SocialLinks";
+import NewsLetter from "../../components/newsLetter/NewsLetter";
 
-const PublicFooter = () => {
+const PublicFooter = ({ siteSettings }) => {
   return (
     <>
       <footer className="text-base-content bg-gray-800">
@@ -50,24 +48,11 @@ const PublicFooter = () => {
             </ul>
           </div>
           <div className="lg:space-y-2 space-y-3 lg:col-span-3 col-span-12">
-            <div className="lg:flex items-center justify-between lg:space-y-2 space-y-4">
-              <span className="">
-                <h4 className="font-bold text-xl lg:mb-0 mb-4">Newsletter</h4>
-              </span>
-              <span className="">
-                <SocialLinks />
-              </span>
-            </div>
-            <form className="space-y-2">
-              <Input type="email" placeholder="Your email" />
-              <Button variant="primary" className="w-full text-sm">
-                Subscribe
-              </Button>
-            </form>
+            <NewsLetter />
           </div>
         </div>
         <div className="text-center text-md text-base-300 bg-gray-900 p-4">
-          &copy; {new Date().getFullYear()} Nova Dashboard. All rights reserved.
+          &copy; {new Date().getFullYear()} {siteSettings?.footerText}
         </div>
       </footer>
     </>

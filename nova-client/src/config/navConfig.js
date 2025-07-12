@@ -76,7 +76,7 @@ export const NAV_ITEMS = [
     icon: ListCheck,
     roles: ["admin", "editor", "user"],
     permissions: ["audit_log"], // authority gate
-    feature: "view-audit-log",
+    feature: "audit-logs",
   },
   {
     to: "/dashboard/admin/contact-messages",
@@ -84,7 +84,7 @@ export const NAV_ITEMS = [
     icon: ListCheck,
     roles: ["admin", "editor", "user"],
     permissions: ["audit_log"],
-    feature: "manage-inbox",
+    feature: "user-management",
   },
   {
     to: "/dashboard/admin/site-settings",
@@ -95,6 +95,18 @@ export const NAV_ITEMS = [
   {
     to: "/dashboard/admin/plans",
     label: "Manage Plans",
+    icon: Settings,
+    roles: ["admin"],
+  },
+  {
+    to: "/dashboard/admin/testimonials",
+    label: "Manage Testimonials",
+    icon: Settings,
+    roles: ["admin"],
+  },
+  {
+    to: "/dashboard/admin/news-letter",
+    label: "Manage Newsletters",
     icon: Settings,
     roles: ["admin"],
   },

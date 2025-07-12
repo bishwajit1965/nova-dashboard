@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
-
+const path = require("path");
 // Importing necessary modules
 const connectDb = require("./config/db");
 const cookieParser = require("cookie-parser");
@@ -21,6 +21,10 @@ app.use(
   })
 );
 
+// Serve static files from the 'uploads' directory
+// app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -34,6 +38,8 @@ const auditLogRoutes = require("./routes/auditLogRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const settingsRoutes = require("./routes/settingsRoutes");
 const planRoutes = require("./routes/planRoutes");
+const newsLetter = require("./routes/newsletterRoutes");
+const testimonialRoutes = require("./routes/testimonialRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -49,6 +55,8 @@ app.use("/api/audit-logs", auditLogRoutes);
 app.use("/api", contactRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/plans", planRoutes);
+app.use("/api/newsletter", newsLetter);
+app.use("/api/testimonials", testimonialRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

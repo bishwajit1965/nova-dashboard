@@ -25,6 +25,10 @@ const API_PATHS = {
     ENDPOINT: "roles",
     KEY: ["roles"],
   },
+  NEWS_LETTER: {
+    ENDPOINT: "newsletter",
+    KEY: ["news-letter"],
+  },
   PERMISSIONS: {
     ENDPOINT: "permissions",
     KEY: ["permissions"],
@@ -36,6 +40,10 @@ const API_PATHS = {
   SETTINGS: {
     ENDPOINT: "settings",
     KEY: ["siteSettings"],
+  },
+  TESTIMONIALS: {
+    ENDPOINT: "testimonials",
+    KEY: ["testimonials"],
   },
 
   // Extend this for other features.....

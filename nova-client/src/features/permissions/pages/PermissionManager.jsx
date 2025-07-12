@@ -2,9 +2,13 @@ import Button from "../../../components/ui/Button";
 import { LucideIcon } from "../../../lib/LucideIcons";
 import PermissionForm from "../components/PermissionForm";
 import PermissionList from "../components/PermissionList";
+import { useDocumentHead } from "../../../hooks/useDocumentHead";
 import { useState } from "react";
 
 export default function PermissionManager() {
+  useDocumentHead("Admin Permission Management • Nova Dashboard", [
+    { name: "description", content: "Create and update permission" },
+  ]);
   const [editingData, setEditingData] = useState(null);
   const [showForm, setShowForm] = useState(false);
 

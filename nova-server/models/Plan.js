@@ -19,11 +19,17 @@ const planSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    features: {
-      type: [String], // array of feature strings
-      required: true,
-      default: [],
-    },
+    features: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Feature",
+      },
+    ],
+    // features: {
+    //   type: [String], // array of feature strings
+    //   required: true,
+    //   default: [],
+    // },
   },
   {
     timestamps: true,

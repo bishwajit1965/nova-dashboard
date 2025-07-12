@@ -9,6 +9,12 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const updateUserPlan = (newPlan) => {
+    setUser((prevUser) =>
+      prevUser ? { ...prevUser, plan: newPlan } : prevUser
+    );
+  };
   // Check auth status on load
   useEffect(() => {
     const checkAuth = async () => {
@@ -23,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         ] = `Bearer ${newAccessToken}`;
         console.log("✅ Session refreshed:", res.data.user);
         setUser(res.data.user);
+
         setIsAuthenticated(true);
         toast.success("🔒 Session restored"); // ✅ Toast on success
       } catch (err) {
@@ -93,6 +100,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     loading,
+    updateUserPlan,
   };
 
   return (

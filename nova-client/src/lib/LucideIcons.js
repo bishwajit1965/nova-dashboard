@@ -31,6 +31,9 @@ import {
   Sunset,
   SunsetIcon,
   Trash2,
+  Upload,
+  UploadCloud,
+  UploadIcon,
   User,
   UserRoundPen,
   Users,
@@ -72,6 +75,9 @@ export const LucideIcon = {
   SquarePen,
   Sunset,
   UserRoundPen,
+  Upload,
+  UploadCloud,
+  UploadIcon,
   X,
   // Continue adding here
 };

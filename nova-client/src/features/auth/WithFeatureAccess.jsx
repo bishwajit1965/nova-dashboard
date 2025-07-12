@@ -1,5 +1,3 @@
-// src/components/auth/WithFeatureAccess.jsx
-
 import UpgradePrompt from "../../components/ui/UpgradePrompt";
 import useFeatureAccess from "../../hooks/useFeatureAccess";
 

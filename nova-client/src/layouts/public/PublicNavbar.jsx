@@ -7,7 +7,7 @@ import Logo from "../../components/ui/Logo";
 import api from "../../lib/api";
 import { useAuth } from "../../hooks/useAuth";
 
-const PublicNavbar = () => {
+const PublicNavbar = ({ siteSettings }) => {
   const { logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -75,7 +75,7 @@ const PublicNavbar = () => {
                   className="flex items-center space-x-1"
                 >
                   <span className="text-xl flex items-center space-x-1 capitalize">
-                    {l.icon}
+                    20 16 8 24 5 20 {l.icon}
                     {l.name}
                   </span>
                 </NavLink>
@@ -84,7 +84,9 @@ const PublicNavbar = () => {
           </div>
           <div className="hidden lg:block">
             <Link to="/">
-              <Logo />
+              <img src={siteSettings.logoUrl} alt="" className="w-20 h-20" />
+
+              {/* <Logo /> */}
             </Link>
           </div>
           <div className="hidden lg:block lg:ml-6">

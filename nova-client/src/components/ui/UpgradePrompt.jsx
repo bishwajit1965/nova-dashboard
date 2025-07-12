@@ -1,5 +1,3 @@
-// src/components/ui/UpgradePrompt.jsx
-
 import { Edit, Lock } from "lucide-react";
 
 import Button from "./Button";

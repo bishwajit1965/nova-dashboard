@@ -18,9 +18,9 @@ const Textarea = forwardRef(
     ref
   ) => {
     return (
-      <div className="form-control w-full">
+      <div className="form-control w-full space-y-1">
         {label && (
-          <label htmlFor={name} className="label">
+          <label htmlFor={name} className="label flex justify-items-start">
             <span className="label-text">{label}</span>
           </label>
         )}
@@ -43,8 +43,8 @@ const Textarea = forwardRef(
         />
 
         {error && (
-          <label className="label">
-            <span className="label-text-alt text-error">{error}</span>
+          <label className="label flex justify-items-start">
+            <span className="label-text-alt text-error text-xs ">{error}</span>
           </label>
         )}
       </div>

@@ -1,5 +1,4 @@
 import {
-  Check,
   CheckCheck,
   CheckCheckIcon,
   CheckCircle,
@@ -21,7 +20,7 @@ import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useAuth } from "../../hooks/useAuth";
 
 const PlanCard = () => {
-  const { user: loggedUser } = useAuth();
+  const { user: loggedUser, updateUserPlan } = useAuth();
   const { user, plans, isLoading, isError, error } = useContext(PlanContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loaderDelay, setLoaderDelay] = useState(false);
@@ -61,9 +60,10 @@ const PlanCard = () => {
   const { mutate: deletePlan } = useApiMutation({
     method: "delete",
     path: `${API_PATHS.USERS.ENDPOINT}/plan`,
-    key: API_PATHS.CURRENT_USER_PLAN.KEY,
+    key: API_PATHS.USERS.KEY,
     onSuccess: () => {
       setConfirmDelete(null);
+      updateUserPlan(null);
     },
     onError: (error) => {
       toast.error("Error deleting permission");
@@ -87,17 +87,11 @@ const PlanCard = () => {
     mutation.mutate({ data: { planId } });
   };
 
-  const priceFormatted = user?.plan?.price
-    ? user?.plan?.price?.toLocaleString("en-BD", {
-        style: "currency",
-        currency: "BDT",
-      })
-    : loggedUser?.plan?.price
-    ? loggedUser?.plan?.price?.toLocaleString("en-BD", {
-        style: "currency",
-        currency: "BDT",
-      })
-    : "";
+  /**  ------------  Derivatives  ------------ */
+  const priceFormatted = user?.plan?.price?.toLocaleString("en-BD", {
+    style: "currency",
+    currency: "BDT",
+  });
 
   if (isLoading)
     return (
@@ -113,38 +107,32 @@ const PlanCard = () => {
 
   return (
     <div className="lg:p-4 lg:min-h-[calc(100vh-262px)] flex justify-center items-start">
-      {user?.plan ? (
+      {loggedUser ? (
         <Card className="w-full max-w-md shadow-lg rounded-2xl bg-base-100">
           <div className="lg:p-6 bg-base-100 space-y-2">
             <h2 className="text-2xl font-bold capitalize">
-              {loggedUser?.name} / {loggedUser?.plan?.name} Plan
+              {loggedUser?.name} / {user?.plan?.tier} Plan
             </h2>
             <div className="divider my-2"></div>
 
             <p className="text-xl mb-4 font-semibold">
-              {loggedUser?.plan?.price.toLocaleString("en-BD", {
-                style: "currency",
-                currency: "BDT",
-              })}
-              / month
+              {priceFormatted ?? "00"} / month
             </p>
-            {/* <p className="text-xl mb-4 font-semibold">
-              {priceFormatted} / month
-            </p> */}
 
             <ul className="list-disc space-y-1">
-              {loggedUser?.plan?.features.map((feature) => (
+              {user?.plan?.features.map((feature, idx) => (
                 <li
-                  key={feature}
+                  key={idx}
                   className="flex items-center space-x-2 capitalize"
                 >
                   <span>
                     <CheckCircle2 size={18} />
                   </span>
-                  <span>{feature}</span>
+                  <span>{feature.title}</span>
                 </li>
               ))}
             </ul>
+
             <p className="font-semibold flex items-center space-x-2">
               <span className="flex items-center space-x-2">
                 <span>{<LucideIcon.Clock size={18} />}</span>
@@ -154,6 +142,7 @@ const PlanCard = () => {
                 {new Date(user?.plan?.createdAt).toLocaleDateString()}
               </span>
             </p>
+
             <p className="font-semibold flex items-center space-x-2">
               <span className="flex items-center space-x-2">
                 <span>{<LucideIcon.CalendarClock size={18} />}</span>
@@ -163,6 +152,7 @@ const PlanCard = () => {
                 {new Date(user?.plan?.updatedAt).toLocaleDateString()}
               </span>
             </p>
+
             {successMsg && (
               <p className="font-bold flex justify-start text-indigo-600">
                 <CheckCheckIcon />
@@ -172,6 +162,7 @@ const PlanCard = () => {
                 {successMsg}
               </p>
             )}
+
             <div className="pt-4">
               <Button icon={LucideIcon.Edit} onClick={openUpgradeModal}>
                 Change Plan
@@ -199,104 +190,109 @@ const PlanCard = () => {
           title={`${loggedUser?.name} - Upgrade Your Chosen Plan`}
           className="w-full lg:!max-w-[58vw] max-h-[80vh] overflow-y-auto"
         >
-          {plans.length > 0 ? (
+          {plans.length ? (
             <div className="grid lg:grid-cols-12 grid-cols-1 gap-4 justify-between lg:max-w-5xl max-w-full">
-              {plans.map((plan) => (
-                <div key={plan._id} className="lg:col-span-4 col-span-12">
-                  <Card
-                    className={`${
-                      plan?._id === user?.plan?._id
-                        ? "border border-blue-500 bg-base-200 animate-pulse"
-                        : ""
-                    } w-full max-w-full shadow-lg rounded-2xl min-h-[17rem] border border-base-100`}
-                  >
-                    <div className="p-2 relative min-h-[17rem]">
-                      <div className="space-y-2">
-                        <h2
-                          className={`${
-                            plan?._id === user?.plan?._id ? "text-red-500" : ""
-                          } text-xl font-bold m-0`}
-                        >
-                          {plan?.name} Plan
-                        </h2>
-                        <div className="divider m-0"></div>
-                        <p>
-                          {plan?._id === user?.plan?._id ? (
-                            <span className="flex items-center space-x-1 font-bold text-red-600">
-                              <span>
-                                <CheckCheck size={20} />
-                              </span>
-                              <span>Your Present Plan</span>
-                            </span>
-                          ) : (
-                            <span className="flex items-center space-x-1 font-bold text-indigo-600">
-                              <span>
-                                <CheckCircle size={16} />
-                              </span>
-                              <span>You Can Upgrade to this</span>
-                            </span>
-                          )}
-                        </p>
-                        <ul>
-                          {plan?.features?.map((feature, idx) => (
-                            <li
-                              key={idx}
-                              className="flex items-center space-x-2"
-                            >
-                              <span>
-                                {<LucideIcon.CircleCheck size={16} />}
-                              </span>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <p className="font-bold">
-                          {plan?.price.toLocaleString("en-BD", {
-                            style: "currency",
-                            currency: "BDT",
-                          })}
-                          / month
-                        </p>
-                      </div>
-                      <div className="">
-                        {selectedPlanId === plan._id && (
-                          <p className="font-bold text-md flex justify-items-start text-blue-600 py-2 items-center space-x-2 animate-pulse">
-                            <span>{<LucideIcon.CircleCheck size={15} />}</span>
-                            <span>Plan is selected</span>
-                          </p>
-                        )}
-                      </div>
-                      <div className="mt-5 flex space-x-4 absolute bottom-2">
-                        {plan?._id === user?.plan?._id ? (
-                          <Button
-                            onClick={() => setConfirmDelete(plan)}
-                            variant="danger"
-                            className="btn btn-sm"
+              {plans.map((plan) => {
+                const isCurrent = plan._id === user?.plan?._id;
+                return (
+                  <div key={plan._id} className="lg:col-span-4 col-span-12">
+                    <Card
+                      className={`${
+                        isCurrent
+                          ? "border border-blue-500 bg-base-200 animate-pulse"
+                          : ""
+                      } w-full max-w-full shadow-lg rounded-2xl min-h-[18rem] border border-base-100`}
+                    >
+                      <div className="p-2 relative min-h-[18rem]">
+                        <div className="space-y-2">
+                          <h2
+                            className={`${
+                              isCurrent ? "text-red-500" : ""
+                            } text-xl font-bold m-0`}
                           >
-                            <LucideIcon.Trash2 size={14} /> Delete
-                          </Button>
-                        ) : (
-                          <Button
-                            onClick={() => handleSelect(plan._id)}
-                            disabled={selectedPlanId === plan._id}
-                            className="btn btn-sm"
-                          >
-                            {selectedPlanId === plan._id ? (
-                              <LucideIcon.Loader2
-                                size={14}
-                                className="animate-spin"
-                              />
+                            {plan?.name}
+                          </h2>
+                          <div className="divider m-0"></div>
+                          <p>
+                            {isCurrent ? (
+                              <span className="flex items-center space-x-1 font-bold text-red-600">
+                                <span>
+                                  <CheckCheck size={20} />
+                                </span>
+                                <span>Your Present Plan</span>
+                              </span>
                             ) : (
-                              <LucideIcon.Edit size={14} />
-                            )}{" "}
-                            Upgrade
-                          </Button>
-                        )}
+                              <span className="flex items-center space-x-1 font-bold text-indigo-600">
+                                <span>
+                                  <CheckCircle size={16} />
+                                </span>
+                                <span>You Can Upgrade to this</span>
+                              </span>
+                            )}
+                          </p>
+                          <ul>
+                            {plan?.features?.map((feature, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-center space-x-2"
+                              >
+                                <span>
+                                  {<LucideIcon.CircleCheck size={16} />}
+                                </span>
+                                <span>{feature.title}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <p className="font-bold">
+                            {plan?.price.toLocaleString("en-BD", {
+                              style: "currency",
+                              currency: "BDT",
+                            })}
+                            / month
+                          </p>
+                        </div>
+                        <div className="lg:pb-6">
+                          {selectedPlanId === plan._id && (
+                            <p className="font-bold text-md flex justify-items-start text-blue-600 py-2 items-center space-x-2 animate-pulse">
+                              <span>
+                                {<LucideIcon.CircleCheck size={15} />}
+                              </span>
+                              <span>Plan is selected</span>
+                            </p>
+                          )}
+                        </div>
+                        <div className="mt-5 flex space-x-4 absolute bottom-2">
+                          {isCurrent ? (
+                            <Button
+                              onClick={() => setConfirmDelete(plan)}
+                              variant="danger"
+                              className="btn btn-sm"
+                            >
+                              <LucideIcon.Trash2 size={14} /> Delete
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handleSelect(plan._id)}
+                              disabled={selectedPlanId === plan._id}
+                              className="btn btn-sm"
+                            >
+                              {selectedPlanId === plan._id ? (
+                                <LucideIcon.Loader2
+                                  size={14}
+                                  className="animate-spin"
+                                />
+                              ) : (
+                                <LucideIcon.Edit size={14} />
+                              )}{" "}
+                              Upgrade
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </div>
-              ))}
+                    </Card>
+                  </div>
+                );
+              })}
             </div>
           ) : (
             "No plan is available now!"

@@ -1,4 +1,4 @@
-import { Activity, DollarSign, Users } from "lucide-react";
+import { Activity, Users } from "lucide-react";
 
 import RevenueCard from "@/components/widgets/RevenueCard";
 import StatsCard from "@/components/widgets/StatsCard";

@@ -89,7 +89,7 @@ const ContactMessagesPage = () => {
   if (error) return <p className="flex justify-center">{error.message}</p>;
 
   return (
-    <WithFeatureAccess feature="manage-inbox">
+    <WithFeatureAccess feature="user-management">
       <div className="">
         <div className="flex items-center space-x-6 mb-4">
           <Button

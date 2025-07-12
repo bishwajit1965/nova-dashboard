@@ -9,14 +9,17 @@ import StatsCard from "../components/widgets/StatsCard";
 import TotalUsersCard from "../components/widgets/TotalUsersCard";
 import UserRolesPieChart from "../components/widgets/UserRolesPieChart";
 import { useAuth } from "../../../hooks/useAuth";
+import { useDocumentHead } from "../../../hooks/useDocumentHead";
 
 const AdminDashboard = () => {
+  useDocumentHead("Admin Dashboard • Nova Dashboard", [
+    { name: "description", content: "Admin dashboard" },
+  ]);
+
   const { user, isAuthenticated } = useAuth();
 
   return (
     <div className="p-6 space-y-8 bg-base-100 min-h-[calc(100vh-4rem)]">
-      {" "}
-      {/* Added base background and better spacing */}
       {/* Welcome Message */}
       <h1 className="text-3xl font-extrabold text-base-content">
         Welcome, <span className="text-primary">{user?.name || "Admin"}</span>

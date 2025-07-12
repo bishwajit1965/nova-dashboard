@@ -2,8 +2,10 @@ import { Outlet, useLocation } from "react-router-dom";
 
 import PublicFooter from "./PublicFooter";
 import PublicNavbar from "./PublicNavbar";
+import useSiteSettings from "../../hooks/useSiteSettings";
 
 const PublicLayout = () => {
+  const { settings } = useSiteSettings();
   const location = useLocation();
 
   // IF PATHNAME IS LIKE: register/verify
@@ -13,9 +15,10 @@ const PublicLayout = () => {
 
   return (
     <div className="min-h-screen max-w-full flex flex-col">
-      {hideLayout ? null : <PublicNavbar />}
+      {hideLayout ? null : <PublicNavbar siteSettings={settings} />}
 
       <main
+        siteSettings={settings}
         className={`${
           hideLayout
             ? "w-full mx-auto bg-white shadow-md rounded-lg"
@@ -24,7 +27,7 @@ const PublicLayout = () => {
       >
         <Outlet />
       </main>
-      {hideLayout ? null : <PublicFooter />}
+      {hideLayout ? null : <PublicFooter siteSettings={settings} />}
     </div>
   );
 };

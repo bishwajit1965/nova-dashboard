@@ -3,9 +3,14 @@ import { LucideIcon } from "../../lib/LucideIcons";
 import Modal from "../../components/ui/Modal";
 import RoleForm from "./components/RoleForm";
 import RoleTable from "./components/RoleTable";
+import { useDocumentHead } from "../../hooks/useDocumentHead";
 import { useState } from "react";
 
 const RoleManager = () => {
+  useDocumentHead("Admin Role Management • Nova Dashboard", [
+    { name: "description", content: "Create and update user roles" },
+  ]);
+
   const [editingRole, setEditingRole] = useState(null);
   const [showForm, setShowForm] = useState(false);
 

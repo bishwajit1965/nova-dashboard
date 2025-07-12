@@ -26,7 +26,7 @@ const registerUser = async (req, res) => {
     if (!userRole) {
       return res.status(500).json({ message: "Default role 'user' not found" });
     }
-    const user = await User.create({
+    let user = await User.create({
       name,
       email,
       password,
@@ -37,7 +37,11 @@ const registerUser = async (req, res) => {
     user = await User.findById(user._id)
       .populate("roles")
       .populate("permissions")
-      .populate("plan", "_id name price tier features");
+      .populate({
+        path: "plan",
+        select: "_id tier name features price createdAt updatedAt",
+        populate: { path: "features" },
+      });
 
     if (user) {
       const accessToken = generateAccessToken(user);
@@ -106,7 +110,16 @@ const googleSignUpController = async (req, res) => {
     }
 
     // 🔍 Check if user exists
-    let user = await User.findOne({ email });
+    // let user = await User.findOne( { email } );
+    let user = await User.findOne({ email })
+      .populate("roles")
+      .populate("permissions")
+      .populate({
+        path: "plan",
+        select: "_id tier name features price createdAt updatedAt",
+        populate: { path: "features" },
+      });
+
     console.log("USER FOUND:", user);
 
     const userRole = await Role.findOne({ name: "user" });
@@ -150,10 +163,18 @@ const googleSignUpController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
-        plan: {
-          tier: user.plan?.tier ?? "free",
-          features: user.plan?.features ?? [],
+        plan: user.plan && {
+          _id: user.plan._id,
+          tier: user.plan.tier,
+          name: user.plan.name,
+          price: user.plan.price,
+          features: user.plan.features || [],
         },
+
+        // plan: {
+        //   tier: user.plan?.tier ?? "free",
+        //   features: user.plan?.features ?? [],
+        // },
       },
     });
   } catch (error) {
@@ -170,7 +191,11 @@ const loginUser = async (req, res) => {
       .select("+password")
       .populate("roles")
       .populate("permissions")
-      .populate("plan", "_id name price tier features");
+      .populate({
+        path: "plan",
+        select: "_id tier name features price createdAt updatedAt",
+        populate: { path: "features" },
+      });
 
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid email or password" });
@@ -227,7 +252,11 @@ const refreshTokenHandler = async (req, res) => {
     user = await User.findById(decoded.userId)
       .populate("roles")
       .populate("permissions")
-      .populate("plan", "_id name price tier features");
+      .populate({
+        path: "plan",
+        select: "_id tier name features price createdAt updatedAt",
+        populate: { path: "features" },
+      });
 
     const accessToken = generateAccessToken(user);
     return res.status(200).json({
@@ -284,9 +313,17 @@ const googleAuthController = async (req, res) => {
     );
 
     const { email, name, picture, sub } = userInfo.data;
+    // let user = await User.findOne({ email })
+    //   .populate("roles")
+    //   .populate( "permissions" );
     let user = await User.findOne({ email })
       .populate("roles")
-      .populate("permissions");
+      .populate("permissions")
+      .populate({
+        path: "plan",
+        select: "_id tier name features price createdAt updatedAt",
+        populate: { path: "features" },
+      });
 
     if (!user) {
       user = await User.create({
@@ -325,10 +362,18 @@ const googleAuthController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
-        plan: {
-          tier: user.plan?.tier ?? "free",
-          features: user.plan?.features ?? [],
+        plan: user.plan && {
+          _id: user.plan._id,
+          tier: user.plan.tier,
+          name: user.plan.name,
+          price: user.plan.price,
+          features: user.plan.features || [],
         },
+
+        // plan: {
+        //   tier: user.plan?.tier ?? "free",
+        //   features: user.plan?.features ?? [],
+        // },
       },
     });
   } catch (error) {
