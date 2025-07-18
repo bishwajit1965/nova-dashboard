@@ -75,17 +75,21 @@ const FaqSection = () => {
         {faqs.map((faq, i) => (
           <div
             key={i}
-            className="border border-gray-300 rounded-lg p-4 transition-all duration-300 bg-white dark:bg-gray-900"
+            className="border border-gray-300 rounded-lg p-4 transition-all duration-300 text-base-content dark:bg-gray-900 bg-base-200"
           >
             <button
               onClick={() => toggle(i)}
               className="flex justify-between items-center w-full text-left text-lg font-medium text-gray-800 dark:text-gray-100"
             >
-              <span>{faq.question}</span>
-              {openIndex === i ? <ChevronUp /> : <ChevronDown />}
+              <span className="text-base-content">{faq.question}</span>
+              {openIndex === i ? (
+                <ChevronUp className="text-base-content" />
+              ) : (
+                <ChevronDown className="text-base-content" />
+              )}
             </button>
             {openIndex === i && (
-              <div className="mt-2 text-gray-600 dark:text-gray-300 text-sm">
+              <div className="mt-2 text-base-content dark:text-gray-300 text-sm">
                 {faq.answer}
               </div>
             )}
@@ -93,44 +97,6 @@ const FaqSection = () => {
         ))}
       </div>
     </section>
-    // <section className="lg:p-10 p-2 bg-base-200 text-base-content rounded-md">
-    //   <div className="max-w-4xl mx-auto px- text-center">
-    //     <h2 className="text-2xl font-bold mb-8">Frequently Asked Questions</h2>
-    //     <div className="space-y-4 text-left">
-    //       {faqs.map((faq, idx) => (
-    //         <div
-    //           key={idx}
-    //           className="border border-base-300 rounded-xl p-4 bg-base-200 shadow-sm"
-    //         >
-    //           <button
-    //             onClick={() => toggle(idx)}
-    //             className="w-full flex justify-between items-center text-lg font-medium"
-    //           >
-    //             {faq.question}
-    //             <ChevronsDown
-    //               className={`transition-transform ${
-    //                 openIndex === idx ? "rotate-180" : ""
-    //               }`}
-    //             />
-    //           </button>
-    //           <AnimatePresence>
-    //             {openIndex === idx && (
-    //               <motion.div
-    //                 initial={{ opacity: 0, height: 0 }}
-    //                 animate={{ opacity: 1, height: "auto" }}
-    //                 exit={{ opacity: 0, height: 0 }}
-    //                 transition={{ duration: 0.25 }}
-    //                 className="mt-2 text-sm text-muted-foreground"
-    //               >
-    //                 {faq.answer}
-    //               </motion.div>
-    //             )}
-    //           </AnimatePresence>
-    //         </div>
-    //       ))}
-    //     </div>
-    //   </div>
-    // </section>
   );
 };
 

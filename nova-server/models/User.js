@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
       trim: true,
     },
     email: {
@@ -15,11 +16,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    bio: {
-      type: String,
-      default: "",
-      maxlength: 500, // Optional constraint
-    },
+
     // password: {
     //   type: String,
     //   required: true,
@@ -30,6 +27,22 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return this.provider === "local";
       },
+    },
+    plan: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Plan",
+      default: null,
+    },
+    team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", default: null },
+    bio: {
+      type: String,
+      default: "",
+      maxlength: 500, // Optional constraint
+    },
+    provider: {
+      type: String,
+      enum: ["local", "google", "facebook"],
+      default: "local",
     },
     roles: [
       {
@@ -43,15 +56,30 @@ const userSchema = new mongoose.Schema(
         ref: "Permission",
       },
     ],
-    plan: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Plan",
-      default: null,
-    },
+
     refreshToken: {
       type: String,
       default: "",
     },
+    acceptedTerms: {
+      type: Boolean,
+      // required: true,
+    },
+    acceptedAt: {
+      type: Date,
+      default: Date.now,
+    },
+    termsVersion: {
+      type: String,
+      default: "v1.0",
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetExpires: {
+      type: Date,
+    },
+    signupIp: { type: String },
   },
   {
     timestamps: true,
@@ -62,6 +90,17 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   // This is a placeholder for password matching logic
   // In a real application, you would use bcrypt or another library to compare hashed passwords
   return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Generate password reset token
+userSchema.methods.generatePasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  return resetToken;
 };
 
 userSchema.pre("save", async function (next) {

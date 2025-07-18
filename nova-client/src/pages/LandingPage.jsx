@@ -198,7 +198,10 @@ const LandingPage = () => {
               <img src={settings.logoUrl} alt="" className="w-28 h-w-28" />
             </div>
             <h1 className="lg:text-5xl text-2xl font-extrabold text-base-content">
-              <span className="text-amber-600"> {user?.name} - </span>{" "}
+              <span className="text-amber-600 capitalize">
+                {" "}
+                {user?.name ? user.name : "Please Login to -"}
+              </span>{" "}
               {settings.siteName}
             </h1>
 

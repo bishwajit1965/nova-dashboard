@@ -5,8 +5,11 @@ import AdminUsersManagementPage from "../features/users/AdminUsersManagementPage
 import AuditLogPage from "../features/auditLog/AuditLogPage";
 import Contact from "../pages/Contact";
 import ContactMessagesPage from "../pages/admin/ContactMessagesPage";
+import CreateTeamForm from "../features/dashboard/admin/teamManagement/CreateTeamForm";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardRouter from "../features/dashboard/DashboardRouter";
+import ForgotPassword from "../pages/ForgotPassword";
+import InviteUserForm from "../features/dashboard/admin/teamManagement/InviteUserForm";
 import LandingPage from "../pages/LandingPage";
 import Login from "../features/auth/Login";
 import MyButtons from "../stories/sandbox/MyButtons";
@@ -16,8 +19,10 @@ import PlansPage from "../pages/admin/PlansPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicLayout from "../layouts/public/PublicLayout";
 import Register from "../features/auth/Register";
+import ResetPassword from "../pages/ResetPassword";
 import RoleManager from "../features/roles/RolesManager";
 import SiteSettingsPage from "../pages/admin/SiteSettingsPage";
+import Terms from "../pages/Terms";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UserSettings from "../features/account/UserSettings";
 import UsersList from "../features/users/UsersList";
@@ -56,7 +61,18 @@ const router = createBrowserRouter([
         path: "/my-buttons",
         element: <MyButtons />,
       },
-
+      {
+        path: "/terms",
+        element: <Terms />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "/reset-password/:token",
+        element: <ResetPassword />,
+      },
       {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
@@ -155,6 +171,14 @@ const router = createBrowserRouter([
       {
         path: "admin/testimonials",
         element: <AdminTestimonialsPage />,
+      },
+      {
+        path: "admin/create-team",
+        element: <CreateTeamForm />,
+      },
+      {
+        path: "admin/invite-users",
+        element: <InviteUserForm />,
       },
       {
         path: "admin/news-letter",

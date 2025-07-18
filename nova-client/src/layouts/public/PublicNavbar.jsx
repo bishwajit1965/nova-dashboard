@@ -1,14 +1,16 @@
+import { ArrowDown, Moon, Sun } from "lucide-react";
 import { FaHome, FaPortrait, FaSign, FaSignOutAlt } from "react-icons/fa";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { ArrowDown } from "lucide-react";
 import Image from "/assets/bishwajit-1.jpg";
 import Logo from "../../components/ui/Logo";
 import api from "../../lib/api";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 
 const PublicNavbar = ({ siteSettings }) => {
   const { logout, isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -84,7 +86,7 @@ const PublicNavbar = ({ siteSettings }) => {
           </div>
           <div className="hidden lg:block">
             <Link to="/">
-              <img src={siteSettings.logoUrl} alt="" className="w-20 h-20" />
+              <img src={siteSettings?.logoUrl} alt="" className="w-10 h-10" />
 
               {/* <Logo /> */}
             </Link>
@@ -111,6 +113,18 @@ const PublicNavbar = ({ siteSettings }) => {
 
         {/* <div className="navbar-center"></div> */}
         <div className="navbar-end">
+          <div className="flex justify-end p-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-gray-800" />
+              )}
+            </button>
+          </div>
           <div className="dropdown">
             <div
               tabIndex={0}

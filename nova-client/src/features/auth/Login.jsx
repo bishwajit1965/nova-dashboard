@@ -1,6 +1,11 @@
 import { Eye, EyeOff, Loader } from "lucide-react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  getFacebookAccessToken,
+  initFacebookSDK,
+} from "../../utils/facebookSdk";
+import { useEffect, useState } from "react";
 
 import Button from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
@@ -8,9 +13,9 @@ import Logo from "../../components/ui/Logo";
 import { LucideIcon } from "../../lib/LucideIcons";
 import api from "../../lib/api";
 import { getGoogleIdToken } from "../../utils/googleAuth";
+import { initializeGoogleSDK } from "../../utils/googleSdk";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
 import useValidator from "../../hooks/useValidator";
 
 const Login = () => {
@@ -21,24 +26,24 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [activeMethod, setActiveMethod] = useState(null);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/dashboard";
   // Validation Rules
   const formData = { email, password };
-  const getFacebookAccessToken = () => {
-    console.log("OK");
-  };
+
+  useEffect(() => {
+    initializeGoogleSDK();
+  }, []);
+
+  useEffect(() => {
+    initFacebookSDK();
+  }, []);
 
   const validationRules = {
-    name: {
-      required: { message: "Name is required" },
-      minLength: { value: 2, message: "Name must be at least 2 characters" },
-      pattern: {
-        value: /^[a-zA-Z\s\-']+$/,
-        message: "Name can only contain letters and spaces",
-      },
-    },
     email: {
       required: { message: "Email is required" },
       pattern: {
@@ -53,8 +58,7 @@ const Login = () => {
         message: "Password must be at least 6 characters",
       },
       pattern: {
-        value:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&^])[A-Za-z\d@$!%*?#&^]{6,}$/,
+        value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.@$!%*?#&^]).{6,}$/,
         message:
           "Password must include uppercase, lowercase, number, and special character",
       },
@@ -65,46 +69,65 @@ const Login = () => {
 
   const handleLogin = async (event, method) => {
     if (method === "email") event.preventDefault();
+    setActiveMethod(method);
+    setLoading(true);
 
-    setActiveMethod(method); // set loading for this method
+    const resetLoading = () => {
+      setLoading(false);
+      setActiveMethod(null);
+    };
+
     let loggedInUser = null;
+
     try {
       switch (method) {
-        case "email":
-          {
-            loggedInUser = await login(email, password);
-            console.log("Logged in user:", loggedInUser);
+        case "email": {
+          if (!validate()) {
+            resetLoading();
+            return;
           }
+
+          loggedInUser = await login(email, password, rememberMe);
+          console.log("Logged in user:", loggedInUser);
           break;
+        }
 
         case "google": {
           const token = await getGoogleIdToken();
-          if (!token) return;
-          try {
-            const res = await api.post("/auth/oauth/google", {
-              code: token,
-            });
-            loggedInUser = res?.data?.user;
-          } catch (error) {
-            console.error(error);
+          if (!token) {
+            resetLoading();
+            return;
           }
+
+          const res = await api.post("/auth/oauth/google", { code: token });
+          loggedInUser = res?.data?.user;
           break;
         }
 
         case "facebook": {
           const token = await getFacebookAccessToken();
+          if (!token) {
+            resetLoading();
+            return;
+          }
+
           const res = await api.post("/auth/oauth/facebook", { token });
           loggedInUser = res?.data?.user;
-
           break;
         }
+
         default:
           throw new Error("Invalid login method");
       }
+
       if (loggedInUser) {
         setUser(loggedInUser);
         setIsAuthenticated(true);
-        toast.success("Login successful!");
+        toast.success("Login is successful!");
+        // Store user in localStorage or sessionStorage based on rememberMe
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem("user", JSON.stringify(loggedInUser));
+
         const userRoles = loggedInUser.roles || [];
         const redirectTo =
           userRoles.includes("admin") || userRoles.includes("editor")
@@ -125,7 +148,7 @@ const Login = () => {
       toast.error(errMsg);
     } finally {
       setTimeout(() => {
-        setActiveMethod(null); // always stops loading after 2s
+        resetLoading();
         setMessage("");
       }, 2000);
     }
@@ -149,7 +172,7 @@ const Login = () => {
           </h2>
         </div>
 
-        <form onSubmit={handleLogin} className="lg:space-y-3 space-y-2">
+        <form className="lg:space-y-3 space-y-2">
           <div className="">
             <Input
               name="email"
@@ -195,6 +218,8 @@ const Login = () => {
                 className="checkbox checkbox-xs checkbox-primary"
                 name=""
                 id=""
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
               />
               <span className="text-indigo">
                 Remember{" "}
@@ -206,7 +231,7 @@ const Login = () => {
             <div className="">
               <Button
                 onClick={(e) => handleLogin(e, "email")}
-                type="submit"
+                type="button"
                 disabled={activeMethod === "email"}
                 variant="primary"
                 className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded btn btn-primary flex items-center  ${
@@ -281,8 +306,8 @@ const Login = () => {
 
         <p className="text-sm text-center">
           <span className="mr-1">Forgot password ?</span>
-          <Link to="/login" className="text-blue-600 underline">
-            Change password
+          <Link to="/forgot-password" className="text-blue-600 underline">
+            Reset password here
           </Link>
         </p>
         <p className="text-sm text-center">

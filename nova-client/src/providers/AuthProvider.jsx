@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import AuthContext from "../authContext/AuthContext";
-import api from "../lib/api"; // Axios instance with credentials
+import api from "../lib/api";
 import { initializeGoogleSDK } from "../utils/googleSdk";
 import toast from "react-hot-toast";
 
@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
       prevUser ? { ...prevUser, plan: newPlan } : prevUser
     );
   };
+
   // Check auth status on load
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,10 +34,19 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated(true);
         toast.success("🔒 Session restored"); // ✅ Toast on success
       } catch (err) {
-        setUser(null);
-        setIsAuthenticated(false);
-        console.log("Error found", err);
-        toast.error("⚠️ Session expired, please log in again"); // ❌ Toast on failure
+        const storedUser =
+          JSON.parse(localStorage.getItem("user")) ||
+          JSON.parse(sessionStorage.getItem("user"));
+        if (storedUser) {
+          setUser(storedUser);
+          setIsAuthenticated(true);
+          toast.success("Session restored from storage");
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+          toast.error("⚠️ Session expired, please log in again");
+          console.log("Error found", err);
+        }
       } finally {
         setLoading(false);
       }
@@ -44,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
-  const register = async ({ name, email, password }) => {
+  const register = async ({ name, email, password }, rememberMe = false) => {
     const res = await api.post(
       "/auth/register",
       { name, email, password },
@@ -57,10 +67,12 @@ export const AuthProvider = ({ children }) => {
     // ⬇️ Attach token to Axios instance
     setUser(user);
     setIsAuthenticated(true);
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem("user", JSON.stringify(user));
     return user;
   };
 
-  const login = async (email, password) => {
+  const login = async (email, password, rememberMe = false) => {
     const res = await api.post(
       "/auth/login",
       { email, password },
@@ -73,12 +85,16 @@ export const AuthProvider = ({ children }) => {
     // ⬇️ Attach token to Axios instance
     setUser(user);
     setIsAuthenticated(true);
+    const storage = rememberMe ? localStorage : sessionStorage;
+    storage.setItem("user", JSON.stringify(user));
     return user;
   };
 
   const logout = async () => {
     try {
       await api.post("/auth/logout", {}, { withCredentials: true });
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("user");
       setUser(null);
       setIsAuthenticated(false);
       toast.success("Logged out successfully");

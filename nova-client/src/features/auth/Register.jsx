@@ -1,6 +1,10 @@
 import { Eye, EyeOff, Loader } from "lucide-react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  getFacebookAccessToken,
+  initFacebookSDK,
+} from "../../utils/facebookSdk";
 import { getGoogleIdToken, initializeGoogleSDK } from "../../utils/googleSdk";
 import { useCallback, useEffect } from "react";
 
@@ -9,7 +13,6 @@ import { Input } from "../../components/ui/Input";
 import Logo from "../../components/ui/Logo";
 import { LucideIcon } from "../../lib/LucideIcons";
 import api from "../../lib/api";
-import { getFacebookAccessToken } from "../../utils/facebookSdk";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
@@ -21,6 +24,7 @@ const Register = () => {
   const [activeMethod, setActiveMethod] = useState(null);
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  // const [acceptedTerms, setAcceptedTerms] = useState(false);
   const { register, setUser, setIsAuthenticated } = useAuth();
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -33,8 +37,11 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    acceptedTerms: false,
   });
   console.log("Form data", form);
+  console.log("Accepted terms", form.acceptedTerms);
+
   const validationRules = {
     name: {
       required: { message: "Name is required" },
@@ -58,8 +65,9 @@ const Register = () => {
         message: "Password must be at least 6 characters",
       },
       pattern: {
+        // Regex requires at least one lowercase, uppercase, digit, special char (. - included)
         value:
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&^.\-])[A-Za-z\d@$!%*?#&^.\-]{6,}$/,
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&^.-])[A-Za-z\d@$!%*?#&^.-]{6,}$/,
         message:
           "Password must include uppercase, lowercase, number, and special character",
       },
@@ -71,13 +79,16 @@ const Register = () => {
     },
   };
 
-  // Validator integration
   const { errors, validate } = useValidator(validationRules, form);
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   useEffect(() => {
     initializeGoogleSDK();
+  }, []);
+
+  useEffect(() => {
+    initFacebookSDK();
   }, []);
 
   const handleRegister = useCallback(
@@ -87,73 +98,90 @@ const Register = () => {
       setActiveMethod(method);
       setLoading(true);
 
+      const resetLoading = () => {
+        setLoading(false);
+        setActiveMethod(null);
+      };
+      if (!form.acceptedTerms) {
+        toast.error("Please accept the terms and conditions.");
+        resetLoading();
+        return;
+      }
+
       try {
         switch (method) {
           case "email": {
             if (!validate()) {
-              setLoading(false);
-              setActiveMethod(null);
+              resetLoading();
               return;
             }
             if (form.password !== form.confirmPassword) {
               toast.error("Passwords do not match");
-              setLoading(false);
-              setActiveMethod(null);
+              resetLoading();
               return;
             }
             await register(form);
             toast.success("Registration is successful!");
-
             break;
           }
+
           case "google": {
-            const id_token = await getGoogleIdToken();
-            console.log("🟡 Received Google ID token:", id_token);
+            const { user, accessToken } = await getGoogleIdToken();
+            if (!user || !accessToken) throw new Error("Google sign-up failed");
 
-            const res = await api.post("/auth/oauth/google-signup", {
-              id_token,
-            });
-            const user = res?.data?.user;
-            if (user) {
-              setUser(user);
-              setIsAuthenticated(true);
-              toast.success("Registered with Google");
-            }
+            setUser(user);
+            setIsAuthenticated(true);
+            toast.success("Registered with Google");
             break;
           }
+
           case "facebook": {
             const token = await getFacebookAccessToken();
-            if (!token) return;
+            if (!token) throw new Error("Facebook access token not received");
+
             const res = await api.post("/auth/oauth/facebook-signup", {
               token,
             });
             const user = res?.data?.user;
-            if (user) {
-              setUser(user);
-              setIsAuthenticated(true);
-              toast.success("Registered with Facebook");
-            }
+            if (!user) throw new Error("Facebook sign-up failed");
+
+            setUser(user);
+            setIsAuthenticated(true);
+            toast.success("Registered with Facebook");
             break;
           }
+
           default:
-            throw new Error("Invalid method");
+            throw new Error("Invalid registration method");
         }
+
         navigate(from, { replace: true });
         setIsError(false);
         setMessage("✅ Login successful!");
         setForm({ name: "", email: "", password: "", confirmPassword: "" });
-      } catch (error) {
-        console.error("Register error:", error);
-        const msg = error.response?.data?.message || "Registration failed.";
+      } catch (err) {
+        console.error("Signup error:", err);
+        const msg =
+          err === "User skipped"
+            ? "You cancelled the Google/Facebook sign-up."
+            : err === "Prompt not displayed"
+            ? "OAuth prompt could not be displayed."
+            : err.response?.data?.message || err.message || "Sign-up failed.";
         toast.error(msg);
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-          setActiveMethod(null);
-        }, 2000);
+        setTimeout(resetLoading, 2000);
       }
     },
-    [form, from, navigate, register, setIsAuthenticated, validate, setUser]
+    [
+      form,
+      from,
+      // acceptedTerms,
+      navigate,
+      register,
+      setIsAuthenticated,
+      validate,
+      setUser,
+    ]
   );
 
   return (
@@ -252,19 +280,25 @@ const Register = () => {
               </p>
             )}
           </div>
-
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-1">
               <input
                 type="checkbox"
                 className="checkbox checkbox-xs checkbox-primary"
-                name=""
-                id=""
+                id="terms"
+                name="acceptedTerms"
+                checked={form.acceptedTerms}
+                onChange={(e) =>
+                  setForm({ ...form, acceptedTerms: e.target.checked })
+                }
               />
               <span className="text-indigo">
-                I agree to the{" "}
-                <Link to="">
-                  <span className="text-blue-800 font-bold">terms</span>{" "}
+                <Link
+                  to="/terms"
+                  className="text-blue-600 underline text-sm"
+                  target="_blank"
+                >
+                  I agree to the terms
                 </Link>
               </span>
             </div>

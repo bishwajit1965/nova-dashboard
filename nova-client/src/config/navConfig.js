@@ -105,6 +105,12 @@ export const NAV_ITEMS = [
     roles: ["admin"],
   },
   {
+    to: "/dashboard/admin/invite-users",
+    label: "Manage Team",
+    icon: UsersIcon,
+    roles: ["admin"],
+  },
+  {
     to: "/dashboard/admin/news-letter",
     label: "Manage Newsletters",
     icon: Settings,

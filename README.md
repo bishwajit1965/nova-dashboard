@@ -37,3 +37,7 @@ src/
 └── App.jsx
 
 ### Pending tasks
+
+## 📚 Documentation
+
+- [Project Policies](./PROJECT_POLICIES.md)

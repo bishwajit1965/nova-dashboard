@@ -18,11 +18,13 @@ export const getFacebookAccessToken = async () => {
 
 // Optional: Call this early if not done globally
 export const initFacebookSDK = () => {
+  if (window.FB) return;
+
   window.fbAsyncInit = function () {
     window.FB.init({
       appId: import.meta.env.VITE_FACEBOOK_APP_ID,
       cookie: true,
-      xfbml: true,
+      xfbml: false,
       version: "v19.0",
     });
   };
@@ -31,5 +33,6 @@ export const initFacebookSDK = () => {
   script.src = "https://connect.facebook.net/en_US/sdk.js";
   script.async = true;
   script.defer = true;
+  script.onerror = () => console.error("Failed to load Facebook SDK");
   document.body.appendChild(script);
 };

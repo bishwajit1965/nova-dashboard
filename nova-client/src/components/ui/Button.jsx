@@ -65,6 +65,9 @@ const Button = ({
       href={href && !isDisabled ? href : undefined}
       onClick={handleClick}
       className={cn(
+        "cursor-pointer",
+        "disabled:cursor-not-allowed",
+        "disabled:opacity-60",
         base,
         variants[variant],
         isDisabled && disabledStyles,

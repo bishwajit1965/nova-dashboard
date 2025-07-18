@@ -8,9 +8,7 @@ const cookieParser = require("cookie-parser");
 
 // Connect to the database
 connectDb();
-
 const app = express();
-
 const port = process.env.PORT || 3000;
 
 // Middlewares
@@ -22,7 +20,6 @@ app.use(
 );
 
 // Serve static files from the 'uploads' directory
-// app.use("/uploads", express.static("uploads"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use(cookieParser());
@@ -40,6 +37,8 @@ const settingsRoutes = require("./routes/settingsRoutes");
 const planRoutes = require("./routes/planRoutes");
 const newsLetter = require("./routes/newsletterRoutes");
 const testimonialRoutes = require("./routes/testimonialRoutes");
+const teamRoutes = require("./routes/teamRoutes");
+const inviteRoutes = require("./routes/inviteRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -57,6 +56,8 @@ app.use("/api/settings", settingsRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/newsletter", newsLetter);
 app.use("/api/testimonials", testimonialRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/invite", inviteRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
