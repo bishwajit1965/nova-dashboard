@@ -13,6 +13,7 @@ const rolesSchema = new mongoose.Schema(
       default: "",
     },
     permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Permission" }],
+    team: { type: mongoose.Schema.Types.ObjectId, ref: "Team", default: null },
   },
   {
     timestamps: true,

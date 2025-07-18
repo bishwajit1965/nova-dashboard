@@ -5,77 +5,110 @@ const Invite = require("../models/Invite");
 const sendInviteEmail = require("../utils/sendInviteEmail");
 
 const createTeam = async (req, res) => {
-  const { name, metadata } = req.body;
-
   try {
     const userId = req.user._id;
+    const { name, metadata } = req.body;
 
-    // Optional: prevent multiple teams per user
+    // Prevent user owning multiple teams
     const existingTeam = await Team.findOne({ owner: userId });
     if (existingTeam) {
       return res.status(400).json({ message: "You already own a team." });
     }
 
-    const team = await Team.create({
-      name,
-      owner: userId,
-      metadata,
+    // Create team
+    const team = await Team.create({ name, owner: userId, metadata });
+
+    // Find global admin role
+    const adminRole = await Role.findOne({ name: "admin" });
+    if (!adminRole) {
+      return res
+        .status(500)
+        .json({ message: "Admin role not found. Please set up roles first." });
+    }
+
+    // Attach team and admin role to user (team owner)
+    await User.findByIdAndUpdate(userId, {
+      team: team._id,
+      $addToSet: { roles: adminRole._id },
     });
 
-    // Attach team to user
-    await User.findByIdAndUpdate(userId, { team: team._id });
-
-    res.status(201).json({ message: "Team created successfully", team });
+    res
+      .status(201)
+      .json({ message: "Team created and admin role assigned", team });
   } catch (error) {
     console.error("Create Team Error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-const inviteUserToTeam = async (req, res) => {
-  console.log("☘️ Invite user to team controller is hit");
-  const { email, role, teamId } = req.body;
-  console.log("Email", email);
-  console.log("Role", role);
-  console.log("Team Id", teamId);
+const getRolesForTeam = async (req, res) => {
+  const { teamId } = req.params;
 
   try {
+    const roles = await Role.find({
+      $or: [
+        { team: teamId },
+        { team: { $exists: false } }, // include global roles
+        { team: null },
+      ],
+    }).select("_id name description");
+
+    res.status(200).json({ roles });
+  } catch (err) {
+    console.error("Failed to fetch roles", err);
+    res.status(500).json({ message: "Error fetching roles" });
+  }
+};
+
+const inviteUserToTeam = async (req, res) => {
+  const { email, role, teamId } = req.body;
+  const inviterId = req.user._id;
+
+  try {
+    // 1. Verify team exists
     const team = await Team.findById(teamId);
-    console.log("Team data", team);
+    console.log("TEAM+>", team);
     if (!team) return res.status(404).json({ message: "Team not found." });
 
-    // Make sure the requestor is the owner
-    if (team.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        message: "You are not authorized to invite users to this team.",
-      });
+    // 2. Ensure the inviter is the team owner
+    if (team.owner.toString() !== inviterId.toString()) {
+      return res.status(403).json({ message: "Not authorized to invite." });
     }
 
+    // 3. Get role document
+    // const roleDoc = await Role.findOne( { _id: role, team: teamId } ); // Scoped to team
+    const roleDoc = await Role.findOne({
+      _id: role,
+      $or: [{ team: teamId }, { team: { $exists: false } }],
+    });
+
+    if (!roleDoc) {
+      return res.status(400).json({ message: "Invalid role selected" });
+    }
+
+    // 4. Check if user already exists
     let user = await User.findOne({ email });
     console.log("USER FOUND", user);
 
-    // ✅ CASE 1: User already exists
     if (user) {
+      // Already in another team?
       if (user.team && user.team.toString() !== teamId) {
         return res
           .status(400)
-          .json({ message: "User already belongs to a different team." });
+          .json({ message: "User is already in another team" });
       }
 
+      // Assign team and role
       user.team = teamId;
-
-      const roleDoc = await Role.findOne({ name: role });
-      if (roleDoc && !user.roles.includes(roleDoc._id)) {
+      if (!user.roles.includes(roleDoc._id)) {
         user.roles.push(roleDoc._id);
       }
 
       await user.save();
-      return res
-        .status(200)
-        .json({ message: "Existing user added to the team." });
+      return res.status(200).json({ message: "User added to team" });
     }
 
-    // ✅ CASE 2: User doesn't exist — generate invite
+    // 5. Create invite for new user
     const existingInvite = await Invite.findOne({
       email,
       team: teamId,
@@ -88,14 +121,14 @@ const inviteUserToTeam = async (req, res) => {
       });
     }
 
-    const invite = new Invite({ email, team: teamId });
-    const rawToken = invite.generateToken();
+    const invite = new Invite({ email, team: teamId, role: roleDoc._id });
+    const token = invite.generateToken();
     await invite.save();
 
-    const inviteLink = `https://yourfrontend.com/accept-invite/${rawToken}`;
-    await sendInviteEmail(email, inviteLink);
+    const inviteUrl = `https://yourfrontend.com/accept-invite/${token}`;
+    await sendInviteEmail(email, inviteUrl);
 
-    res.status(200).json({ message: "Invitation email sent to new user." });
+    res.status(200).json({ message: "Invitation sent to new user" });
   } catch (error) {
     console.error("Invite Error:", error);
     res.status(500).json({ message: "Server error" });
@@ -104,5 +137,6 @@ const inviteUserToTeam = async (req, res) => {
 
 module.exports = {
   createTeam,
+  getRolesForTeam,
   inviteUserToTeam,
 };

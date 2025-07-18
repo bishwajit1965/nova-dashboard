@@ -18,6 +18,7 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.userId)
         .populate("roles")
         .populate("permissions")
+        .populate("team", "_id")
         .populate("plan", "_id name price tier features")
         .select("+password");
 

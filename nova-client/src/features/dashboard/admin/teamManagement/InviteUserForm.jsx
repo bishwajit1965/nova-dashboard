@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import Button from "../../../../components/ui/Button";
 import { Input } from "../../../../components/ui/Input";
 import { Loader } from "lucide-react";
@@ -5,15 +7,32 @@ import { LucideIcon } from "../../../../lib/LucideIcons";
 import api from "../../../../lib/api";
 import toast from "react-hot-toast";
 import { useAuth } from "../../../../hooks/useAuth";
-import { useState } from "react";
 import useValidator from "../../../../hooks/useValidator";
 
 export default function InviteUserForm() {
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState("member");
+  const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [availableRoles, setAvailableRoles] = useState([]);
   const { user } = useAuth();
-  const teamId = user?.team;
+  const teamId = user?.team?._id || user.team;
+  console.log("Team Id", teamId);
+  console.log("User", user);
+  console.log("Roles", availableRoles);
+  console.log("Role", role);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await api.get(`/teams/${teamId}/roles`);
+        setAvailableRoles(res?.data?.roles);
+      } catch (err) {
+        console.error("Error in fetching roles", err);
+        toast.error("Failed to load roles");
+      }
+    };
+    if (teamId) fetchRoles();
+  }, [teamId]);
 
   const formData = { email };
 
@@ -84,9 +103,13 @@ export default function InviteUserForm() {
             onChange={(e) => setRole(e.target.value)}
             className="select select-bordered w-full"
           >
-            <option value="member">Member</option>
-            <option value="editor">Editor</option>
+            {availableRoles.map((r) => (
+              <option key={r._id} value={r._id}>
+                {r.name.charAt(0).toUpperCase() + r.name.slice(1)}
+              </option>
+            ))}
           </select>
+
           <div
             className={`${loading ? "cursor-not-allowed" : "cursor-progress"}`}
           >

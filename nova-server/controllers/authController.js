@@ -233,6 +233,7 @@ const loginUser = async (req, res) => {
       .select("+password")
       .populate("roles")
       .populate("permissions")
+      .populate("team", "_id")
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
@@ -274,6 +275,7 @@ const loginUser = async (req, res) => {
           name: user.plan.name,
           price: user.plan.price,
         },
+        team: user.team,
       },
     });
   } catch (error) {
@@ -300,7 +302,8 @@ const refreshTokenHandler = async (req, res) => {
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
         populate: { path: "features" },
-      });
+      })
+      .populate("team", "_id");
 
     const accessToken = generateAccessToken(user);
     return res.status(200).json({
@@ -320,6 +323,7 @@ const refreshTokenHandler = async (req, res) => {
           name: user.plan.name,
           price: user.plan.price,
         },
+        team: user.team,
       },
     });
   } catch (err) {
