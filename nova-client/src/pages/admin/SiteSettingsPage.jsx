@@ -9,8 +9,6 @@ import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
 
-const BASE_API = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
 const SiteSettingsPage = () => {
   const [errors, setErrors] = useState({});
   const [formToggler, setFormToggler] = useState(false); // false=create, true=edit

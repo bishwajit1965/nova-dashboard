@@ -1,5 +1,6 @@
 const Role = require("../models/Role");
 const Permission = require("../models/Permission"); // ✅ this line is mandatory
+const User = require("../models/User"); // Make sure to import this at the top
 
 const getAllRoles = async (req, res) => {
   try {
@@ -110,21 +111,44 @@ const assignPermissionsToRole = async (req, res) => {
 };
 
 const deleteRole = async (req, res) => {
-  console.log("Delete role is hit");
   try {
     const id = req.params.id;
+
+    // ✅ 1. Validate id
+    if (!id || id.length !== 24) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid role ID.",
+      });
+    }
+
+    // ✅ 2. Check if any users are assigned this role
+    const usersWithRole = await User.find({ roles: id });
+    if (usersWithRole.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot delete role: it is assigned to users.",
+      });
+    }
+
+    // ✅ 3. Proceed to delete
     const role = await Role.findByIdAndDelete(id);
-    console.log("Role=>", role);
-    if (!role)
+    if (!role) {
       return res
         .status(404)
         .json({ success: false, message: "Role not found." });
-    res
-      .status(200)
-      .json({ success: true, message: "Role deleted successfully." });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Role deleted successfully.",
+    });
   } catch (error) {
     console.error("Error deleting role:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 

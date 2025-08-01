@@ -6,25 +6,13 @@ import { useAuth } from "../hooks/useAuth";
 const PlanProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
-  // Fetch User with plan
+  // Fetch all plans to display
   const {
-    data: user,
+    data: plans,
     isLoading,
     isError,
     error,
   } = useApiQuery({
-    url: API_PATHS.CURRENT_USER_PLAN.ENDPOINT,
-    queryKey: API_PATHS.CURRENT_USER_PLAN.KEY,
-    options: {
-      enabled: isAuthenticated,
-      staleTime: 0,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-    },
-  });
-
-  // Fetch all plans to display
-  const { data: plans } = useApiQuery({
     url: API_PATHS.PLANS.ENDPOINT,
     queryKey: API_PATHS.PLANS.KEY,
     // select: (res) => res.data,//NOT NEEDED HERE AS HOOK DOES IT
@@ -37,7 +25,6 @@ const PlanProvider = ({ children }) => {
   });
 
   const planInfo = {
-    user,
     plans,
     isLoading,
     isError,

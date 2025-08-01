@@ -1,10 +1,4 @@
-import {
-  CheckCheck,
-  CheckCheckIcon,
-  CheckCircle,
-  CheckCircle2,
-  Loader,
-} from "lucide-react";
+import { CheckCheck, CheckCheckIcon, CheckCircle, Loader } from "lucide-react";
 import { useContext, useState } from "react";
 
 import API_PATHS from "../../common/apiPaths/apiPaths";
@@ -15,24 +9,22 @@ import { Link } from "react-router-dom";
 import { LucideIcon } from "../../lib/LucideIcons";
 import Modal from "../ui/Modal";
 import PlanContext from "../../planContext/PlanContext";
+import api from "../../lib/api";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useAuth } from "../../hooks/useAuth";
 
 const PlanCard = () => {
-  const { user: loggedUser, updateUserPlan } = useAuth();
-  const { user, plans, isLoading, isError, error } = useContext(PlanContext);
+  const { user, updateUserPlan } = useAuth();
+  const { plans, isLoading, isError, error } = useContext(PlanContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loaderDelay, setLoaderDelay] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
-  const [selectedPlanId, setSelectedPlanId] = useState(
-    loggedUser?.plan?._id ?? null
-  );
+  const [selectedPlanId, setSelectedPlanId] = useState(user?.plan?._id ?? null);
 
-  console.log("Logged User=>", loggedUser);
-  console.log("User=>", user);
+  console.log("Logged User=>", user);
   console.log("Selected plan id=>", selectedPlanId);
   console.log("Selected plan=>", selectedPlan);
 
@@ -41,13 +33,14 @@ const PlanCard = () => {
     method: "update",
     path: `${API_PATHS.USERS.ENDPOINT}/plan`, // Not dynamic, fixed path
     key: API_PATHS.CURRENT_USER_PLAN.KEY,
-    onSuccess: () => {
-      setLoaderDelay(true);
+    onSuccess: async () => {
+      await updateUserPlan();
       setTimeout(() => {
-        setSuccessMsg("Your newly upgraded plan is this!!!");
+        setSuccessMsg("Your newly upgraded plan is this.");
         setSelectedPlanId(null);
         setSelectedPlan(null);
         setIsModalOpen(false);
+        setLoaderDelay(false);
       }, 3000);
     },
     onError: (error) => {
@@ -82,7 +75,21 @@ const PlanCard = () => {
     setSelectedPlan(null);
   };
 
+  const handleMockCheckout = async (planId) => {
+    try {
+      const res = await api.post("/billing/mock-checkout", { planId });
+      toast.success(res.data.message);
+      // Now update user's plan
+      mutation.mutate({ data: { planId } });
+    } catch (err) {
+      console.error("Error found", err);
+      toast.error("Mock payment failed");
+    }
+  };
+
   const handleSelect = (planId) => {
+    setLoaderDelay(true);
+    handleMockCheckout(planId);
     setSelectedPlanId(planId);
     mutation.mutate({ data: { planId } });
   };
@@ -101,44 +108,45 @@ const PlanCard = () => {
     );
 
   if (isError)
-    return <div className="flex justify-center">{isError.message}</div>;
-
-  if (error) return <div className="flex justify-center">{error.message}</div>;
+    return <div className="flex justify-center">{error.message}</div>;
 
   return (
-    <div className="lg:p-4 lg:min-h-[calc(100vh-262px)] flex justify-center items-start">
-      {loggedUser ? (
-        <Card className="w-full max-w-md shadow-lg rounded-2xl bg-base-100">
-          <div className="lg:p-6 bg-base-100 space-y-2">
-            <h2 className="text-2xl font-bold capitalize">
-              {loggedUser?.name} / {user?.plan?.tier} Plan
-            </h2>
+    <div className="lg:p- lg:min-h-[calc(100vh-262px)] flex justify-center items-start">
+      {user ? (
+        <Card className="w-full max-w-md shadow-lg rounded-2xl bg-base-100 lg:!max-w-[26vw] border border-base-300">
+          <div className="lg:p-4  space-y-2">
+            <div className="">
+              <h2 className="text-xl font-bold capitalize">
+                {user?.name} / {user?.plan?.tier} Plan
+              </h2>
+            </div>
+
             <div className="divider my-2"></div>
 
             <p className="text-xl mb-4 font-semibold">
               {priceFormatted ?? "00"} / month
             </p>
 
-            <ul className="list-disc space-y-1">
-              {user?.plan?.features.map((feature, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center space-x-2 capitalize"
-                >
-                  <span>
-                    <CheckCircle2 size={18} />
+            <div className="space-y-1">
+              {Array.isArray(user?.plan?.features) &&
+                user.plan.features.map((feature, idx) => (
+                  <span key={idx} className="flex items-center space-x-2">
+                    <span>
+                      <CheckCircle size={16} />
+                    </span>
+                    <span>
+                      {feature?.title || feature?.key || "Unnamed Feature"}
+                    </span>
                   </span>
-                  <span>{feature.title}</span>
-                </li>
-              ))}
-            </ul>
+                ))}
+            </div>
 
             <p className="font-semibold flex items-center space-x-2">
               <span className="flex items-center space-x-2">
                 <span>{<LucideIcon.Clock size={18} />}</span>
                 <span>Chosen at:</span>
               </span>
-              <span className="flex items-center">
+              <span>
                 {new Date(user?.plan?.createdAt).toLocaleDateString()}
               </span>
             </p>
@@ -187,11 +195,18 @@ const PlanCard = () => {
         <Modal
           isOpen={isModalOpen}
           onClose={closePlanModal}
-          title={`${loggedUser?.name} - Upgrade Your Chosen Plan`}
+          title={`${user?.name} - Upgrade Your Chosen Plan`}
           className="w-full lg:!max-w-[58vw] max-h-[80vh] overflow-y-auto"
         >
           {plans.length ? (
             <div className="grid lg:grid-cols-12 grid-cols-1 gap-4 justify-between lg:max-w-5xl max-w-full">
+              {loaderDelay && (
+                <div className="col-span-12">
+                  <p className="text-lg font-bold text-blue-600">
+                    Please wait, your plan is being updated...
+                  </p>
+                </div>
+              )}
               {plans.map((plan) => {
                 const isCurrent = plan._id === user?.plan?._id;
                 return (

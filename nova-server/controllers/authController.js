@@ -13,6 +13,27 @@ const sendEmail = require("../utils/sendEmail.js");
 const generateAccessToken = require("../utils/generateAccessToken.js");
 const { generateRefreshToken } = require("../utils/generateRefreshToken.js");
 
+function serializePlan(plan) {
+  if (!plan) return null;
+
+  const features = Array.isArray(plan.features)
+    ? plan.features.map((f) => ({
+        key: f.key,
+        title: f.title,
+        description: f.description,
+        icon: f.icon,
+      }))
+    : [];
+
+  return {
+    _id: plan._id,
+    tier: plan.tier,
+    name: plan.name,
+    price: plan.price,
+    features,
+  };
+}
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -55,7 +76,7 @@ const registerUser = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       });
 
     if (user) {
@@ -80,13 +101,7 @@ const registerUser = async (req, res) => {
           email: user.email,
           roles: user.roles.map((r) => r.name),
           permissions: user.permissions.map((p) => p.name),
-          plan: user.plan && {
-            _id: user.plan._id,
-            tier: user.plan.tier,
-            features: user.plan.features,
-            name: user.plan.name,
-            price: user.plan.price,
-          },
+          plan: serializePlan(user.plan),
         },
       });
     } else {
@@ -149,7 +164,7 @@ const googleSignUpController = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       });
 
     console.log("GOOGLE USER", user);
@@ -183,7 +198,7 @@ const googleSignUpController = async (req, res) => {
         .populate({
           path: "plan",
           select: "_id tier name features price createdAt updatedAt",
-          populate: { path: "features" },
+          populate: { path: "features", select: "key" },
         });
     }
 
@@ -210,13 +225,7 @@ const googleSignUpController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          name: user.plan.name,
-          price: user.plan.price,
-          features: user.plan.features || [],
-        },
+        plan: serializePlan(user.plan),
       },
     });
   } catch (error) {
@@ -237,7 +246,10 @@ const loginUser = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: {
+          path: "features",
+          select: "key title description icon", // ✅ Required for frontend
+        },
       });
 
     if (!user || !(await user.matchPassword(password))) {
@@ -247,16 +259,13 @@ const loginUser = async (req, res) => {
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user._id);
 
-    user.refreshToken = refreshToken;
-    // ✅ Use updateOne to avoid Mongoose validation (like acceptedTerms)
     await User.updateOne({ _id: user._id }, { $set: { refreshToken } });
-    // await user.save();
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -265,16 +274,11 @@ const loginUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        roles: user.roles.map((role) => role.name),
-        permissions: user.permissions.map((permission) => permission.name),
+        roles: user.roles.map((r) => r.name),
+        permissions: user.permissions.map((p) => p.name),
         bio: user.bio,
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          features: user.plan.features,
-          name: user.plan.name,
-          price: user.plan.price,
-        },
+        avatar: user.avatar,
+        plan: user.plan, // ✅ Directly return full populated plan
         team: user.team,
       },
     });
@@ -283,6 +287,63 @@ const loginUser = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const user = await User.findOne({ email })
+//       .select("+password")
+//       .populate("roles")
+//       .populate("permissions")
+//       .populate("team", "_id")
+//       .populate({
+//         path: "plan",
+//         select: "_id tier name features price createdAt updatedAt",
+//         populate: {
+//           path: "features",
+//           select: "key title description icon",
+//         },
+//       });
+
+//     if (!user || !(await user.matchPassword(password))) {
+//       return res.status(401).json({ message: "Invalid email or password" });
+//     }
+
+//     const accessToken = generateAccessToken(user);
+//     const refreshToken = generateRefreshToken(user._id);
+
+//     user.refreshToken = refreshToken;
+//     // ✅ Use updateOne to avoid Mongoose validation (like acceptedTerms)
+//     await User.updateOne({ _id: user._id }, { $set: { refreshToken } });
+//     // await user.save();
+
+//     res.cookie("jwt", refreshToken, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "strict",
+//       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+//     });
+
+//     res.status(200).json({
+//       accessToken,
+//       user: {
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         roles: user.roles.map((role) => role.name),
+//         permissions: user.permissions.map((permission) => permission.name),
+//         bio: user.bio,
+//         avatar: user.avatar,
+//         plan: serializePlan(user.plan),
+//         team: user.team,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
 
 const refreshTokenHandler = async (req, res) => {
   const token = req.cookies?.jwt;
@@ -301,7 +362,7 @@ const refreshTokenHandler = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       })
       .populate("team", "_id");
 
@@ -316,13 +377,7 @@ const refreshTokenHandler = async (req, res) => {
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((permission) => permission.name),
         bio: user.bio,
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          features: user.plan.features,
-          name: user.plan.name,
-          price: user.plan.price,
-        },
+        plan: serializePlan(user.plan),
         team: user.team,
       },
     });
@@ -370,7 +425,7 @@ const googleAuthController = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       });
 
     if (!user) {
@@ -410,18 +465,7 @@ const googleAuthController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((role) => role.name),
         permissions: user.permissions.map((perm) => perm.name),
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          name: user.plan.name,
-          price: user.plan.price,
-          features: user.plan.features || [],
-        },
-
-        // plan: {
-        //   tier: user.plan?.tier ?? "free",
-        //   features: user.plan?.features ?? [],
-        // },
+        plan: serializePlan(user.plan),
       },
     });
   } catch (error) {
@@ -463,7 +507,7 @@ const facebookAuthController = async (req, res) => {
       .populate("permissions")
       .populate({
         path: "plan",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       });
 
     if (!user) {
@@ -497,15 +541,7 @@ const facebookAuthController = async (req, res) => {
         avatar: user.avatar || picture?.data?.url,
         roles: user.roles.map((r) => r.name),
         permissions: user.permissions.map((p) => p.name),
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          name: user.plan.name,
-          price: user.plan.price,
-          features: user.plan.features.map((f) =>
-            typeof f === "string" ? f : f.key
-          ),
-        },
+        plan: serializePlan(user.plan),
       },
     });
   } catch (error) {
@@ -541,7 +577,7 @@ const facebookSignUpController = async (req, res) => {
       .populate({
         path: "plan",
         select: "_id tier name features price createdAt updatedAt",
-        populate: { path: "features" },
+        populate: { path: "features", select: "key title description icon" },
       });
 
     const userRole = await Role.findOne({ name: "user" });
@@ -573,7 +609,7 @@ const facebookSignUpController = async (req, res) => {
         .populate({
           path: "plan",
           select: "_id tier name features price createdAt updatedAt",
-          populate: { path: "features" },
+          populate: { path: "features", select: "key title description icon" },
         });
     }
 
@@ -602,13 +638,7 @@ const facebookSignUpController = async (req, res) => {
         avatar: user.avatar,
         roles: user.roles.map((r) => r.name),
         permissions: user.permissions.map((p) => p.name),
-        plan: user.plan && {
-          _id: user.plan._id,
-          tier: user.plan.tier,
-          name: user.plan.name,
-          price: user.plan.price,
-          features: user.plan.features || [],
-        },
+        plan: serializePlan(user.plan),
       },
     });
   } catch (error) {

@@ -1,7 +1,6 @@
 import AdminDashboard from "./admin/AdminDashboard";
-import EditorDashboard from "./editor/EditorDashboard";
 import Loader from "../../components/ui/Loader";
-import UserDashboard from "./user/UserDashboard";
+import UnifiedRolesDashboard from "./unifiedRolesDashboard/UnifiedRolesDashboard";
 import { useAuth } from "../../hooks/useAuth";
 
 const DashboardRouter = () => {
@@ -12,11 +11,13 @@ const DashboardRouter = () => {
   if (!user) return null;
 
   const roles = user.roles || [];
+  const roleNames = roles.map((r) => (typeof r === "string" ? r : r.name));
 
-  if (roles.includes("admin")) return <AdminDashboard />;
-  if (roles.includes("editor")) return <EditorDashboard />;
-
-  return <UserDashboard />;
+  return roleNames.includes("admin") ? (
+    <AdminDashboard />
+  ) : (
+    <UnifiedRolesDashboard />
+  );
 };
 
 export default DashboardRouter;

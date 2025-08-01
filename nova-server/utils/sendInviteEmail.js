@@ -15,7 +15,7 @@ const sendInviteEmail = async (email, link) => {
     subject: "You're Invited to Join a Team",
     html: `
       <p>Hello,</p>
-      <p>You’ve been invited to join a team on Nova Dashboard.</p>
+      <p>You have been invited to join a team on Nova Dashboard.</p>
       <p>Click the link below to accept the invite (valid for 10 minutes):</p>
       <a href="${link}">${link}</a>
     `,

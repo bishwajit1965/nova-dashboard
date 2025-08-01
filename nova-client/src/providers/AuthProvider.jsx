@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import API_PATHS from "../common/apiPaths/apiPaths";
 import AuthContext from "../authContext/AuthContext";
 import api from "../lib/api";
 import { initializeGoogleSDK } from "../utils/googleSdk";
@@ -10,10 +11,20 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const updateUserPlan = (newPlan) => {
-    setUser((prevUser) =>
-      prevUser ? { ...prevUser, plan: newPlan } : prevUser
-    );
+  // const updateUserPlan = (newPlan) => {
+  //   setUser((prevUser) =>
+  //     prevUser ? { ...prevUser, plan: newPlan } : prevUser
+  //   );
+  // };
+
+  const updateUserPlan = async () => {
+    try {
+      const res = await api.get(API_PATHS.CURRENT_USER_PLAN.ENDPOINT);
+      const updatedUser = res.data.data; // assuming backend returns user with plan populated
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Failed to refresh user with plan:", error);
+    }
   };
 
   // Check auth status on load

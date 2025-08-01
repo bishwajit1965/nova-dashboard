@@ -1,5 +1,3 @@
-// navConfig.js  (keep this separate for cleanliness)
-
 import {
   BadgeHelp,
   CircleGauge,
@@ -11,38 +9,46 @@ import {
   UsersIcon,
 } from "lucide-react";
 
+const PERMISSIONS = {
+  auditLog: ["audit_log"],
+  userManagement: ["user_management"],
+  // Add more as needed.........
+};
+
+const ALL_ROLES = ["admin", "editor", "writer", "user"];
+
 export const NAV_ITEMS = [
   // ------------- Everyone -------------
   {
     to: "/dashboard",
     label: "Dashboard",
     icon: CircleGauge,
-    roles: ["user", "editor", "admin"],
+    roles: ALL_ROLES,
     end: true,
   },
   {
     to: "/dashboard/settings",
     label: "Manage Settings",
     icon: Settings,
-    roles: ["user", "editor", "admin"],
+    roles: ALL_ROLES,
   },
   {
     to: "/dashboard/profile",
     label: "Manage Profile",
     icon: UserPen,
-    roles: ["user", "editor", "admin"],
+    roles: ALL_ROLES,
   },
   {
     to: "/dashboard/help",
     label: "Seek Help",
     icon: BadgeHelp,
-    roles: ["user", "editor", "admin"],
+    roles: ALL_ROLES,
   },
   {
     to: "/my-buttons",
     label: "Button Demo",
     icon: SquareChartGantt,
-    roles: ["user", "editor", "admin"],
+    roles: ALL_ROLES,
   },
 
   // ------------- Admin only -----------
@@ -74,16 +80,16 @@ export const NAV_ITEMS = [
     to: "/dashboard/admin/audit-log",
     label: "Manage Audit Log",
     icon: ListCheck,
-    roles: ["admin", "editor", "user"],
-    permissions: ["audit_log"], // authority gate
+    roles: ALL_ROLES,
+    permissions: PERMISSIONS.auditLog, // authority gate
     feature: "audit-logs",
   },
   {
     to: "/dashboard/admin/contact-messages",
     label: "Manage Contacts",
     icon: ListCheck,
-    roles: ["admin", "editor", "user"],
-    permissions: ["audit_log"],
+    roles: ALL_ROLES,
+    permissions: PERMISSIONS.userManagement,
     feature: "user-management",
   },
   {
@@ -102,6 +108,12 @@ export const NAV_ITEMS = [
     to: "/dashboard/admin/testimonials",
     label: "Manage Testimonials",
     icon: Settings,
+    roles: ["admin"],
+  },
+  {
+    to: "/dashboard/admin/create-team",
+    label: "Create Team",
+    icon: UsersIcon,
     roles: ["admin"],
   },
   {

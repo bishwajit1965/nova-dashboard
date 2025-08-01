@@ -1,40 +1,155 @@
-# Nova Dashboard
+# 🚀 Nova Dashboard, a Role-Based SaaS Platform with Plan & Feature Access
 
-## Purpose
+A full-featured role-based web app with authentication, subscription plans, and feature-based access — designed as a non-multi-tenant SaaS for learning, showcasing, or real-world use.
 
-Admin system to manage users, roles, permissions with gated feature access via plan tier.
+---
 
-### Features
+## 🛠️ Tech Stack
 
-- Role-based dashboard navigation
-- Audit log with plan-based visibility
-- Plan upgrade mechanism
-- Contacts inbox for user queries
+**Backend:**
 
-### Tech Stack
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- JWT (Access/Refresh Tokens)
 
-- React + Tailwind + Vite
-- Node.js + Express + MongoDB
+**Frontend:**
 
-### Role & plan rules
+- React + Vite
+- Tailwind CSS
+- React Query
+- React Router DOM
 
-### Folder map
+**Others:**
 
-src/
-├── components/ # Reusable UI components (e.g., Button, Modal)
-├── features/
-│ ├── auth/ # login, register, session logic
-│ ├── users/ # UserTable, CreateUserForm, userRoutes
-│ ├── audit-log/ # AuditLogPage, AuditLogTable
-│ ├── plans/ # PlanSelectionPage, usePlan, useFeatureAccess
-│ └── contact/ # InboxPage, ContactCard
-├── hooks/ # useAuth, useFeatureAccess, useNavAccess
-├── config/ # navConfig.js, planConfig.js
-├── lib/ # helper functions
-├── routes/ # route guards, route layout
-├── context/ # ThemeContext, AuthContext
-├── pages/ # LandingPage, NotFoundPage
-└── App.jsx
+- Lucide Icons
+- Toast Notifications
+- Context API
+
+---
+
+## 📦 Features
+
+### ✅ Authentication
+
+- Secure Register, Login, Logout
+- Refresh Token handling
+- Password reset functionality
+
+### ✅ User Roles
+
+- `user`, `writer`, `editor`, `admin`
+- Each role has a separate dashboard (Unified View)
+
+### ✅ Plans & Feature Access
+
+- Predefined Plans: `free`, `pro`, `premium`, `enterprise`
+- Plans define accessible features (by key)
+- Roles get features according to their plan
+
+### ✅ Plan Management
+
+- Users can upgrade or delete their current plan
+- Plan features shown with icons and descriptions
+- Mock billing logic implemented for plan change
+
+### ✅ Admin Tools (Ready to Expand)
+
+- Admin can define roles, plans, features (future scope)
+
+---
+
+## 🎯 Use Cases
+
+### 📚 Portfolio Project
+
+Use this app to showcase:
+
+- Full authentication system
+- Role-based routing
+- Feature gating with plans
+- Complex frontend + backend integration
+
+### 🧪 Practice Ground
+
+Use this codebase to:
+
+- Learn how to manage access control
+- Build from starter project
+- Add monetization (Stripe ready foundation)
+
+### 🛠️ Standalone Utility
+
+- Turn into an internal tool or starter kit for a SaaS
+- Add Stripe and go live
+
+---
+
+## 🧭 How to Run
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/your-repo-name
+cd your-repo-name
+```
+
+### 2. Backend Setup
+
+```bash
+cd backend
+npm install
+npm run dev
+```
+
+- Create `.env` with Mongo URI, JWT secrets
+
+### 3. Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 📌 Future Enhancements (Optional)
+
+- Stripe Integration for real billing
+- Admin dashboard to manage users/plans
+- Multi-tenant structure for SaaS apps
+- Audit Logs / Activity Feed
+
+---
+
+## 💡 Inspiration
+
+This project is meant to simulate a commercial SaaS-like experience, but simplified for clarity and learning. Inspired by real-world SaaS platforms.
+
+---
+
+## 🧑‍💻 Author
+
+**Your Name:** Bishwajit Paul
+
+Contributions welcome if open-sourced!
+
+---
+
+## 📸 Demo Screenshots (Optional)
+
+_Add some demo screenshots here once deployed or captured._
+
+---
+
+## 📬 Contact
+
+Feel free to reach out on GitHub or LinkedIn for collaboration or questions.
+
+---
+
+### ✅ All systems are ready. You’re now at the final polish stage. 🚀
 
 ### Pending tasks
 

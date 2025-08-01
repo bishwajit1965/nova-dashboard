@@ -9,8 +9,12 @@ const generateAccessToken = (user) => {
   );
 
   const planTier = user?.plan?.tier ?? "free";
-  const planFeatures = user?.plan?.features ?? [];
-  const planPrice = user?.plan?.price;
+  // const planFeatures = user?.plan?.features ?? [];
+  const planFeatures = Array.isArray(user?.plan?.features)
+    ? user.plan.features.map((f) => (typeof f === "string" ? f : f.key))
+    : [];
+
+  const planPrice = user?.plan?.price ?? 0;
 
   return jwt.sign(
     {

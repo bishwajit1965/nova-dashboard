@@ -29,7 +29,8 @@ const RoleTable = ({ onEdit }) => {
       setConfirmDelete(null);
     },
     onError: (error) => {
-      toast.error("Error deleting permission");
+      const message = error?.response?.data?.message || "Failed to delete role";
+      toast.error(message);
       setConfirmDelete(null);
       console.error(error);
     },

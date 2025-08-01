@@ -45,6 +45,10 @@ const API_PATHS = {
     ENDPOINT: "testimonials",
     KEY: ["testimonials"],
   },
+  TEAM_MEMBERS: {
+    ENDPOINT: "teams/team-members",
+    KEY: ["teamMembers"],
+  },
 
   // Extend this for other features.....
 };

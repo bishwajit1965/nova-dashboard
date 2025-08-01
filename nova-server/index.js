@@ -39,6 +39,7 @@ const newsLetter = require("./routes/newsletterRoutes");
 const testimonialRoutes = require("./routes/testimonialRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 const inviteRoutes = require("./routes/inviteRoutes");
+const billingRoutes = require("./routes/billingRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -58,6 +59,7 @@ app.use("/api/newsletter", newsLetter);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/invite", inviteRoutes);
+app.use("/api/billing", billingRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

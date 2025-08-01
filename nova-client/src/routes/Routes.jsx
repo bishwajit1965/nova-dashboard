@@ -1,4 +1,5 @@
 import About from "../pages/About";
+import AcceptInvite from "../pages/AcceptInvite";
 import AdminNewsletterList from "../features/dashboard/newsLetterList/AdminNewsletterList";
 import AdminTestimonialsPage from "../features/dashboard/testimonials/AdminTestimonialsPage";
 import AdminUsersManagementPage from "../features/users/AdminUsersManagementPage";
@@ -22,6 +23,7 @@ import Register from "../features/auth/Register";
 import ResetPassword from "../pages/ResetPassword";
 import RoleManager from "../features/roles/RolesManager";
 import SiteSettingsPage from "../pages/admin/SiteSettingsPage";
+import TeamMembersList from "../features/dashboard/admin/teamManagement/TeamMembersList";
 import Terms from "../pages/Terms";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
 import UserSettings from "../features/account/UserSettings";
@@ -74,6 +76,10 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
+        path: "/accept-invite/:token",
+        element: <AcceptInvite />,
+      },
+      {
         path: "/unauthorized",
         element: <UnauthorizedPage />,
       },
@@ -84,7 +90,7 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
+      <ProtectedRoute allowedRoles={["admin", "editor", "writer", "user"]}>
         <DashboardLayout />
       </ProtectedRoute>
     ),
@@ -138,7 +144,7 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute
             requiredFeatures={["audit-logs"]}
-            allowedRoles={["admin", "editor", "user"]}
+            allowedRoles={["admin", "editor", "writer", "user"]}
           >
             <AuditLogPage />
           </ProtectedRoute>
@@ -155,7 +161,7 @@ const router = createBrowserRouter([
       {
         path: "admin/contact-messages",
         element: (
-          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
+          <ProtectedRoute allowedRoles={["admin", "editor", "writer", "user"]}>
             <ContactMessagesPage />
           </ProtectedRoute>
         ),
@@ -179,6 +185,14 @@ const router = createBrowserRouter([
       {
         path: "admin/invite-users",
         element: <InviteUserForm />,
+      },
+      {
+        path: "admin/team-management",
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "editor", "user"]}>
+            <TeamMembersList />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/news-letter",

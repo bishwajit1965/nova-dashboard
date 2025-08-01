@@ -309,7 +309,7 @@ const Register = () => {
                 type="submit"
                 disabled={activeMethod === "email"}
                 variant="primary"
-                className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded btn btn-primary flex items-center  ${
+                className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded btn btn-primary flex items-center ${
                   activeMethod === "email"
                     ? "opacity-70 cursor-not-allowed"
                     : ""

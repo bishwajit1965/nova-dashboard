@@ -130,7 +130,10 @@ const Login = () => {
 
         const userRoles = loggedInUser.roles || [];
         const redirectTo =
-          userRoles.includes("admin") || userRoles.includes("editor")
+          userRoles.includes("admin") ||
+          userRoles.includes("owner") ||
+          userRoles.includes("editor") ||
+          userRoles.includes("writer")
             ? from
             : "/";
         navigate(redirectTo, { replace: true });
@@ -221,12 +224,7 @@ const Login = () => {
                 checked={rememberMe}
                 onChange={() => setRememberMe(!rememberMe)}
               />
-              <span className="text-indigo">
-                Remember{" "}
-                <Link to="">
-                  <span className="text-blue-800 font-bold">me</span>{" "}
-                </Link>
-              </span>
+              <span className="text-indigo-500">Remember me</span>
             </div>
             <div className="">
               <Button
@@ -234,7 +232,7 @@ const Login = () => {
                 type="button"
                 disabled={activeMethod === "email"}
                 variant="primary"
-                className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded btn btn-primary flex items-center  ${
+                className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded btn btn-primary flex items-center ${
                   activeMethod === "email"
                     ? "opacity-70 cursor-not-allowed"
                     : ""

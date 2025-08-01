@@ -60,45 +60,53 @@ const getRolesForTeam = async (req, res) => {
   }
 };
 
+const getTeamMembers = async (req, res) => {
+  const { teamId } = req.params;
+
+  try {
+    const members = await User.find({ team: teamId }).populate("roles", "name");
+    if (!members) {
+      return res
+        .status(404)
+        .json({ message: "No members found for this team" });
+    }
+
+    res.status(200).json({ success: true, data: members });
+  } catch (error) {
+    console.error("Error fetching team members:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const inviteUserToTeam = async (req, res) => {
   const { email, role, teamId } = req.body;
   const inviterId = req.user._id;
 
   try {
-    // 1. Verify team exists
     const team = await Team.findById(teamId);
-    console.log("TEAM+>", team);
     if (!team) return res.status(404).json({ message: "Team not found." });
 
-    // 2. Ensure the inviter is the team owner
     if (team.owner.toString() !== inviterId.toString()) {
       return res.status(403).json({ message: "Not authorized to invite." });
     }
 
-    // 3. Get role document
-    // const roleDoc = await Role.findOne( { _id: role, team: teamId } ); // Scoped to team
     const roleDoc = await Role.findOne({
       _id: role,
       $or: [{ team: teamId }, { team: { $exists: false } }],
     });
 
     if (!roleDoc) {
-      return res.status(400).json({ message: "Invalid role selected" });
+      return res.status(400).json({ message: "Invalid role selected." });
     }
 
-    // 4. Check if user already exists
     let user = await User.findOne({ email });
-    console.log("USER FOUND", user);
-
     if (user) {
-      // Already in another team?
       if (user.team && user.team.toString() !== teamId) {
         return res
           .status(400)
           .json({ message: "User is already in another team" });
       }
 
-      // Assign team and role
       user.team = teamId;
       if (!user.roles.includes(roleDoc._id)) {
         user.roles.push(roleDoc._id);
@@ -108,7 +116,6 @@ const inviteUserToTeam = async (req, res) => {
       return res.status(200).json({ message: "User added to team" });
     }
 
-    // 5. Create invite for new user
     const existingInvite = await Invite.findOne({
       email,
       team: teamId,
@@ -125,7 +132,9 @@ const inviteUserToTeam = async (req, res) => {
     const token = invite.generateToken();
     await invite.save();
 
-    const inviteUrl = `https://yourfrontend.com/accept-invite/${token}`;
+    const baseUrl = process.env.CLIENT_URL.replace(/\/$/, "");
+    const inviteUrl = `${baseUrl}/accept-invite/${token}`;
+
     await sendInviteEmail(email, inviteUrl);
 
     res.status(200).json({ message: "Invitation sent to new user" });
@@ -135,8 +144,73 @@ const inviteUserToTeam = async (req, res) => {
   }
 };
 
+const removeMemberFromTeam = async (req, res) => {
+  console.log("✅ Remove Member from Team Controller Method is hit");
+  const id = req.params.id;
+
+  console.log("User ID to remove:", id);
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user || !user.team) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found or not in a team." });
+    }
+
+    user.team = null;
+    user.acceptedAt = null; // Optional: reset invite state
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "User removed from the team." });
+  } catch (error) {
+    console.error("Error removing team member:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const updateTeamMemberRole = async (req, res) => {
+  try {
+    console.log("REQ.PARAMS:", req.params);
+    const id = req.user._id;
+    const { role } = req.body;
+    if (!role) {
+      return res.status(404).json({ message: "Role is required" });
+    }
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Prevent demoting self from admin
+
+    if (user.roles.includes(role) && role === "admin") {
+      return res.status(403).json({
+        message: "You cannot demote yourself from admin role.",
+      });
+    }
+
+    user.roles = [role];
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "User role updated!", data: user });
+  } catch (error) {
+    console.error("Error updating team member role:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createTeam,
   getRolesForTeam,
+  getTeamMembers,
   inviteUserToTeam,
+  updateTeamMemberRole,
+  removeMemberFromTeam,
 };
