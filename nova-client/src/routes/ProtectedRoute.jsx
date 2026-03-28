@@ -31,8 +31,6 @@ const ProtectedRoute = ({
   // ✅ Plan features: array of objects with { key, title }
   const userFeatures = user.plan?.features?.map((f) => f.key) || [];
 
-  console.log("User features", userFeatures);
-
   const hasRoleAccess =
     isAdmin ||
     allowedRoles.length === 0 ||
@@ -47,7 +45,6 @@ const ProtectedRoute = ({
     isAdmin ||
     requiredFeatures.length === 0 ||
     requiredFeatures.every((f) => userFeatures.includes(f));
-  console.log("Has feature access", hasFeatureAccess);
   if (!hasRoleAccess || !hasPermissionAccess || !hasFeatureAccess) {
     return <Navigate to="/unauthorized" replace />;
   }

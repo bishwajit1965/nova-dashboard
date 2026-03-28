@@ -3,6 +3,8 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { useState } from "react";
+import SectionTitle from "../../utility/sectionTitle/SectionTitle";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const faqs = [
   {
@@ -67,9 +69,13 @@ const FaqSection = () => {
       }}
     >
       <div className="bg-base-300 lg:p-8 space-y-4 lg:max-w-full lg:mx-12 mx-auto mb-4 rounded-lg">
-        <h2 className="text-2xl font-bold text-center">
-          Frequently Asked Questions
-        </h2>
+        <SectionTitle
+          title="Frequently Asked"
+          decoratedText="Questions"
+          description="Your questions and our answers."
+          dataLength={faqs.length ? faqs.length : ""}
+          icon={<LucideIcon.FaQuestion size={20} />}
+        />
       </div>
       <div className="space-y-2 lg:max-w-full lg:px-12 mx-auto">
         {faqs.map((faq, i) => (
@@ -79,7 +85,7 @@ const FaqSection = () => {
           >
             <button
               onClick={() => toggle(i)}
-              className="flex justify-between items-center w-full text-left text-lg font-medium text-gray-800 dark:text-gray-100"
+              className="flex justify-between items-center w-full text-left text-lg font-medium text-gray-800 dark:text-gray-100 cursor-pointer"
             >
               <span className="text-base-content">{faq.question}</span>
               {openIndex === i ? (

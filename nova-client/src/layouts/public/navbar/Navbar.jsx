@@ -43,6 +43,11 @@ const Navbar = () => {
       id: 9,
       isThemeToggle: true, // Differentiator key
     },
+    {
+      id: 10,
+      route: "/help",
+      name: "Help & support",
+    },
   ];
 
   const handleLogOut = async () => {
@@ -102,7 +107,7 @@ const Navbar = () => {
                       <a href={item.route}>{item.name}</a>
                     </li>
                   )
-                ) : null
+                ) : null,
               )}
             </ul>
           </div>

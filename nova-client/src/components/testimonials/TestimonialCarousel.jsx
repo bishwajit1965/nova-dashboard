@@ -3,10 +3,12 @@ import Button from "../ui/Button"; // adjust import path to your Button
 import Slider from "react-slick";
 import StarRating from "../ui/StartRating";
 import TestimonialForm from "./TestimonialForm";
-import { X } from "lucide-react";
+import { UploadCloud, X } from "lucide-react";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import SectionTitle from "../../utility/sectionTitle/SectionTitle";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const sliderSettings = {
   dots: true,
@@ -55,11 +57,16 @@ const TestimonialCarousel = () => {
   return (
     <section className="lg:py-16 py-4 bg-base-200 lg:max-w-7xl text-base-content rounded-md">
       <div className="max-w-3xl mx-auto text-center">
-        <h2 className="text-2xl font-bold mb-8">What Our Users Say</h2>
+        <SectionTitle
+          title="What Our"
+          decoratedText="Users Say"
+          dataLength={testimonials?.length ? testimonials?.length : ""}
+          icon={<LucideIcon.FaComment />}
+        />
 
         {isLoading ? (
           <Loader className="animate-spin mx-auto" />
-        ) : testimonials.length ? (
+        ) : testimonials?.length ? (
           // Carousel
           <Slider {...sliderSettings} className="mb-8">
             {testimonials.map((t) => (
@@ -90,8 +97,12 @@ const TestimonialCarousel = () => {
         )}
 
         {/* CTA Button */}
-        <Button variant="outline" onClick={() => setOpen(true)}>
-          Share your story
+        <Button
+          variant="outline"
+          onClick={() => setOpen(true)}
+          className="text-base-content"
+        >
+          <UploadCloud /> Share Your Story
         </Button>
       </div>
 

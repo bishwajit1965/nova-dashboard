@@ -38,7 +38,7 @@ const PluginLink = ({
           iconOnly && "p-2 justify-center",
           isActive &&
             "ring-2 ring-offset-2 ring-slate-700 bg-slate-600 shadow-lg shadow-slate-700/50 outline-2 outline-slate-700 text-base-200", // consistent, elegant effect
-          className
+          className,
         )
       }
     >

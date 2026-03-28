@@ -15,7 +15,6 @@ export const API_PATHS = {
     ENDPOINT: "settings",
     KEY: ["siteSettings"],
   },
-
   // Extend this for other features
 };
 

@@ -16,7 +16,7 @@ router.get("/public", getTestimonialsPublished);
 
 // Admin (role: admin or editor as you prefer)
 router.use(protect);
-router.use(authorizeRoles("admin"));
+router.use(authorizeRoles("admin", "user"));
 
 router.get("/", getAllTestimonials);
 router.post("/", createTestimonial);

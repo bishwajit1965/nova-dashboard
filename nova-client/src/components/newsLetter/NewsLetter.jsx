@@ -7,6 +7,8 @@ import SocialLinks from "../socialLinks/SocialLinks";
 import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useState } from "react";
+import SectionTitle from "../../utility/sectionTitle/SectionTitle";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const NewsLetter = () => {
   const [loading, setLoading] = useState(false);
@@ -75,9 +77,15 @@ const NewsLetter = () => {
   };
 
   return (
-    <div className="lg:space-y-2 space-y-4 lg:col-span-3 col-span-12">
-      <div className="lg:max-w-xl mx-auto">
-        <div className="lg:flex grid items-center justify-between lg:space-y-2 space-y-4 lg:mb-0 mb-">
+    <div className="bg-base-200 lg:p-12 p-2 rounded-md shadow-sm border border-base-300">
+      <SectionTitle
+        title="Subscribe to the"
+        decoratedText="News Letter"
+        description="Subscribe to the news letter and get the latest updates instantly! Your satisfaction is our achievement!!"
+        icon={<LucideIcon.Rss size={30} />}
+      />
+      <section className="lg:max-w-xl mx-auto">
+        <div className="lg:flex grid items-center justify-between lg:space-y-4 space-y-2 lg:mb-0 mb-">
           <span className="lg:order-first order-last">
             <h4 className="font-bold lg:pb-0 pb-">Newsletter</h4>
           </span>
@@ -100,7 +108,7 @@ const NewsLetter = () => {
             } input-sm text-black`}
           />
           {errors.contactEmail && (
-            <p className="text-base-100 bg-red-500 text-sm p-1.5 rounded-md">
+            <p className="text-base-content bg-red-500 text-sm p-1.5 rounded-md">
               {errors.contactEmail}
             </p>
           )}
@@ -126,7 +134,7 @@ const NewsLetter = () => {
             </p>
           )}
         </form>
-      </div>
+      </section>
     </div>
   );
 };

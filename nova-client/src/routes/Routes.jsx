@@ -30,6 +30,8 @@ import UserSettings from "../features/account/UserSettings";
 import UsersList from "../features/users/UsersList";
 import UsersPage from "../features/users/UsersPage";
 import { createBrowserRouter } from "react-router-dom";
+import Profile from "../pages/dashboard/Profile";
+import HelpSupport from "../pages/HelpSupport";
 
 const router = createBrowserRouter([
   // Public landing layout
@@ -68,6 +70,10 @@ const router = createBrowserRouter([
         element: <Terms />,
       },
       {
+        path: "/help-support",
+        element: <HelpSupport />,
+      },
+      {
         path: "/forgot-password",
         element: <ForgotPassword />,
       },
@@ -100,8 +106,16 @@ const router = createBrowserRouter([
         element: <DashboardRouter />,
       },
       {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
         path: "settings", // `/dashboard/settings`
-        element: <UserSettings />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserSettings />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/site-settings",
@@ -159,6 +173,10 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "help",
+        element: <div>Help and support</div>,
+      },
+      {
         path: "admin/contact-messages",
         element: (
           <ProtectedRoute allowedRoles={["admin", "editor", "writer", "user"]}>
@@ -176,15 +194,27 @@ const router = createBrowserRouter([
       },
       {
         path: "admin/testimonials",
-        element: <AdminTestimonialsPage />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <AdminTestimonialsPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/create-team",
-        element: <CreateTeamForm />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <CreateTeamForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/invite-users",
-        element: <InviteUserForm />,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <InviteUserForm />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin/team-management",

@@ -31,7 +31,7 @@ const Button = ({
       "text-gray-600 hover:text-gray-800 hover:text-black hover:bg-gray-100 border border-gray-200 shadow-md",
     cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-md",
     outline:
-      "border border-gray-300 text-gray-800 hover:text-gray-800 hover:bg-gray-100 shadow-md ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-md",
+      "border border-gray-300 text-base-content hover:text-gray-800 hover:bg-gray-100 shadow-md ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-md",
     warning:
       "bg-yellow-600 border border-yellow-600 text-base-100 hover:text-gray-200 hover:bg-yellow-700 shadow-md",
     muted:
@@ -68,7 +68,7 @@ const Button = ({
         base,
         variants[variant],
         isDisabled && disabledStyles,
-        className
+        className,
       )}
       aria-disabled={isDisabled}
       {...(Component === "button" ? { disabled: isDisabled } : {})}

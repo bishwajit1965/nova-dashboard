@@ -8,9 +8,9 @@ const SectionTitle = ({
   dataLength,
 }) => {
   return (
-    <div className="lg:space-y-1 space-y-1 text-center bg-base-100 shadow-sm w-full lg:py-2 py-2 rounded-md border-1 border-base-100">
-      <div className="flex justify-center">
-        <h1 className="lg:text-2xl font-extrabold flex items-center space-x-2">
+    <div className="lg:space-y-2 space-y-1 text-center w-full lg:pb-4 pb-2 rounded-md">
+      <div className="flex items-center justify-center">
+        <h1 className="lg:text-3xl text-xl font-extrabold flex items-center space-x-2">
           <span>{icon}</span>
           <span className="capitalize">{userStatus}</span>
           <span>
@@ -19,12 +19,16 @@ const SectionTitle = ({
               {decoratedText}
             </span>
           </span>{" "}
-          <span>{dataLength}</span>
+          {dataLength && (
+            <span className="h-6 w-6 rounded-full text-sm flex items-center justify-center border border-base-content">
+              {dataLength}
+            </span>
+          )}
           <span>{activeStatus}</span>
         </h1>
       </div>
-      <div className="">
-        <p className="">{description}</p>
+      <div className="flex justify-center">
+        <p className="text-base max-w-3xl text-center">{description}</p>
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 // components/admin/TestimonialForm.jsx
 
-import { CircleArrowOutUpRight, Loader, X } from "lucide-react";
+import {
+  CircleArrowOutUpRight,
+  Loader,
+  Loader2,
+  UploadCloud,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 import API_PATHS from "../../common/apiPaths/apiPaths";
@@ -172,8 +178,8 @@ const TestimonialForm = ({ editData, onCancel }) => {
           {loading
             ? "Sending Testimonial..."
             : editData
-            ? "Update Testimonial"
-            : "Add Testimonial"}
+              ? "Update Testimonial"
+              : "Add Testimonial"}
         </Button>
 
         {editData && (

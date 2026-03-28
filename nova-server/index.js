@@ -40,6 +40,7 @@ const testimonialRoutes = require("./routes/testimonialRoutes");
 const teamRoutes = require("./routes/teamRoutes");
 const inviteRoutes = require("./routes/inviteRoutes");
 const billingRoutes = require("./routes/billingRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 // Basic route for testing
 app.get("/", (req, res) => {
@@ -60,6 +61,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/invite", inviteRoutes);
 app.use("/api/billing", billingRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

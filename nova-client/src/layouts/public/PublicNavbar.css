@@ -1,0 +1,23 @@
+/* Define a variable for active color */
+:root {
+  --active-link-color: #34d399;
+  --active-link-border: 0.1rem solid var(--active-link-color);
+}
+
+.public-navbar a {
+  margin: 0 0.6rem;
+  padding: 0.2rem 0.2rem;
+  transition: all 0.3s ease;
+  color: inherit;
+  font-weight: 400;
+  border-bottom: 0 transparent;
+}
+
+.public-navbar a.active {
+  color: var(--active-link-color);
+  font-weight: 600;
+  border-bottom: var(--active-link-border);
+}
+.navbar {
+  transition: background-color 0.3s ease;
+}

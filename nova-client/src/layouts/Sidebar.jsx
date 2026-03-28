@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </div>
 
       {/* brand */}
-      <div className="flex items-center space-x-2 bg-gray-900 p-4 mb-4 border-b border-gray-800">
+      <div className="flex items-center space-x-2 bg-gray-900 p-4 mb-4 border-b border-gray-800 sticky top-0">
         <img
           src="https://i.ibb.co.com/MgsDqCZ/FB-IMG-1678691214526.jpg"
           alt="logo"

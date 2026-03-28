@@ -4,7 +4,7 @@ import { useApiQuery } from "../common/hooks/useApiQuery";
 import { useAuth } from "../hooks/useAuth";
 
 const PlanProvider = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   // Fetch all plans to display
   const {
@@ -25,6 +25,7 @@ const PlanProvider = ({ children }) => {
   });
 
   const planInfo = {
+    user,
     plans,
     isLoading,
     isError,
