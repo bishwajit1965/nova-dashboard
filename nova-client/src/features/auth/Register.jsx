@@ -165,8 +165,8 @@ const Register = () => {
           err === "User skipped"
             ? "You cancelled the Google/Facebook sign-up."
             : err === "Prompt not displayed"
-            ? "OAuth prompt could not be displayed."
-            : err.response?.data?.message || err.message || "Sign-up failed.";
+              ? "OAuth prompt could not be displayed."
+              : err.response?.data?.message || err.message || "Sign-up failed.";
         toast.error(msg);
       } finally {
         setTimeout(resetLoading, 2000);
@@ -181,7 +181,7 @@ const Register = () => {
       setIsAuthenticated,
       validate,
       setUser,
-    ]
+    ],
   );
 
   return (
@@ -361,16 +361,22 @@ const Register = () => {
             </Button>
           </div>
         </div>
-        <p className="text-sm text-center">
+        <p className="text-sm text-center gap-4">
           Already have an account ?{" "}
-          <Link to="/login" className="text-blue-600 underline">
+          <Link to="/login" className="text-blue-600 link">
             Log in here
+          </Link>{" "}
+          &nbsp;
+          <Link to="/" className="m-0 text-blue-600 link">
+            Home
           </Link>
         </p>
         <div className="divider m-0 p-0"></div>
         <p className="mt-2 text-center text-xs text-base-content/60">
-          &copy; {new Date().getFullYear()}{" "}
-          <span className="text-indigo-500 font-bold">Nova Dashboard LTS</span>{" "}
+          &copy; {new Date().getFullYear()}
+          <span className="text-indigo-500 font-bold">
+            Nova Dashboard LTS
+          </span>{" "}
           . All rights reserved. <script></script>
         </p>
       </div>

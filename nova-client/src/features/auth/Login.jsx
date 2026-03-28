@@ -312,6 +312,10 @@ const Login = () => {
           New to this site ?{" "}
           <Link to="/register" className="text-blue-600 underline">
             Register here
+          </Link>{" "}
+          &nbsp;
+          <Link to="/" className="m-0 text-blue-600 link">
+            Home
           </Link>
         </p>
         <div className="divider m-0 p-0"></div>
