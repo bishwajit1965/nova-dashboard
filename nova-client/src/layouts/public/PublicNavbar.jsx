@@ -126,7 +126,7 @@ const PublicNavbar = ({ siteSettings }) => {
         </div>
       </div>
 
-      <div className="navbar-end space-x-4">
+      <div className="dropdown dropdown-end navbar-end space-x-4">
         <div className="flex justify-end">
           <button
             onClick={toggleTheme}
@@ -164,6 +164,18 @@ const PublicNavbar = ({ siteSettings }) => {
               <a className="text-[16px]">
                 <FaPortrait />
                 Portfolio
+              </a>
+            </li>
+            <li className="text-base-content text-lg">
+              <a className="text-[16px]">
+                <FaPortrait />
+                {user.name}
+              </a>
+            </li>
+            <li className="text-base-content text-lg">
+              <a className="text-[16px]">
+                <FaPortrait />
+                {user.email}
               </a>
             </li>
           </ul>
