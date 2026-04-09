@@ -160,12 +160,7 @@ const PublicNavbar = ({ siteSettings }) => {
                 </a>
               </li>
             )}
-            <li className="text-base-content text-lg">
-              <a className="text-[16px]">
-                <FaPortrait />
-                Portfolio
-              </a>
-            </li>
+
             <li className="text-base-content text-lg">
               <a className="text-[16px]">
                 <FaPortrait />
@@ -176,6 +171,12 @@ const PublicNavbar = ({ siteSettings }) => {
               <a className="text-[16px]">
                 <FaPortrait />
                 {user.email}
+              </a>
+            </li>
+            <li className="text-base-content text-lg">
+              <a className="text-[16px]">
+                <FaPortrait />
+                Portfolio
               </a>
             </li>
           </ul>
