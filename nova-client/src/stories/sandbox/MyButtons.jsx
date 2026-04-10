@@ -9,7 +9,7 @@ const MyButtons = () => {
   return (
     <div className="bg-base-50 p-6 rounded-lg shadow space-y-6">
       {/* 1️⃣ Normal buttons with icon, loading */}
-      <div className="flex justify-center lg:mb-10 mb-2">
+      <div className="flex justify-center lg:mb-8 mb-2">
         <h1 className="lg:text-3xl text-xl font-bold flex items-center gap-2">
           <LucideIcon.Layers3Icon /> Demo Buttons Displayed
         </h1>

@@ -13,7 +13,7 @@ export default function PermissionManager() {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="max-w-7xl mx-auto lg:p-2 p-2 space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       <div className="lg:flex lg:space-y-0 space-y-2 justify-between">
         <h1 className="lg:text-2xl text-xl font-bold flex items-center gap-2">
           <LucideIcon.CircleGauge /> Manage Permissions
@@ -31,6 +31,7 @@ export default function PermissionManager() {
           Add Permission
         </Button>
       </div>
+
       {showForm && (
         <div className="bg-base-100 rounded-lg shadow-sm lg:p-4 p-2">
           <PermissionForm

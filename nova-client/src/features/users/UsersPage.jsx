@@ -38,10 +38,11 @@ const UsersPage = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto lg:p-2 p-2 space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6">
       <h1 className="text-2xl font-bold flex items-center gap-2">
         <LucideIcon.CircleGauge /> User Management
       </h1>
+
       <UsersTable
         users={users}
         roles={roles}

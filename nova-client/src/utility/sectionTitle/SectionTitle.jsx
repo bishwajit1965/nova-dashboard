@@ -8,7 +8,7 @@ const SectionTitle = ({
   dataLength,
 }) => {
   return (
-    <div className="lg:space-y-2 space-y-1 text-center w-full lg:pb-4 pb-2 rounded-md">
+    <div className="text-center w-full lg:py-2 py-2 rounded-md">
       <div className="flex items-center justify-center">
         <h1 className="lg:text-3xl text-lg font-extrabold flex items-center space-x-2">
           <span>{icon}</span>

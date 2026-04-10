@@ -154,8 +154,11 @@ const PlansPage = () => {
 
   return (
     <div className="p-4 max-w-6xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Manage Billing Plans</h1>
-
+      <div className="">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          <LucideIcon.CircleGauge /> Manage Billing Plans
+        </h1>
+      </div>
       <form
         onSubmit={handleSubmit}
         className="space-y-4 bg-base-200 p-4 rounded-xl"

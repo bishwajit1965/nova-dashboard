@@ -90,7 +90,7 @@ const ContactMessagesPage = () => {
 
   return (
     <WithFeatureAccess feature="user-management">
-      <div className="">
+      <div className="lg:mt-6 mt-2">
         <div className="flex items-center space-x-6 mb-4">
           <Button
             onClick={() => setFilter("all")}
