@@ -30,7 +30,9 @@ const Button = ({
       "bg-green-500 text-white hover:text-gray-200 hover:bg-green-800 shadow-md",
     ghost:
       "text-gray-600 hover:text-gray-800 hover:text-black hover:bg-gray-100 border border-gray-200 shadow-md",
-    cyan: "bg-cyan-700 text-base-200 hover:text-white hover:bg-cyan-800 shadow-md",
+
+    cyan: "bg-cyan-600 text-white text-base-content hover:text-base-300 hover:bg-cyan-800 shadow-md",
+
     outline:
       "border border-gray-300 text-base-content hover:text-gray-800 hover:bg-gray-100 shadow-md ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-md",
     warning:

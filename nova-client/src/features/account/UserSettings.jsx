@@ -34,13 +34,13 @@ const UserSettings = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email, bio } = formData;
-    mutate({ name, email, bio }), console.log("Updated info:", formData);
+    (mutate({ name, email, bio }), console.log("Updated info:", formData));
   };
   return (
     <div className="lg:max-w-2xl mx-auto lg:p-6 space-y-4">
       <div className="flex items-center justify-between bg-base-100 p-2 shadow-sm rounded-md">
         <h2 className="lg:text-2xl text-xl font-bold flex items-center space-x-2">
-          <span className="bg-info shadow w-10 h-10 rounded-full flex items-center justify-center mr-2">
+          <span className="bg-info shadow w-8 h-8 rounded-full flex items-center justify-center mr-2">
             {isOpenPasswordReset ? (
               <LucideIcon.RotateCcwKey />
             ) : (
@@ -58,6 +58,7 @@ const UserSettings = () => {
           onClick={() => setIsOpenPasswordReset(!isOpenPasswordReset)}
           icon={LucideIcon.FolderOpen}
           variant="primary"
+          size="sm"
         >
           {isOpenPasswordReset ? "Open My Profile" : "Reset Password"}
         </Button>
@@ -104,8 +105,10 @@ const UserSettings = () => {
           <Button
             type="submit"
             disabled={isPending}
+            variant="primary"
+            size="sm"
             icon={LucideIcon.SquarePen}
-            className="btn-primary cursor-pointer w-full font-bold"
+            className="cursor-pointer w-full"
           >
             {isPending ? "Updating..." : "Update Profile"}
           </Button>

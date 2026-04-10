@@ -65,14 +65,16 @@ const RoleTable = ({ onEdit }) => {
                   onClick={() => onEdit(role)}
                   icon="edit"
                   variant="primary"
-                  className="btn btn-sm"
+                  size="xs"
+                  className=""
                 />
 
                 <MiniIconButton
                   onClick={() => setConfirmDelete(role)}
                   icon="delete"
                   variant="danger"
-                  className="btn btn-sm"
+                  size="xs"
+                  className=""
                 />
               </td>
             </tr>

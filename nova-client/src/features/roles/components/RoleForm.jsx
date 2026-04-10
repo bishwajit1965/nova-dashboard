@@ -117,7 +117,8 @@ const RoleForm = ({ onSuccess, initialData = {}, onClose }) => {
         <Button
           type="submit"
           disabled={mutation.isPending}
-          className="btn btn-sm"
+          className=""
+          size="sm"
           icon={initialData ? LucideIcon.Edit : LucideIcon.Plus}
           variant="primary"
         >
@@ -127,7 +128,8 @@ const RoleForm = ({ onSuccess, initialData = {}, onClose }) => {
         <Button
           onClick={onClose}
           type="submit"
-          className="btn btn-sm"
+          className=""
+          size="sm"
           icon={LucideIcon.X}
           variant="warning"
         >

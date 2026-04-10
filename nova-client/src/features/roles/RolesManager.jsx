@@ -25,8 +25,9 @@ const RoleManager = () => {
             setShowForm(true);
           }}
           variant="primary"
+          size="sm"
           icon={LucideIcon.SquarePlus}
-          className="btn btn-md"
+          className=""
         >
           Create Role
         </Button>

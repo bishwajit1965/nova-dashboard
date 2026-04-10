@@ -4,7 +4,7 @@ const planSchema = new mongoose.Schema(
   {
     tier: {
       type: String,
-      enum: ["free", "pro", "premium", "enterprise"],
+      enum: ["free", "pro", "premium", "enterprise", "annual"],
       required: true,
       unique: true, // one document per tier
       lowercase: true,
@@ -33,7 +33,7 @@ const planSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("Plan", planSchema);

@@ -6,11 +6,10 @@ const HeroSection = ({ settings, user }) => {
   return (
     <section className="bg-base-200 lg:p-12 p-2 rounded-md shadow-sm border border-base-300 lg:space-y-6 space-y-2">
       <div className="flex justify-center">
-        <img src={settings.logoUrl} alt="Logo" className="w-28 h-28" />
+        <img src={settings.logoUrl} alt="Logo" className="w-52" />
       </div>
       <h1 className="lg:text-5xl text-2xl font-extrabold text-base-content">
         <span className="text-amber-600 capitalize">
-          {" "}
           {user?.name ? user.name : "Please Login to -"}
         </span>{" "}
         {settings.siteName}
@@ -24,7 +23,8 @@ const HeroSection = ({ settings, user }) => {
         <Button
           href="/register"
           variant="cyan"
-          className="btn btn-md lg:w-44 w-full"
+          size="md"
+          className="lg:w-56 w-full"
           icon={LucideIcon.UserCog2}
         >
           Register & Start Free
@@ -32,8 +32,10 @@ const HeroSection = ({ settings, user }) => {
 
         <Button
           href="/dashboard"
+          variant="success"
           icon={LucideIcon.CircleGauge}
-          className="btn btn-md lg:w-44 w-full"
+          size="md"
+          className="lg:w-56 w-full"
         >
           Your Dashboard
         </Button>

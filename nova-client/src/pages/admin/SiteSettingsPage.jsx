@@ -323,11 +323,11 @@ const SiteSettingsPage = () => {
                   <p className="text-sm text-red-500">{errors.logoUrl}</p>
                 )}
                 {logoPreview ? (
-                  <div className="absolute top-[-55px] right-0 w-full bg-base-100 border border-gray-300 rounded-lg flex justify-end">
+                  <div className="absolute top-[-55px] right-0 w-full bg-base-100 border border-base-300 rounded-lg flex justify-end">
                     <img
                       src={logoPreview}
                       alt="logo preview"
-                      className="h-[130px] w-[130px] rounded-lg flex justify-end"
+                      className="h-[130px] w-[130px] rounded-lg flex justify-end object-fill"
                     />
                   </div>
                 ) : (
@@ -356,7 +356,8 @@ const SiteSettingsPage = () => {
                 disabled={isSubmitting}
                 type="submit"
                 variant="primary"
-                className="btn btn-md"
+                size="md"
+                className=""
               >
                 {isSubmitting ? (
                   <Loader className="animate-spin" />
@@ -367,18 +368,19 @@ const SiteSettingsPage = () => {
                 {formToggler
                   ? "Update Settings"
                   : isSubmitting
-                  ? "Updating..."
-                  : "Add Settings"}
+                    ? "Updating..."
+                    : "Add Settings"}
               </Button>
             </div>
           </form>
           {formToggler && (
-            <div className="absolute bottom-0 lg:right-[55%] right-[5%]">
+            <div className="absolute bottom-0 lg:right-[44%] right-[5%]">
               <Button
                 variant="warning"
+                size="md"
                 icon={LucideIcon.X}
                 onClick={handleDataReset}
-                className="btn btn-md"
+                className=""
               >
                 Cancel
               </Button>

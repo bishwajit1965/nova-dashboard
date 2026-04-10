@@ -1,5 +1,11 @@
+import SiteUnderConstruction from "../../components/ui/SiteUnderConstruction";
+
 const Profile = () => {
-  return <div>Profile</div>;
+  return (
+    <div>
+      <SiteUnderConstruction />
+    </div>
+  );
 };
 
 export default Profile;

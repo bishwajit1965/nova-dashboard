@@ -32,6 +32,7 @@ import UsersPage from "../features/users/UsersPage";
 import { createBrowserRouter } from "react-router-dom";
 import Profile from "../pages/dashboard/Profile";
 import HelpSupport from "../pages/HelpSupport";
+import SiteUnderConstruction from "../components/ui/SiteUnderConstruction";
 
 const router = createBrowserRouter([
   // Public landing layout
@@ -174,7 +175,7 @@ const router = createBrowserRouter([
       },
       {
         path: "help",
-        element: <div>Help and support</div>,
+        element: <SiteUnderConstruction />,
       },
       {
         path: "admin/contact-messages",

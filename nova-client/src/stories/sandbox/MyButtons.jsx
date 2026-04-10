@@ -19,28 +19,32 @@ const MyButtons = () => {
     <div className="bg-base-50 p-6 rounded-lg shadow space-y-6">
       {/* 1️⃣ Normal buttons with icon, loading */}
       <div className="flex gap-4">
-        <Button variant="primary" icon={LucideIcon.Save}>
+        <Button variant="primary" size="sm" icon={LucideIcon.Save}>
           Save
         </Button>
-        <Button variant="success" icon={LucideIcon.CircleCheck}>
+        <Button variant="success" size="sm" icon={LucideIcon.CircleCheck}>
           Success Button
         </Button>
-        <Button variant="secondary" icon={LucideIcon.ClipboardCheck}>
+        <Button variant="secondary" size="sm" icon={LucideIcon.ClipboardCheck}>
           Button
         </Button>
-        <Button variant="danger" loading>
+        <Button variant="danger" size="sm" loading>
           Deleting
         </Button>
-        <Button variant="green" icon={LucideIcon.CircleCheck}>
+        <Button variant="green" size="sm" icon={LucideIcon.CircleCheck}>
           Green
         </Button>
-        <Button variant="green" disabled>
+        <Button variant="green" size="sm" disabled>
           Disabled
         </Button>
-        <Button variant="muted">Muted Button</Button>
+        <Button variant="muted" size="sm">
+          Muted Button
+        </Button>
         {/* <Button variant="outline">Outline Button</Button> */}
-        <Button variant="ghost">Ghost Button</Button>
-        <Button variant="cyan" icon={PrinterCheck}>
+        <Button variant="ghost" size="sm">
+          Ghost Button
+        </Button>
+        <Button variant="cyan" size="sm" icon={PrinterCheck}>
           Cyan Button
         </Button>
       </div>
@@ -67,13 +71,13 @@ const MyButtons = () => {
 
       {/* 3️⃣ Grouped buttons for filters/sorting */}
       <ButtonGroup>
-        <Button variant="ghost" icon={LucideIcon.Clock}>
+        <Button variant="success" size="md" icon={LucideIcon.Clock}>
           Today
         </Button>
-        <Button variant="ghost" icon={LucideIcon.CalendarDays}>
+        <Button variant="primary" size="md" icon={LucideIcon.CalendarDays}>
           This Week
         </Button>
-        <Button variant="ghost" icon={LucideIcon.CalendarClock}>
+        <Button variant="ghost" size="md" icon={LucideIcon.CalendarClock}>
           This Month
         </Button>
       </ButtonGroup>

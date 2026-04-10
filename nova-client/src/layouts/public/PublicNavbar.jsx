@@ -103,7 +103,7 @@ const PublicNavbar = ({ siteSettings }) => {
         </div>
         <div className="hidden lg:flex">
           <Link to="/" className="m-0">
-            <img src={siteSettings?.logoUrl} alt="" className="w-10" />
+            <img src={siteSettings?.logoUrl} alt="" className="w-14" />
             {/* <Logo /> */}
           </Link>
         </div>
@@ -145,7 +145,7 @@ const PublicNavbar = ({ siteSettings }) => {
         </div>
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-            <img src={Image} alt="" className="w-10 rounded-full" />
+            <img src={Image} alt="" className="w-44 rounded-full" />
           </div>
           <ul
             tabIndex={0}
