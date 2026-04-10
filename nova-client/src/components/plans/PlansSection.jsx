@@ -18,7 +18,10 @@ const PlansSection = ({ plans, selectedPlanId, handleSelect }) => {
             key={i}
             className="relative min-h-72 p-6 rounded-xl shadow-sm border border-base-300 bg-base-100 text-base-content transition-colors lg:space-y-4 space-y-2"
           >
-            <h3 className="lg:text-xl text-lg font-bold">{p.name}</h3>
+            <h3 className="lg:text-xl text-lg font-bold flex items-center gap-2">
+              <LucideIcon.Package size={20} />
+              {p.name}
+            </h3>
             <p className="text-base font-bold text-base-content">
               ${p.price}/mo
             </p>
@@ -39,8 +42,9 @@ const PlansSection = ({ plans, selectedPlanId, handleSelect }) => {
             <div className="absolute bottom-0 left-0 w-full lg:pt-4">
               <Button
                 onClick={() => handleSelect(p._id)}
+                variant="primary"
                 disabled={selectedPlanId === p._id}
-                className="mt-4 w-full btn btn-primary rounded-b-lg"
+                className="rounded-t-none rounded-b-lg w-full"
               >
                 {selectedPlanId === p._id ? <Edit2 /> : <CheckCircle />}{" "}
                 {selectedPlanId === p._id ? "Chosen Plan" : "Choose Plan"}

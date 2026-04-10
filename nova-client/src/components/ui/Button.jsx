@@ -13,7 +13,7 @@ const Button = ({
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded font-semibold transition duration-150 transition-transform cursor-pointer hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-90 hover:scale-105";
+    "inline-flex items-center justify-center gap-2 rounded font-semibold transition duration-150 transition-transform cursor-pointer hover:scale-101 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-90";
 
   const variants = {
     primary:
