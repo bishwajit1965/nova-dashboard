@@ -1,5 +1,4 @@
 import { Eye, Loader2, Pencil, PlusCircleIcon, Trash2, X } from "lucide-react";
-
 import Button from "./Button";
 import { cn } from "../../lib/utils";
 
@@ -21,24 +20,33 @@ const iconLabels = {
   loading: "Loading",
 };
 
+// Map local sizes → Button sizes
+const sizeMap = {
+  xs: "sm",
+  sm: "sm",
+  md: "md",
+  lg: "lg",
+};
+
 export function MiniIconButton({
   icon = "edit",
   onClick,
   className = "",
-  variant = "muted", // 👈 neutral default
-  tooltip, // label override
+  variant = "muted",
+  tooltip,
   loading = false,
   disabled = false,
-  label = false, // 👈 if true, shows "Edit" text
-  size = "xs", // "xs", "sm", "md" (default sm)
+  label = false,
+  size = "xs",
 }) {
   const Icon = loading ? Loader2 : icons[icon] || Pencil;
   const text = tooltip || iconLabels[icon] || "Action";
 
   const baseSize = {
-    xs: "px-1 py-1 text-xs h-8",
-    sm: "px-2 py-2 text-sm h-9",
-    md: "px-3 py-3 text-sm h-10",
+    xs: "h-6 text-xs",
+    sm: "h-8",
+    md: "h-10",
+    lg: "h-12",
   };
 
   return (
@@ -46,16 +54,17 @@ export function MiniIconButton({
       icon={Icon}
       onClick={onClick}
       variant={variant}
-      title={!label ? text : undefined} // tooltip only if label is not shown
+      size={sizeMap[size] || "sm"}
       loading={loading}
       disabled={disabled}
+      title={!label ? text : undefined}
       className={cn(
-        baseSize[size],
-        "gap-1 cursor-pointer shadow-md",
-        className
+        "gap-1 shadow-md",
+        baseSize[size] || baseSize.xs,
+        className,
       )}
     >
-      {label && text}
+      {label ? text : null}
     </Button>
   );
 }

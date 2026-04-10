@@ -75,7 +75,7 @@ const ContactMessagesPage = () => {
       (msg) =>
         msg.name.toLowerCase().includes(term) ||
         msg.email.toLowerCase().includes(term) ||
-        msg.message.toLowerCase().includes(term)
+        msg.message.toLowerCase().includes(term),
     );
   }, [filteredMessages, searchTerm]);
 
@@ -160,12 +160,14 @@ const ContactMessagesPage = () => {
                       toolTip="Delete Contact"
                       variant="danger"
                       icon="delete"
+                      size="xs"
                       disabled={isLoading}
                     />
 
                     <MiniIconButton
                       onClick={() => mutation.mutate(msg._id)}
                       icon="edit"
+                      size="xs"
                       variant="success"
                       className={`btn btn-xs ${
                         msg.read
@@ -178,6 +180,7 @@ const ContactMessagesPage = () => {
                       toolTip="View Contact"
                       variant="primary"
                       icon="view"
+                      size="xs"
                       disabled={isLoading}
                     />
                   </div>

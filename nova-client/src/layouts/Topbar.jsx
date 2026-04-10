@@ -101,23 +101,6 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
             </a>
           )}
         </div>
-        {/* <div className="lg:visible invisible sm:visible lg:mr-0 mr-4">
-          {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 flex items-center"
-            >
-              <LogOut size={18} color="white" className="mr-2" /> Logout
-            </button>
-          ) : (
-            <a
-              href="/login"
-              className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 flex items-center"
-            >
-              <LogIn size={18} color="white" className="mr-2" /> Login
-            </a>
-          )}
-        </div> */}
       </div>
       <div className="dropdown dropdown-end">
         <div

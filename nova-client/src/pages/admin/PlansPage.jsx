@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
 import { useState } from "react";
+import { FaEdit, FaTimes, FaTrashAlt } from "react-icons/fa";
 
 const PlansPage = () => {
   const [form, setForm] = useState({
@@ -140,28 +141,37 @@ const PlansPage = () => {
           onChange={handleChange}
           placeholder="Plan feature..."
         />
-
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? (
-            <Loader className="animate-spin" />
-          ) : editingId ? (
-            "Update"
-          ) : (
-            "Create"
-          )}
-        </Button>
-        {editingId && (
+        <div className="flex gap-4">
           <Button
-            type="button"
-            variant="ghost"
-            onClick={() => {
-              setEditingId(null);
-              setForm({ tier: "", name: "", price: "", features: "" });
-            }}
+            type="submit"
+            variant="success"
+            size="sm"
+            icon={FaEdit}
+            disabled={mutation.isPending}
           >
-            Cancel Edit
+            {mutation.isPending ? (
+              <Loader className="animate-spin" />
+            ) : editingId ? (
+              "Update"
+            ) : (
+              "Create"
+            )}
           </Button>
-        )}
+          {editingId && (
+            <Button
+              type="button"
+              variant="warning"
+              size="sm"
+              icon={FaTimes}
+              onClick={() => {
+                setEditingId(null);
+                setForm({ tier: "", name: "", price: "", features: "" });
+              }}
+            >
+              Cancel Edit
+            </Button>
+          )}
+        </div>
       </form>
 
       <table className="table w-full mt-6">
@@ -188,12 +198,19 @@ const PlansPage = () => {
                 </ul>
               </td>
               <td className="flex space-x-2">
-                <Button onClick={() => handleEdit(plan)} variant="secondary">
+                <Button
+                  onClick={() => handleEdit(plan)}
+                  variant="success"
+                  size="sm"
+                  icon={FaEdit}
+                >
                   Edit
                 </Button>
                 <Button
                   onClick={() => deleteMutation.mutate(plan._id)}
-                  variant="destructive"
+                  icon={FaTrashAlt}
+                  variant="danger"
+                  size="sm"
                 >
                   Delete
                 </Button>

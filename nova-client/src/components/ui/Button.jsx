@@ -6,13 +6,14 @@ const Button = ({
   variant = "primary",
   className = "",
   href,
+  size = "md",
   disabled = false,
   loading = false,
   icon: Icon,
   ...props
 }) => {
   const base =
-    "inline-flex items-center justify-center gap-2 px-2 py-2 rounded font-semibold transition duration-150 cursor-pointer hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-90 text-sm px-2";
+    "inline-flex items-center justify-center gap-2 rounded font-semibold transition duration-150 transition-transform cursor-pointer hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-90 hover:scale-105";
 
   const variants = {
     primary:
@@ -33,7 +34,7 @@ const Button = ({
     outline:
       "border border-gray-300 text-base-content hover:text-gray-800 hover:bg-gray-100 shadow-md ring-2 ring-offset-2 ring-slate-700 ring-2 outline-2 shadow-md",
     warning:
-      "bg-yellow-600 border border-yellow-600 text-base-100 hover:text-gray-200 hover:bg-yellow-700 shadow-md",
+      "bg-yellow-600 border border-yellow-600 text-base-content hover:text-gray-200 hover:bg-yellow-700 shadow-md",
     muted:
       "bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-100 shadow-md", // 👈 Add this
   };
@@ -57,6 +58,13 @@ const Button = ({
     }
   };
 
+  const baseSize = {
+    xs: "px-2 py-2 text-xs h-6",
+    sm: "px-3 py-2.5 text-sm h-8",
+    md: "px-4 py-3.5 text-lg h-10",
+    lg: "px-5 py-4.5 text-xl h-12",
+  };
+
   return (
     <Component
       href={href && !isDisabled ? href : undefined}
@@ -67,6 +75,7 @@ const Button = ({
         "disabled:opacity-60",
         base,
         variants[variant],
+        baseSize[size] || baseSize["md"],
         isDisabled && disabledStyles,
         className,
       )}
