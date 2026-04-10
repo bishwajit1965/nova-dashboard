@@ -10,7 +10,7 @@ const SectionTitle = ({
   return (
     <div className="lg:space-y-2 space-y-1 text-center w-full lg:pb-4 pb-2 rounded-md">
       <div className="flex items-center justify-center">
-        <h1 className="lg:text-3xl text-xl font-extrabold flex items-center space-x-2">
+        <h1 className="lg:text-3xl text-lg font-extrabold flex items-center space-x-2">
           <span>{icon}</span>
           <span className="capitalize">{userStatus}</span>
           <span>
@@ -20,7 +20,7 @@ const SectionTitle = ({
             </span>
           </span>{" "}
           {dataLength && (
-            <span className="h-6 w-6 rounded-full text-sm flex items-center justify-center border border-base-content">
+            <span className="h-6 w-6 rounded-full text-sm flex items-center justify-center border-2 border-base-content">
               {dataLength}
             </span>
           )}

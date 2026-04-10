@@ -37,7 +37,7 @@ const DashboardLayout = () => {
         <main className="flex-1 overflow-y-auto bg-base-50">
           <div className="sticky top-0 z-40">
             <SectionTitle
-              icon=<ShieldCheckIcon className="" />
+              icon={<ShieldCheckIcon className="" />}
               title="Only"
               decoratedText="Dashboard"
               userStatus={user?.name}

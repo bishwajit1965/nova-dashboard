@@ -19,7 +19,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       {/* mobile close */}
       <div className="lg:hidden flex justify-end p-4">
         <button onClick={toggleSidebar} aria-label="Close Sidebar">
-          <X size={28} />
+          <X size={20} className="text-base-100" />
         </button>
       </div>
 

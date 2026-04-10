@@ -21,7 +21,6 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  console.log("User", user);
   const handleOpen = () => {
     setOpen(!open);
   };
@@ -231,7 +230,7 @@ const Navbar = () => {
                     <>
                       <div className="flex-none items-center space-x-1">
                         <span className="text-xs capitalize">
-                          {/* {user ? user.displayName : " "} */}
+                          {user ? user.displayName : " "}
                         </span>
                         <img
                           src={user.photoURL}

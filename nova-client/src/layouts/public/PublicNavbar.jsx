@@ -1,5 +1,11 @@
 import { Moon, Sun } from "lucide-react";
-import { FaHome, FaPortrait, FaSign, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaHome,
+  FaMailBulk,
+  FaPortrait,
+  FaSign,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import Image from "/assets/bishwajit-1.jpg";
@@ -10,12 +16,10 @@ import { useTheme } from "../../hooks/useTheme";
 import "./PublicNavbar.css";
 
 const PublicNavbar = ({ siteSettings }) => {
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, user, isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { user } = useAuth();
-  console.log("User", user);
 
   const handleLogout = async () => {
     try {
@@ -147,38 +151,37 @@ const PublicNavbar = ({ siteSettings }) => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt- w-52 shadow text-xl"
           >
-            {isAuthenticated ? (
-              <li className="text-base-content text-lg">
-                <a onClick={handleLogout} className="text-[16px]">
-                  <FaSignOutAlt /> Log out
-                </a>
-              </li>
-            ) : (
-              <li className="text-base-content text-lg">
-                <a href="/login" className="text-[16px]">
-                  <FaSign /> Login
-                </a>
-              </li>
-            )}
-
-            <li className="text-base-content text-lg">
-              <a className="text-[16px]">
+            <li className="text-base-content">
+              <a className="text-sm">
                 <FaPortrait />
-                {user.name}
+                {user?.name}
               </a>
             </li>
-            <li className="text-base-content text-lg">
-              <a className="text-[16px]">
-                <FaPortrait />
-                {user.email}
+            <li className="text-base-content">
+              <a className="text-sm">
+                <FaMailBulk />
+                {user?.email}
               </a>
             </li>
-            <li className="text-base-content text-lg">
-              <a className="text-[16px]">
+            <li className="text-base-content">
+              <a className="text-sm">
                 <FaPortrait />
                 Portfolio
               </a>
             </li>
+            {isAuthenticated ? (
+              <li className="text-base-content">
+                <a onClick={handleLogout} className="text-sm">
+                  <FaSignOutAlt /> Log out
+                </a>
+              </li>
+            ) : (
+              <li className="text-base-content">
+                <a href="/login" className="">
+                  <FaSign /> Login
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

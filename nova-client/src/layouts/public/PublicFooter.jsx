@@ -69,7 +69,7 @@ const PublicFooter = ({ siteSettings }) => {
       </div>
 
       {/* Bottom */}
-      <div className="text-center text-sm bg-base-200 text-base-content lg:p-4 p-2 border-t border-base-300">
+      <div className="text-center lg:text-sm text-xs bg-base-200 text-base-content lg:p-4 p-2 border-t border-base-300">
         © {new Date().getFullYear()}{" "}
         {siteSettings?.footerText || "Nova Dashboard. All rights reserved."}
       </div>

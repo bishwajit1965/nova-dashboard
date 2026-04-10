@@ -1,11 +1,12 @@
 import { Home, UsersIcon, X } from "lucide-react";
 import { LogIn, LogOut, SquareMenu } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
-
 import Logo from "../components/ui/Logo";
 import ThemeToggle from "../components/ui/ThemeToggle";
 import api from "../lib/api";
 import { useAuth } from "../hooks/useAuth";
+import { FaSignOutAlt } from "react-icons/fa";
+import Image from "/assets/bishwajit-1.jpg";
 
 const navItems = [
   {
@@ -22,7 +23,7 @@ const navItems = [
 ];
 
 const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -100,7 +101,7 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
             </a>
           )}
         </div>
-        <div className="lg:visible invisible sm:visible lg:mr-0 mr-4">
+        {/* <div className="lg:visible invisible sm:visible lg:mr-0 mr-4">
           {isAuthenticated ? (
             <button
               onClick={handleLogout}
@@ -116,7 +117,35 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
               <LogIn size={18} color="white" className="mr-2" /> Login
             </a>
           )}
+        </div> */}
+      </div>
+      <div className="dropdown dropdown-end">
+        <div
+          tabIndex={0}
+          role="button"
+          className="btn btn-ghost btn-circle avatar"
+        >
+          <div className="w-10 rounded-full">
+            <img src={Image} alt="Tailwind CSS Navbar component" />
+          </div>
         </div>
+        <ul
+          tabIndex="-1"
+          className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+        >
+          <li>Name: {user.name}</li>
+          <li>Role: {user.roles[0]}</li>
+          <li>Email: {user.email}</li>
+          <li onClick={handleLogout}>
+            {isAuthenticated ? (
+              <button className="p-0">
+                <FaSignOutAlt /> Logout
+              </button>
+            ) : (
+              <a href="/login">Login</a>
+            )}
+          </li>
+        </ul>
       </div>
     </header>
   );
