@@ -18,6 +18,11 @@ import {
   FileText,
   FolderOpen,
   Home,
+  Layers,
+  Layers2,
+  Layers3,
+  Layers3Icon,
+  LayersIcon,
   ListCheck,
   Loader2,
   Lock,
@@ -55,6 +60,7 @@ import {
   X,
 } from "lucide-react";
 import { FaComment, FaQuestion } from "react-icons/fa";
+import { Layer } from "recharts";
 
 // Central registry
 export const LucideIcon = {
@@ -78,6 +84,11 @@ export const LucideIcon = {
   FileText,
   FolderOpen,
   Home,
+  Layers,
+  Layers2,
+  Layers3,
+  Layers3Icon,
+  LayersIcon,
   ListCheck,
   Lock,
   LogIn,

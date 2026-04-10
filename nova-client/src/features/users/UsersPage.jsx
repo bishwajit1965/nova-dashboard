@@ -1,6 +1,7 @@
 import API_PATHS from "../../common/apiPaths/apiPaths";
 import UsersTable from "./components/UserTable";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const UsersPage = () => {
   const { data: users, isLoading } = useApiQuery({
@@ -37,8 +38,10 @@ const UsersPage = () => {
   });
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">User Management</h1>
+    <div className="max-w-7xl mx-auto lg:p-2 p-2 space-y-6">
+      <h1 className="text-2xl font-bold flex items-center gap-2">
+        <LucideIcon.CircleGauge /> User Management
+      </h1>
       <UsersTable
         users={users}
         roles={roles}

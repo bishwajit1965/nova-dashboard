@@ -64,7 +64,8 @@ export default function PermissionForm({ existing, onClose, onEditing }) {
 
   return (
     <div className="lg:max-w-xl max-w-full mx-auto space-y-6 border border-base-300 shadow-sm lg:p-6 rounded-lg lg:mb-10">
-      <h2 className="lg:text-3xl text-xl font-bold text-base-content">
+      <h2 className="lg:text-3xl text-xl font-bold text-base-content flex items-center gap-2">
+        {existing ? <LucideIcon.Edit /> : <LucideIcon.UploadCloud />}{" "}
         {existing ? "Update Permission" : "Create Permission"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -107,25 +108,31 @@ export default function PermissionForm({ existing, onClose, onEditing }) {
         </div>
         <div className="flex items-center space-x-4">
           <Button
-            className="btn btn-md"
+            className=""
             variant="primary"
             type="submit"
+            size="sm"
             disabled={mutation.isPending}
             loading={mutation.isPending}
             icon={
               delayedIsSubmitting
                 ? LucideIcon.Check
                 : existing
-                ? LucideIcon.Edit
-                : LucideIcon.Plus
+                  ? LucideIcon.Edit
+                  : LucideIcon.Plus
             }
           >
-            {delayedIsSubmitting ? "Saving..." : existing ? "Update" : "Create"}{" "}
+            {delayedIsSubmitting
+              ? "Saving..."
+              : existing
+                ? "Update"
+                : "Create"}{" "}
           </Button>
           <Button
             type="button"
             icon={LucideIcon.Settings}
             variant="warning"
+            size="sm"
             onClick={onClose}
           >
             Cancel

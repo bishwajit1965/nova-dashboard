@@ -13,15 +13,19 @@ export default function PermissionManager() {
   const [showForm, setShowForm] = useState(false);
 
   return (
-    <div className="max-w-7xl mx-auto lg:p-4 p-2 space-y-6">
+    <div className="max-w-7xl mx-auto lg:p-2 p-2 space-y-6">
       <div className="lg:flex lg:space-y-0 space-y-2 justify-between">
-        <h1 className="lg:text-2xl text-xl font-bold">Manage Permissions</h1>
+        <h1 className="lg:text-2xl text-xl font-bold flex items-center gap-2">
+          <LucideIcon.CircleGauge /> Manage Permissions
+        </h1>
         <Button
           onClick={() => {
             setEditingData(null); // create mode
             setShowForm(true);
           }}
-          className="btn btn-primary lg:mb-4"
+          variant="primary"
+          size="sm"
+          className=""
           icon={LucideIcon.SquarePlus}
         >
           Add Permission
