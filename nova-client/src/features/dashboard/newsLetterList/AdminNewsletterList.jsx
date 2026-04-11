@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useApiMutation } from "../../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../../common/hooks/useApiQuery";
 import { useState } from "react";
+import { LucideIcon } from "../../../lib/LucideIcons";
 
 const AdminNewsletterList = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
@@ -57,52 +58,59 @@ const AdminNewsletterList = () => {
       </div>
     );
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Email</th>
-            <th>Subscribed At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedData.length === 0 ? (
-            <div className="flex justify-center">No newsLetters!</div>
-          ) : (
-            paginatedData.map((nl, i) => (
-              <tr key={nl._id}>
-                <th>{i + 1}</th>
-                <td>{nl?.email}</td>
-                <td>{new Date(nl.subscribedAt).toLocaleDateString()}</td>
-                <td className="flex items-center space-x-2">
-                  <MiniIconButton
-                    onClick={() => setConfirmDelete(nl)}
-                    variant="danger"
-                    icon="delete"
-                  />
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+    <div className="">
+      <div className="flex justify-center lg:my-4 my-2">
+        <h1 className="font-bold lg:text-2xl text-xl flex items-center gap-2">
+          <LucideIcon.NewspaperIcon /> News Letters
+        </h1>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Email</th>
+              <th>Subscribed At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedData.length === 0 ? (
+              <div className="flex justify-center">No newsLetters!</div>
+            ) : (
+              paginatedData.map((nl, i) => (
+                <tr key={nl._id}>
+                  <th>{i + 1}</th>
+                  <td>{nl?.email}</td>
+                  <td>{new Date(nl.subscribedAt).toLocaleDateString()}</td>
+                  <td className="flex items-center space-x-2">
+                    <MiniIconButton
+                      onClick={() => setConfirmDelete(nl)}
+                      variant="danger"
+                      icon="delete"
+                    />
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
 
-      {/* pagination begins*/}
-      <Pagination
-        items={newsLetters}
-        onPaginatedDataChange={setPaginatedData}
-      />
-
-      {/* Newsletter Delete Confirm Dialogue */}
-      {confirmDelete && (
-        <ConfirmDialog
-          isOpen={confirmDelete}
-          onClose={() => setConfirmDelete(null)}
-          onConfirm={() => deleteNewsletter(confirmDelete._id)}
+        {/* pagination begins*/}
+        <Pagination
+          items={newsLetters}
+          onPaginatedDataChange={setPaginatedData}
         />
-      )}
+
+        {/* Newsletter Delete Confirm Dialogue */}
+        {confirmDelete && (
+          <ConfirmDialog
+            isOpen={confirmDelete}
+            onClose={() => setConfirmDelete(null)}
+            onConfirm={() => deleteNewsletter(confirmDelete._id)}
+          />
+        )}
+      </div>
     </div>
   );
 };

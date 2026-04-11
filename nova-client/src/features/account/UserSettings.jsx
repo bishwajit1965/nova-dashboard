@@ -65,54 +65,56 @@ const UserSettings = () => {
       </div>
 
       {!isOpenPasswordReset && (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-600 font-medium">
-              Name
-            </label>
-            <Input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
+        <div className="lg:p-8 p-2 bg-base-200 rounded-xl shadow-md">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-600 font-medium">
+                Name
+              </label>
+              <Input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm text-gray-600 font-medium">
-              Email
-            </label>
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="">
-            <label htmlFor="" className="text-sm text-gray-600">
-              Short Bio
-            </label>
-            <Textarea
-              value={formData.bio}
-              name="bio"
-              placeholder="Tell us about yourself..."
-              onChange={handleChange}
-              error={formData?.bio?.length > 500 ? "Too long!" : undefined}
-            />
-          </div>
+            <div>
+              <label className="block text-sm text-gray-600 font-medium">
+                Email
+              </label>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="">
+              <label htmlFor="" className="text-sm text-gray-600">
+                Short Bio
+              </label>
+              <Textarea
+                value={formData.bio}
+                name="bio"
+                placeholder="Tell us about yourself..."
+                onChange={handleChange}
+                error={formData?.bio?.length > 500 ? "Too long!" : undefined}
+              />
+            </div>
 
-          <Button
-            type="submit"
-            disabled={isPending}
-            variant="primary"
-            size="sm"
-            icon={LucideIcon.SquarePen}
-            className="cursor-pointer w-full"
-          >
-            {isPending ? "Updating..." : "Update Profile"}
-          </Button>
-        </form>
+            <Button
+              type="submit"
+              disabled={isPending}
+              variant="primary"
+              size="sm"
+              icon={LucideIcon.SquarePen}
+              className="cursor-pointer w-full"
+            >
+              {isPending ? "Updating..." : "Update Profile"}
+            </Button>
+          </form>
+        </div>
       )}
 
       {/* Password reset form */}

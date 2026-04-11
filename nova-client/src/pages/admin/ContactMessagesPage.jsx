@@ -11,6 +11,7 @@ import { useApiMutation } from "../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../common/hooks/useApiQuery";
 import { useMemo } from "react";
 import { useState } from "react";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const ContactMessagesPage = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
@@ -95,6 +96,7 @@ const ContactMessagesPage = () => {
           <Button
             onClick={() => setFilter("all")}
             variant={filter === "all" ? "default" : "outline"}
+            icon={LucideIcon.NotebookTabs}
             className="btn btn-sm"
           >
             All
@@ -102,6 +104,7 @@ const ContactMessagesPage = () => {
           <Button
             onClick={() => setFilter("unread")}
             variant={filter === "unread" ? "default" : "outline"}
+            icon={LucideIcon.EyeClosed}
             className="btn btn-sm"
           >
             Unread
@@ -109,6 +112,7 @@ const ContactMessagesPage = () => {
           <Button
             onClick={() => setFilter("read")}
             variant={filter === "read" ? "default" : "outline"}
+            icon={LucideIcon.Eye}
             className="btn btn-sm"
           >
             Read
@@ -122,7 +126,9 @@ const ContactMessagesPage = () => {
           />
         </div>
       </div>
-      <h1 className="text-2xl font-semibold mb-4">Contact Messages</h1>
+      <h1 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+        <LucideIcon.MessageCircleHeart /> Contact Messages
+      </h1>
       <div className="overflow-x-auto">
         <table className="table table-xs">
           <thead>

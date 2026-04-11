@@ -78,12 +78,12 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
       </div>
 
       <div className="flex items-center justify-around lg:space-x-8">
-        <div className="invisible lg:visible">Menu One</div>
+        {/* <div className="invisible lg:visible">Menu One</div>
         <div className="invisible lg:visible">Menu Two</div>
-        <div className="invisible lg:visible">Menu Three</div>
-        <div className="flex items-center">
+        <div className="invisible lg:visible">Menu Three</div> */}
+        {/* <div className="flex items-center justify-end">
           <ThemeToggle />
-        </div>
+        </div> */}
         <div className="visible lg:invisible lg:mr-0 mr-4">
           {isAuthenticated ? (
             <button
@@ -101,6 +101,9 @@ const Topbar = ({ toggleSidebar, leftSidebarToggler }) => {
             </a>
           )}
         </div>
+      </div>
+      <div className="flex justify-end mr-6 w-full">
+        <ThemeToggle />
       </div>
       <div className="dropdown dropdown-end">
         <div

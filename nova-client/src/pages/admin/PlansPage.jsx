@@ -153,152 +153,163 @@ const PlansPage = () => {
     return <div className="text-red-500">Error: {error?.message}</div>;
 
   return (
-    <div className="p-4 max-w-6xl mx-auto space-y-6">
-      <div className="">
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <LucideIcon.CircleGauge /> Manage Billing Plans
-        </h1>
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 bg-base-200 p-4 rounded-xl"
-      >
-        <Input
-          label="Plan Name"
-          type="text"
-          name="name"
-          icon={FaUser}
-          value={form.name}
-          onChange={handleChange}
-          placeholder="Plan name..."
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-
-        <fieldset className="fieldset">
-          <legend className="fieldset-legend">Tier</legend>
-          <select
-            // defaultValue="Select Tie"
-            name="tier"
-            value={form.tier}
-            onChange={handleChange}
-            icon={LucideIcon.Package}
-            className="input input-bordered w-full select"
-          >
-            <option value="" disabled>
-              Select Tier
-            </option>
-            <option value="free">Free</option>
-            <option value="basic">Basic</option>
-            <option value="pro">Pro</option>
-            <option value="premium">Premium</option>
-            <option value="enterprise">Enterprise</option>
-            <option value="annual">Annual</option>
-          </select>
-        </fieldset>
-        {errors.tier && <p className="text-red-500 text-sm">{errors.tier}</p>}
-
-        <Input
-          label="Price (USD)"
-          name="price"
-          type="number"
-          value={form.price}
-          icon={FaDollarSign}
-          onChange={handleChange}
-          placeholder="Plan price..."
-        />
-        {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
-
-        <Input
-          label="Features (comma-separated)"
-          name="features"
-          value={form.features}
-          onChange={handleChange}
-          placeholder="Plan feature..."
-          icon={LucideIcon.Package}
-        />
-        {errors.features && (
-          <p className="text-red-500 text-sm">{errors.features}</p>
-        )}
-
-        <div className="flex gap-4">
-          <Button
-            type="submit"
-            variant="success"
-            size="md"
-            icon={FaEdit}
-            disabled={mutation.isPending}
-          >
-            {mutation.isPending ? (
-              <Loader className="animate-spin" />
-            ) : editingId ? (
-              "Update"
-            ) : (
-              "Create"
-            )}
-          </Button>
-
-          {editingId && (
-            <Button
-              type="button"
-              variant="warning"
-              size="md"
-              icon={FaTimes}
-              onClick={() => {
-                setEditingId(null);
-                setForm({ tier: "", name: "", price: "", features: "" });
-              }}
-            >
-              Cancel Edit
-            </Button>
-          )}
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div className="lg:p-8 p-2">
+        <div className="px- pb-4">
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <LucideIcon.CircleGauge /> Manage Billing & Plans
+          </h1>
         </div>
-      </form>
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 bg-base-300 shadow lg:p-8 p-2 rounded-xl"
+        >
+          <Input
+            label="Plan Name"
+            type="text"
+            name="name"
+            icon={FaUser}
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Plan name..."
+          />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
 
-      <table className="table w-full mt-6">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Tier</th>
-            <th>Price</th>
-            <th>Features</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {plans?.map((plan) => (
-            <tr key={plan._id} className="hover:bg-base-100">
-              <td>{plan.name}</td>
-              <td>{plan.tier}</td>
-              <td>${plan.price}</td>
-              <td>
-                <ul className="list-disc list-inside space-y-1">
-                  {plan.features.map((f, idx) => (
-                    <li key={f._id || idx}>{f.title}</li>
-                  ))}
-                </ul>
-              </td>
-              <td className="flex space-x-2">
-                <Button
-                  onClick={() => handleEdit(plan)}
-                  variant="success"
-                  size="sm"
-                  icon={FaEdit}
-                >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => deleteMutation.mutate(plan._id)}
-                  icon={FaTrashAlt}
-                  variant="danger"
-                  size="sm"
-                >
-                  Delete
-                </Button>
-              </td>
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Tier</legend>
+            <select
+              // defaultValue="Select Tie"
+              name="tier"
+              value={form.tier}
+              onChange={handleChange}
+              icon={LucideIcon.Package}
+              className="input input-bordered w-full select"
+            >
+              <option value="" disabled>
+                Select Tier
+              </option>
+              <option value="free">Free</option>
+              <option value="basic">Basic</option>
+              <option value="pro">Pro</option>
+              <option value="premium">Premium</option>
+              <option value="enterprise">Enterprise</option>
+              <option value="annual">Annual</option>
+            </select>
+          </fieldset>
+          {errors.tier && <p className="text-red-500 text-sm">{errors.tier}</p>}
+
+          <Input
+            label="Price (USD)"
+            name="price"
+            type="number"
+            value={form.price}
+            icon={FaDollarSign}
+            onChange={handleChange}
+            placeholder="Plan price..."
+          />
+          {errors.price && (
+            <p className="text-red-500 text-sm">{errors.price}</p>
+          )}
+
+          <Input
+            label="Features (comma-separated)"
+            name="features"
+            value={form.features}
+            onChange={handleChange}
+            placeholder="Plan feature..."
+            icon={LucideIcon.Package}
+          />
+          {errors.features && (
+            <p className="text-red-500 text-sm">{errors.features}</p>
+          )}
+
+          <div className="flex gap-4">
+            <Button
+              type="submit"
+              variant="success"
+              size="md"
+              icon={FaEdit}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? (
+                <Loader className="animate-spin" />
+              ) : editingId ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
+            </Button>
+
+            {editingId && (
+              <Button
+                type="button"
+                variant="warning"
+                size="md"
+                icon={FaTimes}
+                onClick={() => {
+                  setEditingId(null);
+                  setForm({ tier: "", name: "", price: "", features: "" });
+                }}
+              >
+                Cancel Edit
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
+      <div className="flex justify-center">
+        <h2 className="lg:text-3xl text-lg font-bold flex items-center gap-2">
+          <LucideIcon.FileText /> Users Plans & Billing Table
+        </h2>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="table w-full mt-6">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Tier</th>
+              <th>Price</th>
+              <th>Features</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {plans?.map((plan) => (
+              <tr key={plan._id} className="hover:bg-base-200">
+                <td>{plan.name}</td>
+                <td>{plan.tier}</td>
+                <td>${plan.price}</td>
+                <td>
+                  <ul className="list-disc list-inside space-y-1">
+                    {plan.features.map((f, idx) => (
+                      <li key={f._id || idx}>{f.title}</li>
+                    ))}
+                  </ul>
+                </td>
+                <td className="flex space-x-2">
+                  <Button
+                    onClick={() => handleEdit(plan)}
+                    variant="success"
+                    size="sm"
+                    icon={FaEdit}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    onClick={() => deleteMutation.mutate(plan._id)}
+                    icon={FaTrashAlt}
+                    variant="danger"
+                    size="sm"
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

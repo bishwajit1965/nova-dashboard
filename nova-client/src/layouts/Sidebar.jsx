@@ -24,13 +24,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       </div>
 
       {/* brand */}
-      <div className="flex items-center space-x-2 bg-gray-900 p-4 mb-4 border-b border-gray-800 sticky top-0">
+      <div className="flex items-center space-x-2 bg-gray-900 p-4 mb-4 border-b border-gray-800 sticky top-0 text-white">
         <img
           src="https://i.ibb.co.com/MgsDqCZ/FB-IMG-1678691214526.jpg"
           alt="logo"
           className="h-12 w-12 rounded-full"
         />
-        <h2 className="text-lg font-bold text-base-300">Nova&nbsp;Dashboard</h2>
+        <div className="flex flex-wrap items-center">
+          <h2 className="text-lg font-bold text-white">
+            Nova &nbsp; Dashboard
+          </h2>
+        </div>
       </div>
 
       {/* links */}

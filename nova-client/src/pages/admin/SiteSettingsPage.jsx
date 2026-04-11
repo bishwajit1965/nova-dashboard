@@ -239,7 +239,8 @@ const SiteSettingsPage = () => {
   return (
     <div className="grid lg:grid-cols-12 grid-cols-1 justify-between gap-6">
       <div className="lg:col-span-6 col-span-12 space-y-2 bg-base-200 rounded-md lg:p-4 p-2">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          {formToggler ? <LucideIcon.Edit /> : <LucideIcon.UploadCloud />}
           {formToggler ? "Update Site Settings Data" : "Add Site Settings Data"}
         </h1>
         <div className="relative">
@@ -362,7 +363,7 @@ const SiteSettingsPage = () => {
                 {isSubmitting ? (
                   <Loader className="animate-spin" />
                 ) : (
-                  <LucideIcon.SquarePlus />
+                  <LucideIcon.UploadCloud />
                 )}
 
                 {formToggler
@@ -389,12 +390,19 @@ const SiteSettingsPage = () => {
         </div>
       </div>
       <div className="lg:col-span-6 col-span-12 bg-base-200 lg:p-4 p-2 rounded-md">
-        <h2 className="text-2xl font-bold">Site Settings Data</h2>
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          <LucideIcon.FileText /> Site Settings Data
+        </h2>
         <div className="border border-base-300 rounded-lg">
           <div className="flex justify-center">
-            <img src={settings.logoUrl} alt="" className="w-32 h-32" />
+            <figure>
+              <img src={settings.logoUrl} alt="" className="w-44 h-44" />
+              <figcaption>
+                {/* <p className="text-center">Site Logo </p> */}
+              </figcaption>
+            </figure>
           </div>
-          <div className="divider m-0"></div>
+          <div className="divider"></div>
           <ul className="space-y-1">
             <li>
               <strong>Site Name:</strong> {settings?.siteName}

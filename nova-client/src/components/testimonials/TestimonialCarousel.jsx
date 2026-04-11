@@ -117,7 +117,9 @@ const TestimonialCarousel = () => {
             >
               <X size={18} />
             </button>
-            <h3 className="text-xl font-bold mb-4">Leave a Testimonial</h3>
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <LucideIcon.UploadCloud /> Leave a Testimonial
+            </h3>
 
             <TestimonialForm
               editData={null}

@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useApiMutation } from "../../../common/hooks/useApiMutation";
 import { useApiQuery } from "../../../common/hooks/useApiQuery";
 import { useState } from "react";
+import { LucideIcon } from "../../../lib/LucideIcons";
 
 const AdminTestimonialsPage = () => {
   const [testimonialData, setTestimonialData] = useState(null);
@@ -76,6 +77,11 @@ const AdminTestimonialsPage = () => {
 
   return (
     <div>
+      <div className="">
+        <h1 className="lg:text-2xl text-lg font-bold flex items-center gap-2">
+          <LucideIcon.MessageCircleIcon /> Testimonials List Table
+        </h1>
+      </div>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>

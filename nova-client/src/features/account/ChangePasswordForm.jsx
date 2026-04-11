@@ -58,95 +58,97 @@ const ChangePasswordForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 lg:max-w-2xl">
-      <div className="relative">
-        <label
-          htmlFor="password"
-          className="block text-sm text-gray-500 font-medium mb-1"
-        >
-          Current password
-        </label>
-        <Input
-          type={showCurrentPassword ? "text" : "password"}
-          name="currentPassword"
-          value={formData.currentPassword}
-          onChange={handleChange}
-          placeholder="Current Password..."
-        />
-        <span
-          className="absolute right-2 top-8 cursor-pointer z-50"
-          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-        >
-          {showCurrentPassword ? (
-            <EyeOff className="text-gray-400 text-sm" />
-          ) : (
-            <Eye className="text-gray-400 text-sm" />
-          )}
-        </span>
-      </div>
-      <div className="relative">
-        <label
-          htmlFor="newPassword"
-          className="block text-sm text-gray-500 font-medium mb-1"
-        >
-          New password
-        </label>
-        <Input
-          type={showNewPassword ? "text" : "password"}
-          name="newPassword"
-          value={formData.newPassword}
-          onChange={handleChange}
-          placeholder="New Password..."
-        />
-        <span
-          className="absolute right-2 top-8 cursor-pointer z-50"
-          onClick={() => setShowNewPassword(!showNewPassword)}
-        >
-          {showNewPassword ? (
-            <EyeOff className="text-gray-400 text-sm" />
-          ) : (
-            <Eye className="text-gray-400 text-sm" />
-          )}
-        </span>
-      </div>
+    <div className="lg:p-8 p-2 bg-base-200 rounded-xl shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-4 lg:max-w-2xl">
+        <div className="relative">
+          <label
+            htmlFor="password"
+            className="block text-sm text-gray-500 font-medium mb-1"
+          >
+            Current password
+          </label>
+          <Input
+            type={showCurrentPassword ? "text" : "password"}
+            name="currentPassword"
+            value={formData.currentPassword}
+            onChange={handleChange}
+            placeholder="Current Password..."
+          />
+          <span
+            className="absolute right-2 top-8 cursor-pointer z-50"
+            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+          >
+            {showCurrentPassword ? (
+              <EyeOff className="text-gray-400 text-sm" />
+            ) : (
+              <Eye className="text-gray-400 text-sm" />
+            )}
+          </span>
+        </div>
+        <div className="relative">
+          <label
+            htmlFor="newPassword"
+            className="block text-sm text-gray-500 font-medium mb-1"
+          >
+            New password
+          </label>
+          <Input
+            type={showNewPassword ? "text" : "password"}
+            name="newPassword"
+            value={formData.newPassword}
+            onChange={handleChange}
+            placeholder="New Password..."
+          />
+          <span
+            className="absolute right-2 top-8 cursor-pointer z-50"
+            onClick={() => setShowNewPassword(!showNewPassword)}
+          >
+            {showNewPassword ? (
+              <EyeOff className="text-gray-400 text-sm" />
+            ) : (
+              <Eye className="text-gray-400 text-sm" />
+            )}
+          </span>
+        </div>
 
-      <div className="relative">
-        <label
-          htmlFor="confirmPassword"
-          className="block text-sm text-gray-500 font-medium mb-1"
-        >
-          Confirm password
-        </label>
-        <Input
-          type={showConfirmPassword ? "text" : "password"}
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          placeholder="Confirm New Password..."
-        />
-        <span
-          className="absolute right-2 top-8 cursor-pointer z-50"
-          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-        >
-          {showConfirmPassword ? (
-            <EyeOff className="text-gray-400 text-sm" />
-          ) : (
-            <Eye className="text-gray-400 text-sm" />
-          )}
-        </span>
-      </div>
+        <div className="relative">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm text-gray-500 font-medium mb-1"
+          >
+            Confirm password
+          </label>
+          <Input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm New Password..."
+          />
+          <span
+            className="absolute right-2 top-8 cursor-pointer z-50"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? (
+              <EyeOff className="text-gray-400 text-sm" />
+            ) : (
+              <Eye className="text-gray-400 text-sm" />
+            )}
+          </span>
+        </div>
 
-      {error && <p className="text-sm text-red-500">{error}</p>}
-      {success && <p className="text-sm text-green-500">{success}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        {success && <p className="text-sm text-green-500">{success}</p>}
 
-      <Button
-        type="submit"
-        disabled={isPending}
-        className="btn-primary cursor-pointer w-full"
-      >
-        {isPending ? "Updating..." : "Update Password"}
-      </Button>
-    </form>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="btn-primary cursor-pointer w-full"
+        >
+          {isPending ? "Updating..." : "Update Password"}
+        </Button>
+      </form>
+    </div>
   );
 };
 
