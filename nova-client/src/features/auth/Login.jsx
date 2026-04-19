@@ -216,15 +216,17 @@ const Login = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-1">
-              <input
-                type="checkbox"
-                className="checkbox checkbox-xs checkbox-primary"
-                name=""
-                id=""
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              <span className="text-indigo-500">Remember me</span>
+              <label className="label">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-xs checkbox-primary"
+                  name=""
+                  id=""
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                />
+                <span className="text-indigo-500">Remember me</span>
+              </label>
             </div>
             <div className="">
               <Button
